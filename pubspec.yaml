@@ -9,6 +9,7 @@ environment:
 dependencies:
   markdown: ^3.0.0
   args: ^1.6.0
+  ansicolor: ^1.0.5
 
 dev_dependencies:
   pedantic: ^1.9.2
