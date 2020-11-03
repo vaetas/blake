@@ -7,9 +7,11 @@ environment:
   sdk: '>=2.8.0 <3.0.0'
 
 dependencies:
-  markdown: ^3.0.0
-  args: ^1.6.0
   ansicolor: ^1.0.5
+  args: ^1.6.0
+  markdown: ^3.0.0
+  yaml: ^2.2.1
+  yaml_edit: ^1.0.3
 
 dev_dependencies:
   pedantic: ^1.9.2
