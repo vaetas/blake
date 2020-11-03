@@ -1,0 +1,10 @@
+name: blake
+version: 0.1.0
+description: Static Site Generator
+homepage: https://github.com/vaetas/blake
+
+environment:
+  sdk: '>=2.8.0 <3.0.0'
+
+dev_dependencies:
+  pedantic: ^1.9.2
