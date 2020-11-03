@@ -1,3 +1,9 @@
+import 'dart:io';
+
+import 'package:blake/blake.dart';
+
 void main() {
-  print('Hello world');
+  File('lib/post.md').readAsString().then((value) {
+    print(parse(value));
+  });
 }
