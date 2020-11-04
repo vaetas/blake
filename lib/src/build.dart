@@ -3,6 +3,9 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:blake/src/cli.dart';
+import 'package:blake/src/content.dart';
+import 'package:blake/src/utils.dart';
+import 'package:path/path.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
 class BuildCommand extends Command<int> {
@@ -16,9 +19,16 @@ class BuildCommand extends Command<int> {
   FutureOr<int> run() async {
     print(bluePen('Building...'));
 
+    Directory publicDir;
+    Directory contentDir;
     try {
-      final publicDir = await Directory('public').create();
+      publicDir = await Directory('public');
+      await publicDir.delete(recursive: true);
+      await publicDir.create();
+
+      contentDir = await Directory('content');
     } catch (e) {
+      printError(e);
       return 1;
     }
 
@@ -37,6 +47,53 @@ class BuildCommand extends Command<int> {
       return 1;
     }
 
+    final content = await _generateTree(contentDir.path);
+    printInfo('Content tree parsed: $content');
+
+    await _renderSection(content, 'public');
+    printInfo('Files generated.');
+
     return 0;
+  }
+
+  Future<Section> _generateTree(String root) async {
+    final rootDirectory = Directory(root);
+    final content = await rootDirectory.list().toList();
+
+    final children = await _mapFileSystem(content);
+
+    return Section(
+      name: '.',
+      children: children,
+    );
+  }
+
+  Future<List<Content>> _mapFileSystem(List<FileSystemEntity> entities) async {
+    return entities.asyncMap<Content>((e) async {
+      if (e is Directory) {
+        final _children = await e.list().toList();
+
+        return Section(
+          name: basename(e.path),
+          children: await _mapFileSystem(_children),
+        );
+      } else {
+        return Page(name: basename(e.path));
+      }
+    });
+  }
+
+  Future<void> _renderSection(Section section, String path) async {
+    for (var x in section.children) {
+      final _path = '$path/${x.name}';
+
+      if (x is Section) {
+        await Directory(_path).create();
+
+        await _renderSection(x, _path);
+      } else {
+        final file = File(_path).create();
+      }
+    }
   }
 }
