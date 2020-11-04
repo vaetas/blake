@@ -24,9 +24,10 @@ class ServeCommand extends Command<int> {
     LocalServer('./public').start();
 
     await watch('.').listen((event) async {
+      final stopwatch = Stopwatch()..start();
       await blake.runner.commands['build'].run();
-      printInfo('Rebuild successful. $event');
-      // print(Uri.parse(event.path).pathSegments);
+      stopwatch.stop();
+      printInfo('Rebuild successful (${stopwatch.elapsedMilliseconds} ms)');
     });
 
     return 0;
