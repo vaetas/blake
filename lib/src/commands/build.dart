@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:blake/blake.dart';
 import 'package:blake/src/cli.dart';
 import 'package:blake/src/content.dart';
 import 'package:blake/src/utils.dart';
+import 'package:mustache_template/mustache_template.dart';
 import 'package:path/path.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
@@ -17,13 +19,13 @@ class BuildCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    print(bluePen('Building...'));
+    print(bluePen('Building in...'));
 
     Directory publicDir;
     Directory contentDir;
+
     try {
       publicDir = await Directory('public');
-      await publicDir.delete(recursive: true);
       await publicDir.create();
 
       contentDir = await Directory('content');
@@ -78,7 +80,10 @@ class BuildCommand extends Command<int> {
           children: await _mapFileSystem(_children),
         );
       } else {
-        return Page(name: basename(e.path));
+        return Page(
+          name: basename(e.path),
+          content: await (e as File).readAsString(),
+        );
       }
     });
   }
@@ -92,7 +97,21 @@ class BuildCommand extends Command<int> {
 
         await _renderSection(x, _path);
       } else {
-        final file = File(_path).create();
+        final file = await File(_path.replaceAll('.md', '.html')).create();
+
+        final template = await File('templates/index.mustache').readAsString();
+        final mustache = Template(template);
+
+        final markdown = parse((x as Page).content);
+
+        final output = mustache.renderString(
+          <dynamic, dynamic>{
+            'title': x.name,
+            'content': markdown,
+          },
+        );
+
+        await file.writeAsString(output);
       }
     }
   }

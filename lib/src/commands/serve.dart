@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:args/command_runner.dart';
+import 'package:blake/blake.dart';
 import 'package:blake/src/cli.dart';
 import 'package:blake/src/local_server.dart';
 import 'package:watcher/watcher.dart';
@@ -22,8 +23,10 @@ class ServeCommand extends Command<int> {
     // ignore: unawaited_futures
     LocalServer('./public').start();
 
-    await watch('.').listen((event) {
-      printInfo('Event: $event');
+    await watch('.').listen((event) async {
+      await blake.runner.commands['build'].run();
+      printInfo('Rebuild successful. $event');
+      // print(Uri.parse(event.path).pathSegments);
     });
 
     return 0;
@@ -34,7 +37,8 @@ class ServeCommand extends Command<int> {
     return DirectoryWatcher(
       directory,
       pollingDelay: const Duration(milliseconds: 250),
-    ).events;
+    ).events.where((event) =>
+        !event.path.contains('public/') && !event.path.contains(r'public\'));
   }
 }
 

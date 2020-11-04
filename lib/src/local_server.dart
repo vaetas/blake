@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:blake/src/cli.dart';
+import 'package:http_server/http_server.dart';
 
 class LocalServer {
   LocalServer(
@@ -20,20 +20,19 @@ class LocalServer {
   HttpServer server;
 
   Future<void> start() async {
+    final directory = VirtualDirectory(path);
+
+    directory
+      ..allowDirectoryListing = false
+      ..directoryHandler = (dir, request) {
+        final indexUri = Uri.file(dir.path).resolve('index.html');
+
+        directory.serveFile(File(indexUri.toFilePath()), request);
+      };
+
     server = await HttpServer.bind(address, port);
-    printInfo('Server started on $address:$port');
+    print('Server started on $address:$port');
 
-    await server.listen((request) async {
-      print('Request: ${request.uri}');
-
-      try {
-        final file = await File('$path/${request.uri}').readAsString();
-        request.response.write(file);
-      } catch (e) {
-        printError(e);
-      }
-
-      await request.response.close();
-    });
+    await server.forEach(directory.serveRequest);
   }
 }

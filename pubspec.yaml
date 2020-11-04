@@ -9,8 +9,10 @@ environment:
 dependencies:
   ansicolor: ^1.0.5
   args: ^1.6.0
+  http_server: ^0.9.8+3
   markdown: ^3.0.0
   meta: ^1.2.3
+  mustache_template: ^1.0.0+1
   path: ^1.7.0
   watcher: ^0.9.7+15
   yaml: ^2.2.1

@@ -30,6 +30,8 @@ class InitCommand extends Command<int> {
       final contentDir = await Directory(name + 'content').create(
         recursive: true,
       );
+     
+      final templatesDir = await Directory(name + 'templates').create();
     } catch (e) {
       print('Error: $e');
       return 1;

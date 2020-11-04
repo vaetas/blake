@@ -25,10 +25,12 @@ class Section implements Content {
 
 /// [Page] is leaf node which cannot have other subpages.
 class Page implements Content {
-  Page({this.name});
+  Page({this.name, this.content});
 
   @override
   final String name;
+
+  final String content;
 
   @override
   String toString() => 'Page{name: $name}';
