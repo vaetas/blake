@@ -10,15 +10,26 @@ class InitCommand extends Command<int> {
   final name = 'init';
 
   @override
-  final description = 'Setup new project.';
+  String get summary => 'Setup new project.';
+
+  @override
+  final description = _description;
 
   @override
   FutureOr<int> run() async {
-    print(bluePen('Initing project...'));
+    final name = argResults.rest.isEmpty ? '' : argResults.rest.first + '/';
+
+    if (name.isEmpty) {
+      print(bluePen('Initializing project in current directory...'));
+    } else {
+      printInfo('Initializing project in $name directory');
+    }
 
     try {
-      await _initConfig();
-      final contentDir = await Directory('content').create();
+      await _initConfig(name);
+      final contentDir = await Directory(name + 'content').create(
+        recursive: true,
+      );
     } catch (e) {
       print('Error: $e');
       return 1;
@@ -27,8 +38,8 @@ class InitCommand extends Command<int> {
     return 0;
   }
 
-  Future<void> _initConfig() async {
-    final configFile = await File('config.yaml').create();
+  Future<void> _initConfig(String root) async {
+    final configFile = await File(root + 'config.yaml').create(recursive: true);
     final config = await configFile.readAsString();
 
     if (config.trim().isNotEmpty) {
@@ -52,3 +63,10 @@ class InitCommand extends Command<int> {
     }
   }
 }
+
+final _description = '''
+Setup new project. 
+
+Use `blake init` to initialize project in current repository.
+If you want to initialize project in subdirectory call `blake init folder_name`.
+''';
