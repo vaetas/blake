@@ -20,9 +20,6 @@ class ServeCommand extends Command<int> {
   FutureOr<int> run() async {
     printInfo('Serving...');
 
-    // ignore: unawaited_futures
-    LocalServer('./public').start();
-
     await watch('.').listen((event) async {
       final stopwatch = Stopwatch()..start();
       await blake.runner.commands['build'].run();
@@ -30,18 +27,24 @@ class ServeCommand extends Command<int> {
       printInfo('Rebuild successful (${stopwatch.elapsedMilliseconds} ms)');
     });
 
+    await LocalServer('./public').start();
+
     return 0;
   }
 
-  /// Watch [directory] for changes in whole subtree.
+  /// Watch [directory] for changes in whole subtree except `public` directory.
   Stream<WatchEvent> watch(String directory) {
     return DirectoryWatcher(
       directory,
       pollingDelay: const Duration(milliseconds: 250),
-    ).events.where((event) =>
-        !event.path.contains('public/') && !event.path.contains(r'public\'));
+    ).events.where((e) => !_publicDirRegexp.hasMatch(e.path));
   }
 }
+
+/// Valid for paths starting with `public` directory.
+///
+/// Examples: public/index.html, public\index.html, ./public/index.html
+final _publicDirRegexp = RegExp(r'^(\.\\|\.\/|\\|\/)?public[\\\/]{1}');
 
 final _description = '''Starts local web server and watches for file changes. 
 After every change the website will be rebuilt.''';
