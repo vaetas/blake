@@ -1,7 +1,7 @@
 import 'package:args/command_runner.dart';
-import 'package:blake/src/build.dart';
+import 'file:///C:/Users/vojtech/dev/blake/lib/src/commands/build.dart';
 import 'package:blake/src/cli.dart';
-import 'package:blake/src/init.dart';
+import 'file:///C:/Users/vojtech/dev/blake/lib/src/commands/init.dart';
 
 export 'src/markdown/parser.dart';
 
