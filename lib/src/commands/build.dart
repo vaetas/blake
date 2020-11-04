@@ -7,7 +7,7 @@ import 'package:blake/src/cli.dart';
 import 'package:blake/src/content.dart';
 import 'package:blake/src/utils.dart';
 import 'package:mustache_template/mustache_template.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as path;
 import 'package:yaml/yaml.dart' as yaml;
 
 class BuildCommand extends Command<int> {
@@ -96,12 +96,12 @@ class BuildCommand extends Command<int> {
         final _children = await e.list().toList();
 
         return Section(
-          name: basename(e.path),
+          name: path.basename(e.path),
           children: await _mapFileSystem(_children),
         );
       } else {
         return Page(
-          name: basename(e.path),
+          name: path.basename(e.path),
           content: await (e as File).readAsString(),
         );
       }
