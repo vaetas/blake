@@ -11,11 +11,25 @@ import 'package:path/path.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
 class BuildCommand extends Command<int> {
+  BuildCommand() {
+    argParser.addFlag(
+      'verbose',
+      abbr: 'v',
+      help: 'Show more logs.',
+      defaultsTo: false,
+      negatable: false,
+    );
+  }
+
   @override
   final name = 'build';
 
   @override
   final description = 'Build static files.';
+
+  // TODO: Refactor this.
+  bool get verbose =>
+      argResults == null ? false : argResults['verbose'] as bool;
 
   @override
   FutureOr<int> run() async {
@@ -36,7 +50,10 @@ class BuildCommand extends Command<int> {
 
     try {
       final config = await File('config.yaml').readAsString();
-      print(yaml.loadYaml(config));
+
+      if (verbose) {
+        print('Config: ${yaml.loadYaml(config)}');
+      }
     } on FileSystemException catch (e) {
       switch (e.osError.errorCode) {
         case 2:
@@ -50,7 +67,10 @@ class BuildCommand extends Command<int> {
     }
 
     final content = await _generateTree(contentDir.path);
-    printInfo('Content tree parsed: $content');
+
+    if (verbose) {
+      printInfo('Content tree parsed: $content');
+    }
 
     await _renderSection(content, 'public');
     printInfo('Files generated.');
