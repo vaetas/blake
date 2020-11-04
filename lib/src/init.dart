@@ -31,21 +31,24 @@ class InitCommand extends Command<int> {
     final configFile = await File('config.yaml').create();
     final config = await configFile.readAsString();
 
-    if (config.trim().isEmpty) {
-      printWarning('Config file is empty. Populating with default values...');
+    if (config.trim().isNotEmpty) {
+      printWarning('WARNING: Config is not empty and will be rewritten.');
+    }
 
-      final m = <String, String>{
-        'title': '',
-        'author': '',
-      };
+    printInfo('Populating with default values...');
 
-      try {
-        await configFile.writeAsString(jsonToYaml(m));
-      } catch (e) {
-        printError(e);
-      }
-    } else {
-      printWarning('Config file already exists');
+    final defaultConfig = <String, dynamic>{
+      'title': 'Static Site',
+      'author': 'William Blake',
+    };
+
+    final yaml = jsonToYaml(defaultConfig);
+    print(yaml);
+
+    try {
+      await configFile.writeAsString(yaml);
+    } catch (e) {
+      printError(e);
     }
   }
 }
