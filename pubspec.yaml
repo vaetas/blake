@@ -12,6 +12,7 @@ dependencies:
   markdown: ^3.0.0
   meta: ^1.2.3
   path: ^1.7.0
+  watcher: ^0.9.7+15
   yaml: ^2.2.1
   yaml_edit: ^1.0.3
 
