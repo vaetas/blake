@@ -33,7 +33,8 @@ class BuildCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    print(bluePen('Building in...'));
+    print(bluePen('Building...'));
+    final stopwatch = Stopwatch()..start();
 
     Directory publicDir;
     Directory contentDir;
@@ -73,8 +74,9 @@ class BuildCommand extends Command<int> {
     }
 
     await _renderSection(content, 'public');
-    printInfo('Files generated.');
 
+    stopwatch.stop();
+    printInfo('Build done in ${stopwatch.elapsedMilliseconds}ms');
     return 0;
   }
 

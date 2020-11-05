@@ -9,13 +9,8 @@ class Blake {
     ..addCommand(ServeCommand())
     ..addCommand(InitCommand());
 
-  Future<int> call(List<String> args) async {
-    final stopwatch = Stopwatch()..start();
-    final exitCode = await runner.run(args);
-    stopwatch.stop();
-
-    print('Done in ${stopwatch.elapsed.inMilliseconds} milliseconds.');
-    return exitCode;
+  Future<int> call(List<String> args) {
+    return runner.run(args);
   }
 }
 

@@ -37,6 +37,7 @@ class InitCommand extends Command<int> {
       return 1;
     }
 
+    printInfo('Site initialized successfully');
     return 0;
   }
 
