@@ -1,10 +1,7 @@
 import 'package:args/command_runner.dart';
+import 'package:blake/src/commands/build.dart';
+import 'package:blake/src/commands/init.dart';
 import 'package:blake/src/commands/serve.dart';
-
-import 'file:///C:/Users/vojtech/dev/blake/lib/src/commands/build.dart';
-import 'file:///C:/Users/vojtech/dev/blake/lib/src/commands/init.dart';
-
-export 'src/markdown/parser.dart';
 
 class Blake {
   final runner = CommandRunner<int>('blake', 'Blake Static Site Generator')

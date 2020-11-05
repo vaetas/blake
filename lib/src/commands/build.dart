@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:blake/blake.dart';
 import 'package:blake/src/cli.dart';
 import 'package:blake/src/content.dart';
+import 'package:blake/src/markdown/parser.dart';
 import 'package:blake/src/utils.dart';
 import 'package:mustache_template/mustache_template.dart';
 import 'package:path/path.dart' as path;
