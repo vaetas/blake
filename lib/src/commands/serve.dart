@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:blake/blake.dart';
 import 'package:blake/src/cli.dart';
@@ -7,6 +8,12 @@ import 'package:blake/src/local_server.dart';
 import 'package:watcher/watcher.dart';
 
 class ServeCommand extends Command<int> {
+  ServeCommand() {
+    argParser
+      ..addOption('address', abbr: 'a', defaultsTo: '127.0.0.1')
+      ..addOption('port', abbr: 'p', defaultsTo: '4040');
+  }
+
   @override
   final String name = 'serve';
 
@@ -19,17 +26,29 @@ class ServeCommand extends Command<int> {
   @override
   FutureOr<int> run() async {
     printInfo('Serving...');
+    final config = _ServeConfig(argResults);
+
+    // Build once before starting server to ensure there is something to show.
+    await _build();
 
     await watch('.').listen((event) async {
       final stopwatch = Stopwatch()..start();
-      await blake.runner.commands['build'].run();
+      await _build();
       stopwatch.stop();
-      printInfo('Rebuild successful (${stopwatch.elapsedMilliseconds} ms)');
+      printInfo('Rebuild successful');
     });
 
-    await LocalServer('./public').start();
+    await LocalServer(
+      './public',
+      address: config.address,
+      port: config.port,
+    ).start();
 
     return 0;
+  }
+
+  Future<void> _build() async {
+    await blake.runner.commands['build'].run();
   }
 
   /// Watch [directory] for changes in whole subtree except `public` directory.
@@ -39,6 +58,17 @@ class ServeCommand extends Command<int> {
       pollingDelay: const Duration(milliseconds: 250),
     ).events.where((e) => !_publicDirRegexp.hasMatch(e.path));
   }
+}
+
+class _ServeConfig {
+  _ServeConfig(this.argResults)
+      : address = argResults['address'] as String,
+        port = int.parse(argResults['port'] as String);
+
+  final ArgResults argResults;
+
+  final String address;
+  final int port;
 }
 
 /// Valid for paths starting with `public` directory.
