@@ -76,7 +76,7 @@ class BuildCommand extends Command<int> {
     await _renderSection(content, 'public');
 
     stopwatch.stop();
-    printInfo('Build done in ${stopwatch.elapsedMilliseconds}ms');
+    print('Build done in ${stopwatch.elapsedMilliseconds}ms');
     return 0;
   }
 

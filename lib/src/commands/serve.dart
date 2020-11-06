@@ -37,7 +37,6 @@ class ServeCommand extends Command<int> {
       final stopwatch = Stopwatch()..start();
       await _build();
       stopwatch.stop();
-      printInfo('Rebuild successful');
       _onReload.add(null);
     });
 
