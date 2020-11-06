@@ -102,9 +102,12 @@ class BuildCommand extends Command<int> {
           children: await _mapFileSystem(_children),
         );
       } else {
+        final file = await (e as File).readAsString();
+        final parsed = parse(file);
+
         return Page(
           name: path.basename(e.path),
-          content: await (e as File).readAsString(),
+          content: parsed.content,
         );
       }
     });
@@ -124,12 +127,12 @@ class BuildCommand extends Command<int> {
         final template = await File('templates/index.mustache').readAsString();
         final mustache = Template(template);
 
-        final markdown = parse((x as Page).content);
+        // final markdown = parse((x as Page).content);
 
         final output = mustache.renderString(
           <dynamic, dynamic>{
             'title': x.name,
-            'content': markdown,
+            'content': (x as Page).content,
           },
         );
 

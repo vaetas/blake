@@ -25,12 +25,18 @@ class Section implements Content {
 
 /// [Page] is leaf node which cannot have other subpages.
 class Page implements Content {
-  Page({this.name, this.content});
+  Page({
+    this.name,
+    this.content,
+    this.metadata = const <String, dynamic>{},
+  });
 
   @override
   final String name;
 
   final String content;
+
+  final Map<String, dynamic> metadata;
 
   @override
   String toString() => 'Page{name: $name}';

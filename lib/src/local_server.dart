@@ -33,7 +33,7 @@ class LocalServer {
     final directory = VirtualDirectory(path);
 
     directory
-      ..allowDirectoryListing = false
+      ..allowDirectoryListing = true
       ..directoryHandler = (dir, request) {
         final indexUri = Uri.file(dir.path).resolve('index.html');
         directory.serveFile(File(indexUri.toFilePath()), request);
