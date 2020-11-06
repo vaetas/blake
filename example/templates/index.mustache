@@ -2,12 +2,7 @@
 <html>
 <head>
   <title>{{ title }}</title>
-  <script>
-    var socket = new WebSocket('ws://localhost:4041');
-    socket.onmessage = function(event) {
-      location.reload();
-    };
-  </script>
+  <script src="http://127.0.0.1:4040/reload.js"></script>
 </head>
 <body>
 {{{ content }}}

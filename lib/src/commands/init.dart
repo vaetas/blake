@@ -32,6 +32,8 @@ class InitCommand extends Command<int> {
       );
      
       final templatesDir = await Directory(name + 'templates').create();
+
+      await Directory(name + 'static').create();
     } catch (e) {
       print('Error: $e');
       return 1;

@@ -74,6 +74,7 @@ class BuildCommand extends Command<int> {
     }
 
     await _renderSection(content, 'public');
+    await _buildStaticContent();
 
     stopwatch.stop();
     print('Build done in ${stopwatch.elapsedMilliseconds}ms');
@@ -138,6 +139,30 @@ class BuildCommand extends Command<int> {
 
         await file.writeAsString(output);
       }
+    }
+  }
+
+  Future<void> _buildStaticContent() async {
+    final staticDir = Directory('static');
+
+    final staticContent = await staticDir.list(recursive: true).toList();
+    final directories = staticContent.whereType<Directory>();
+    final files = staticContent.whereType<File>();
+
+    for (var directory in directories) {
+      final path = directory.path.replaceFirst('static', 'public');
+      print(path);
+      await Directory(path).create(
+        recursive: true,
+      );
+    }
+
+    for (var file in files) {
+      await file.copy(file.path.replaceFirst('static', 'public'));
+    }
+
+    if (verbose) {
+      print('Static files copied');
     }
   }
 }
