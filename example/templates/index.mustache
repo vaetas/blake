@@ -1,6 +1,13 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
 <head>
   <title>{{ title }}</title>
+  <script>
+    var socket = new WebSocket('ws://localhost:4041');
+    socket.onmessage = function(event) {
+      location.reload();
+    };
+  </script>
 </head>
 <body>
 {{{ content }}}

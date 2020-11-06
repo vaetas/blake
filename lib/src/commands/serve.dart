@@ -31,17 +31,21 @@ class ServeCommand extends Command<int> {
     // Build once before starting server to ensure there is something to show.
     await _build();
 
+    final _onReload = StreamController<void>();
+
     await watch('.').listen((event) async {
       final stopwatch = Stopwatch()..start();
       await _build();
       stopwatch.stop();
       printInfo('Rebuild successful');
+      _onReload.add(null);
     });
 
     await LocalServer(
       './public',
       address: config.address,
       port: config.port,
+      onReload: _onReload.stream.asBroadcastStream(),
     ).start();
 
     return 0;
