@@ -16,7 +16,6 @@ dependencies:
   path: ^1.7.0
   watcher: ^0.9.7+15
   yaml: ^2.2.1
-  yaml_edit: ^1.0.3
 
 dev_dependencies:
   pedantic: ^1.9.2
