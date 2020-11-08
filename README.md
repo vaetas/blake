@@ -18,9 +18,13 @@ you change files in your project and the browser tab will be reloaded automatica
 ## Structure
 
 `content` directory contains all Markdown files which will be transformed into HTML files.
+
 `static` directory files will be copied into generated site without change.
+
 `public` contains generated files.
+
 `templates` should contain templates which will be used to process Markdown files inside `content`.
+
 `config.yaml` configures build options for your site.
 
 ## Build
