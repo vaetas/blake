@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:blake/blake.dart';
+import 'package:blake/src/build/build_config.dart';
 import 'package:blake/src/cli.dart';
 import 'package:blake/src/local_server.dart';
 import 'package:watcher/watcher.dart';
@@ -28,15 +29,16 @@ class ServeCommand extends Command<int> {
   FutureOr<int> run() async {
     printInfo('Serving...');
     final config = _ServeConfig(argResults);
+    final buildConfig = const BuildConfig();
 
     // Build once before starting server to ensure there is something to show.
-    await _build();
+    await build(buildConfig);
 
     final _onReload = StreamController<void>();
 
     await watch('.').listen((event) async {
       final stopwatch = Stopwatch()..start();
-      await _build();
+      await build(buildConfig);
       stopwatch.stop();
       _onReload.add(null);
     });
@@ -49,10 +51,6 @@ class ServeCommand extends Command<int> {
     ).start();
 
     return 0;
-  }
-
-  Future<void> _build() async {
-    await blake.runner.commands['build'].run();
   }
 
   /// Watch [directory] for changes in whole subtree except `public` directory.

@@ -2,7 +2,7 @@ import 'package:args/args.dart';
 import 'package:blake/src/utils.dart';
 
 class BuildConfig {
-  BuildConfig({
+  const BuildConfig({
     this.verbose = false,
     this.buildFolder = 'public',
     this.contentFolder = 'content',

@@ -29,7 +29,7 @@ class BuildCommand extends Command<int> {
   @override
   final description = 'Build static files.';
 
-  BuildConfig config = BuildConfig();
+  BuildConfig config = const BuildConfig();
 
   @override
   FutureOr<int> run() async {
