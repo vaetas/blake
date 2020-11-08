@@ -6,6 +6,9 @@ homepage: https://github.com/vaetas/blake
 environment:
   sdk: '>=2.8.0 <3.0.0'
 
+executables:
+  blake:
+
 dependencies:
   ansicolor: ^1.0.5
   args: ^1.6.0

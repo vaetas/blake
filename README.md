@@ -45,3 +45,7 @@ You can also run this project without compiling native binary.
 ```
 dart bin/blake.dart
 ```
+
+## Activate `blake` globally
+
+Use `blake` everywhere by using `pub global activate --source path .` inside this project's root.
