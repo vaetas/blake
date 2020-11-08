@@ -69,25 +69,36 @@ Future<void> _buildSection(Section section, BuildConfig config) async {
   for (var child in section.children) {
     await child.when(
       section: (section) => _buildSection(section, config),
-      page: (page) => _buildPage(page, config),
+      page: (page) => _buildPage(
+        page,
+        config,
+        index: page.path.endsWith('index.md'),
+      ),
     );
   }
 }
 
-Future<void> _buildPage(Page page, BuildConfig config) async {
-  final template = await File('templates/index.mustache').readAsString();
+Future<void> _buildPage(
+  Page page,
+  BuildConfig config, {
+  bool index = false,
+  List<Page> subpages = const [],
+}) async {
+  final templatesDir = await getTemplatesDirectory(config);
+  final template = await File(
+          '${templatesDir.path}/${index ? 'section.mustache' : 'page.mustache'}')
+      .readAsString();
   final mustache = Template(template);
 
   final output = mustache.renderString(
     <dynamic, dynamic>{
       'title': page.name,
       'content': page.content,
+      'children': subpages.map((e) {
+        return e.toMap();
+      }).toList(),
     },
   );
-
-  final h = html.parse(output).head..append(html.Element.html('<meta>'));
-
-  print(h.children);
 
   final path = page.path
       .replaceFirst(_contentDirPattern, 'public${Platform.pathSeparator}');
@@ -96,7 +107,6 @@ Future<void> _buildPage(Page page, BuildConfig config) async {
 
   final canonicalPath =
       '${config.baseUrl}:4040/${file.path.replaceFirst('.html', '/').substring(7)}';
-  print(canonicalPath);
 
   final canonicalTag = '<link rel="canonical" href="$canonicalPath"/>';
   final refreshTag =

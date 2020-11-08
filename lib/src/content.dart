@@ -6,10 +6,17 @@ abstract class Content {
   String get path;
 
   R when<R>({R Function(Section section) section, R Function(Page page) page});
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'name': name,
+      'path': path,
+    };
+  }
 }
 
 /// [Section] is node with other subsections or pages.
-class Section implements Content {
+class Section extends Content {
   Section({
     @required this.name,
     this.path,
@@ -26,16 +33,25 @@ class Section implements Content {
   final List<Content> children;
 
   @override
-  String toString() => 'Section{name: $name, children: $children}';
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'name': name,
+      'path': path,
+      'children': children.map((e) => e.toMap()).toList(),
+    };
+  }
 
   @override
   R when<R>({R Function(Section section) section, R Function(Page page) page}) {
     return section?.call(this);
   }
+
+  @override
+  String toString() => 'Section{name: $name, path: $path, children: $children}';
 }
 
 /// [Page] is leaf node which cannot have other subpages.
-class Page implements Content {
+class Page extends Content {
   Page({
     @required this.name,
     @required this.path,
@@ -54,10 +70,19 @@ class Page implements Content {
   final Map<String, dynamic> metadata;
 
   @override
-  String toString() => 'Page{name: $name}';
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'name': name,
+      'path': path,
+      'content': content,
+    };
+  }
 
   @override
   R when<R>({R Function(Section section) section, R Function(Page page) page}) {
     return page?.call(this);
   }
+
+  @override
+  String toString() => 'Page{name: $name, path: $path}';
 }

@@ -3,6 +3,10 @@ author: William Blake
 
 base_url: 'http://127.0.0.1:4040'
 
+templates:
+  page: page.mustache
+  section: section.mustache
+
 build:
   verbose: true
 
