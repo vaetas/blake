@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:yaml/yaml.dart';
 
 class MarkdownFile {
   MarkdownFile({
@@ -6,7 +7,7 @@ class MarkdownFile {
     @required this.content,
   });
 
-  final String metadata;
+  final YamlMap metadata;
 
   /// Raw markdown content.
   final String content;
