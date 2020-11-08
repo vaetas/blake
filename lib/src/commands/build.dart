@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:blake/src/assets/reload_js.dart';
 import 'package:blake/src/cli.dart';
 import 'package:blake/src/content.dart';
 import 'package:blake/src/markdown/parser.dart';
@@ -75,6 +76,7 @@ class BuildCommand extends Command<int> {
 
     await _renderSection(content, 'public');
     await _buildStaticContent();
+    await _setupReloadScript();
 
     stopwatch.stop();
     print('Build done in ${stopwatch.elapsedMilliseconds}ms');
@@ -164,5 +166,10 @@ class BuildCommand extends Command<int> {
     if (verbose) {
       print('Static files copied');
     }
+  }
+
+  Future<void> _setupReloadScript() async {
+    // TODO: Use optional configuration.
+    await File('public/reload.js').writeAsString(getReloadScript(4041));
   }
 }

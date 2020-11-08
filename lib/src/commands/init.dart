@@ -27,12 +27,9 @@ class InitCommand extends Command<int> {
 
     try {
       await _initConfig(name);
-      final contentDir = await Directory(name + 'content').create(
-        recursive: true,
-      );
-     
-      final templatesDir = await Directory(name + 'templates').create();
 
+      await Directory(name + 'content').create();
+      await Directory(name + 'templates').create();
       await Directory(name + 'static').create();
     } catch (e) {
       print('Error: $e');
@@ -48,7 +45,8 @@ class InitCommand extends Command<int> {
     final config = await configFile.readAsString();
 
     if (config.trim().isNotEmpty) {
-      printWarning('WARNING: Config is not empty and will be rewritten.');
+      printWarning('WARNING: config.yaml file already exists.');
+      return;
     }
 
     printInfo('Populating with default values...');

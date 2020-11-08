@@ -11,7 +11,8 @@ class ServeCommand extends Command<int> {
   ServeCommand() {
     argParser
       ..addOption('address', abbr: 'a', defaultsTo: '127.0.0.1')
-      ..addOption('port', abbr: 'p', defaultsTo: '4040');
+      ..addOption('port', abbr: 'p', defaultsTo: '4040')
+      ..addOption('websocketPort', defaultsTo: '4041');
   }
 
   @override

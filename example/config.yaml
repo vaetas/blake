@@ -1,2 +1,12 @@
 title: Static Site
 author: William Blake
+
+base_url: 'http://127.0.0.1:4040'
+
+build:
+  verbose: true
+
+serve:
+  address: '127.0.0.1'
+  port: 80
+  websocket_port: 4041
