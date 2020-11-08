@@ -8,6 +8,7 @@ class BuildConfig {
     this.contentFolder = 'content',
     this.templatesFolder = 'templates',
     this.staticFolder = 'static',
+    this.baseUrl = 'http://127.0.0.1'
   });
 
   BuildConfig.fromArgResult(ArgResults results)
@@ -25,4 +26,6 @@ class BuildConfig {
   final String templatesFolder;
 
   final String staticFolder;
+
+  final String baseUrl;
 }

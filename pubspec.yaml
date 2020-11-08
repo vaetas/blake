@@ -12,6 +12,7 @@ executables:
 dependencies:
   ansicolor: ^1.0.5
   args: ^1.6.0
+  html: ^0.14.0+4
   http_server: ^0.9.8+3
   markdown: ^3.0.0
   meta: ^1.2.3

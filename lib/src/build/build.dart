@@ -7,6 +7,8 @@ import 'package:blake/src/content.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/markdown/parser.dart';
 import 'package:blake/src/utils.dart';
+import 'package:html/dom.dart' as html;
+import 'package:html/parser.dart' as html;
 import 'package:mustache_template/mustache_template.dart';
 import 'package:path/path.dart' as p;
 
@@ -58,21 +60,21 @@ Future<Content> parseFileTree(FileSystemEntity entity) async {
 
 Future<void> generateContent(Content content, BuildConfig config) async {
   await content.when(
-    section: _buildSection,
-    page: _buildPage,
+    section: (section) => _buildSection(section, config),
+    page: (page) => _buildPage(page, config),
   );
 }
 
-Future<void> _buildSection(Section section) async {
+Future<void> _buildSection(Section section, BuildConfig config) async {
   for (var child in section.children) {
     await child.when(
-      section: _buildSection,
-      page: _buildPage,
+      section: (section) => _buildSection(section, config),
+      page: (page) => _buildPage(page, config),
     );
   }
 }
 
-Future<void> _buildPage(Page page) async {
+Future<void> _buildPage(Page page, BuildConfig config) async {
   final template = await File('templates/index.mustache').readAsString();
   final mustache = Template(template);
 
@@ -83,30 +85,50 @@ Future<void> _buildPage(Page page) async {
     },
   );
 
+  final h = html.parse(output).head..append(html.Element.html('<meta>'));
+
+  print(h.children);
+
   final path = page.path
       .replaceFirst(_contentDirPattern, 'public${Platform.pathSeparator}');
 
-  print(path);
-
   final file = File(path.replaceFirst('.md', '.html'));
+
+  final canonicalPath =
+      '${config.baseUrl}:4040/${file.path.replaceFirst('.html', '/').substring(7)}';
+  print(canonicalPath);
+
+  final canonicalTag = '<link rel="canonical" href="$canonicalPath"/>';
+  final refreshTag =
+      '<meta http-equiv="refresh" content="0; url=$canonicalPath" />';
+  final noIndexTag = '<meta name="robots" content="noindex">';
+
+  final alteredOutput = html.parse(output);
+
+  if (!file.isIndex) {
+    alteredOutput.head
+      ..append(html.Element.html(canonicalTag))
+      ..append(html.Element.html(refreshTag))
+      ..append(html.Element.html(noIndexTag));
+  }
 
   if (!await file.exists()) {
     await file.create(recursive: true);
   }
 
-  print('File:' + file.path);
-  await file.writeAsString(output, mode: FileMode.write);
+  await file.writeAsString(alteredOutput.outerHtml, mode: FileMode.write);
 
   // For each post like /hello.html create /hello/index.html page which will
   // redirect user.
   if (!file.isIndex) {
     // TODO: Redirect user.
-    await File(
+    final canonicalFile = await File(
       file.path.replaceFirst(
         '.html',
         '${Platform.pathSeparator}index.html',
       ),
     ).create(recursive: true);
+    await canonicalFile.writeAsString(output);
   }
 }
 
