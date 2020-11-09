@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:blake/blake.dart';
 import 'package:blake/src/build/build_config.dart';
 import 'package:blake/src/cli.dart';
 import 'package:blake/src/local_server.dart';
+import 'package:blake/src/serve/serve_config.dart';
 import 'package:watcher/watcher.dart';
 
 class ServeCommand extends Command<int> {
@@ -28,7 +28,7 @@ class ServeCommand extends Command<int> {
   @override
   FutureOr<int> run() async {
     printInfo('Serving...');
-    final config = _ServeConfig(argResults);
+    final config = ServeConfig.fromArgResult(argResults);
     final buildConfig = const BuildConfig();
 
     // Build once before starting server to ensure there is something to show.
@@ -60,17 +60,6 @@ class ServeCommand extends Command<int> {
       pollingDelay: const Duration(milliseconds: 250),
     ).events.where((e) => !_publicDirRegexp.hasMatch(e.path));
   }
-}
-
-class _ServeConfig {
-  _ServeConfig(this.argResults)
-      : address = argResults['address'] as String,
-        port = int.parse(argResults['port'] as String);
-
-  final ArgResults argResults;
-
-  final String address;
-  final int port;
 }
 
 /// Valid for paths starting with `public` directory.
