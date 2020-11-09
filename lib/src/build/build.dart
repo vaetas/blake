@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:blake/src/build/build_config.dart';
-import 'package:blake/src/cli.dart';
 import 'package:blake/src/content.dart';
 import 'package:blake/src/file_system.dart';
+import 'package:blake/src/log.dart';
 import 'package:blake/src/markdown/parser.dart';
 import 'package:blake/src/utils.dart';
 import 'package:html/dom.dart' as html;
@@ -13,20 +13,20 @@ import 'package:mustache_template/mustache_template.dart';
 import 'package:path/path.dart' as p;
 
 Future<int> build(BuildConfig config) async {
-  printInfo('Building...');
+  log.fine('Building');
   final stopwatch = Stopwatch()..start();
   final contentDir = await getContentDirectory(config);
   final tree = await parseFileTree(contentDir);
 
   if (config.verbose) {
-    print('Files: $tree');
+    log.fine('Files: $tree');
   }
 
   await generateContent(tree, config);
   await copyStaticFiles(config);
 
   stopwatch.stop();
-  print('Build done in ${stopwatch.elapsedMilliseconds}ms');
+  log.info('Build done in ${stopwatch.elapsedMilliseconds}ms');
   return 0;
 }
 

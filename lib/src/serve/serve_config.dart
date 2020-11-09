@@ -11,7 +11,7 @@ class ServeConfig {
       : this(
           address: results['address'] as String,
           port: int.parse(results['port'] as String),
-          websocketPort: int.parse(results['websocket_port'] as String),
+          websocketPort: int.parse(results['websocket-port'] as String),
         );
 
   final String address;

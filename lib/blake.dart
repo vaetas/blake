@@ -2,6 +2,7 @@ import 'package:args/command_runner.dart';
 import 'package:blake/src/commands/build_command.dart';
 import 'package:blake/src/commands/init_command.dart';
 import 'package:blake/src/commands/serve_command.dart';
+import 'package:blake/src/log.dart';
 
 export 'src/build/build.dart';
 export 'src/content.dart';
@@ -14,6 +15,7 @@ class Blake {
     ..addCommand(InitCommand());
 
   Future<int> call(List<String> args) {
+    setupLogs();
     return runner.run(args);
   }
 }
