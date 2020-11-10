@@ -52,9 +52,12 @@ class Page extends Content {
 
   @override
   Map<String, dynamic> toMap(BuildConfig config) {
+    // TODO: Refactor path.
     return <String, dynamic>{
       'name': name,
-      'path': getCanonicalPath(config),
+      'path': getCanonicalPath(config)
+          .replaceFirst(config.buildFolder, '')
+          .replaceFirst('index.html', ''),
       'content': content,
       'metadata': metadata,
     };

@@ -12,9 +12,7 @@ Future<int> serve({
   @required BuildConfig buildConfig,
 }) async {
   // Build once before starting server to ensure there is something to show.
-  if (await build(buildConfig) != 0) {
-    return 1;
-  }
+  await build(buildConfig);
 
   final _onReload = StreamController<void>();
 

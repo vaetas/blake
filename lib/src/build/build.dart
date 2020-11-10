@@ -15,7 +15,14 @@ Future<int> build(BuildConfig config) async {
   log.fine('Building');
   final stopwatch = Stopwatch()..start();
   final contentDir = await getContentDirectory(config);
-  final tree = await parseContentTree(contentDir);
+
+  Content tree;
+  try {
+    tree = await parseContentTree(contentDir);
+  } catch (e) {
+    log.severe('Build failed: Could not parse content tree');
+    return 1;
+  }
 
   log.fine('Files: $tree');
 
