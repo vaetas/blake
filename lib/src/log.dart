@@ -1,8 +1,9 @@
 import 'package:blake/src/cli.dart';
 import 'package:logging/logging.dart';
 
-void setupLogs({Level level = Level.ALL}) {
-  Logger.root.level = level; // defaults to Level.INFO
+void setupLogging({Level level = Level.ALL}) {
+  Logger.root.level = level;
+
   Logger.root.onRecord.listen((record) {
     final name = record.loggerName;
     final level = record.level;

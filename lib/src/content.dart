@@ -1,4 +1,6 @@
+import 'package:blake/src/build/build_config.dart';
 import 'package:meta/meta.dart';
+import 'package:path/path.dart' as p;
 
 abstract class Content {
   String get name;
@@ -64,6 +66,30 @@ class Page extends Content {
 
   @override
   final String path;
+
+  /// Get final build path for this [Page].
+  ///
+  /// Index file is kept as is, only file extension is changed to HTML.
+  /// For regular page is created a subdirectory with `index.html` file.
+  ///
+  /// Example:
+  ///   content/post.md   ->  public/post/index.html
+  ///   content/index.md  ->  public/index.html
+  String getCanonicalPath(BuildConfig config) {
+    final buildPath = path.replaceFirst(
+      config.contentFolder,
+      config.buildFolder,
+    );
+
+    final basename = p.basenameWithoutExtension(buildPath);
+    final dirName = p.dirname(buildPath);
+
+    if (basename == 'index') {
+      return '$dirName/$basename.html';
+    } else {
+      return '$dirName/$basename/index.html';
+    }
+  }
 
   final String content;
 

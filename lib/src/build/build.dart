@@ -7,11 +7,10 @@ import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/markdown/parser.dart';
 import 'package:blake/src/utils.dart';
-import 'package:html/dom.dart' as html;
-import 'package:html/parser.dart' as html;
 import 'package:mustache_template/mustache_template.dart';
 import 'package:path/path.dart' as p;
 
+/// Build static site
 Future<int> build(BuildConfig config) async {
   log.fine('Building');
   final stopwatch = Stopwatch()..start();
@@ -82,7 +81,6 @@ Future<void> _buildPage(
   Page page,
   BuildConfig config, {
   bool index = false,
-  List<Page> subpages = const [],
 }) async {
   final templatesDir = await getTemplatesDirectory(config);
   final template = await File(
@@ -94,52 +92,16 @@ Future<void> _buildPage(
     <dynamic, dynamic>{
       'title': page.name,
       'content': page.content,
-      'children': subpages.map((e) {
-        return e.toMap();
-      }).toList(),
+      'children': <dynamic>[],
     },
   );
 
-  final path = page.path
-      .replaceFirst(_contentDirPattern, 'public${Platform.pathSeparator}');
+  final path = page.getCanonicalPath(config);
 
-  final file = File(path.replaceFirst('.md', '.html'));
+  log.fine('Page: $path');
 
-  final canonicalPath =
-      '${config.baseUrl}:4040/${file.path.replaceFirst('.html', '/').substring(7)}';
-
-  final canonicalTag = '<link rel="canonical" href="$canonicalPath"/>';
-  final refreshTag =
-      '<meta http-equiv="refresh" content="0; url=$canonicalPath" />';
-  final noIndexTag = '<meta name="robots" content="noindex">';
-
-  final alteredOutput = html.parse(output);
-
-  if (!file.isIndex) {
-    alteredOutput.head
-      ..append(html.Element.html(canonicalTag))
-      ..append(html.Element.html(refreshTag))
-      ..append(html.Element.html(noIndexTag));
-  }
-
-  if (!await file.exists()) {
-    await file.create(recursive: true);
-  }
-
-  await file.writeAsString(alteredOutput.outerHtml, mode: FileMode.write);
-
-  // For each post like /hello.html create /hello/index.html page which will
-  // redirect user.
-  if (!file.isIndex) {
-    // TODO: Redirect user.
-    final canonicalFile = await File(
-      file.path.replaceFirst(
-        '.html',
-        '${Platform.pathSeparator}index.html',
-      ),
-    ).create(recursive: true);
-    await canonicalFile.writeAsString(output);
-  }
+  final file = await File(path).create(recursive: true);
+  await file.writeAsString(output);
 }
 
 Future<void> copyStaticFiles(BuildConfig config) async {
@@ -163,17 +125,5 @@ Future<void> copyStaticFiles(BuildConfig config) async {
 
   if (config.verbose) {
     print('Static files copied');
-  }
-}
-
-final _contentDirPattern = RegExp(r'^(\.\\|\.\/|\\|\/)?content[\\\/]{1}');
-
-extension on FileSystemEntity {
-  String get basename {
-    return p.basename(path);
-  }
-
-  bool get isIndex {
-    return basename == 'index.html';
   }
 }

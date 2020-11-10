@@ -15,7 +15,7 @@ class Blake {
     ..addCommand(InitCommand());
 
   Future<int> call(List<String> args) {
-    setupLogs();
+    setupLogging();
     return runner.run(args);
   }
 }
