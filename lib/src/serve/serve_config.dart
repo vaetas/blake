@@ -1,4 +1,5 @@
 import 'package:args/args.dart';
+import 'package:yaml/yaml.dart';
 
 class ServeConfig {
   const ServeConfig({
@@ -12,6 +13,13 @@ class ServeConfig {
           address: results['address'] as String,
           port: int.parse(results['port'] as String),
           websocketPort: int.parse(results['websocket-port'] as String),
+        );
+
+  ServeConfig.fromYaml(YamlMap yaml)
+      : this(
+          address: yaml['address'] as String,
+          port: yaml['port'] as int,
+          websocketPort: yaml['websocket_port'] as int,
         );
 
   final String address;

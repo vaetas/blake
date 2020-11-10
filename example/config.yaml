@@ -1,7 +1,7 @@
 title: Static Site
 author: William Blake
 
-base_url: 'http://127.0.0.1:4040'
+base_url: http://127.0.0.1:4040
 
 templates:
   page: page.mustache
@@ -9,8 +9,9 @@ templates:
 
 build:
   verbose: true
+  folder: public
 
 serve:
-  address: '127.0.0.1'
+  address: 127.0.0.1
   port: 80
   websocket_port: 4041

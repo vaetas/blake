@@ -4,16 +4,11 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:blake/src/assets/reload_js.dart';
 import 'package:blake/src/build/build.dart';
-import 'package:blake/src/build/build_config.dart';
+import 'package:blake/src/config.dart';
 
 class BuildCommand extends Command<int> {
-  BuildCommand() {
+  BuildCommand(this.config) {
     argParser
-      ..addOption(
-        'build_folder',
-        abbr: 'f',
-        defaultsTo: 'public',
-      )
       ..addFlag(
         'verbose',
         abbr: 'v',
@@ -23,24 +18,23 @@ class BuildCommand extends Command<int> {
       );
   }
 
+  final Config config;
+
   @override
   final name = 'build';
 
   @override
   final description = 'Build static files.';
 
-  BuildConfig config = const BuildConfig();
-
   @override
   FutureOr<int> run() async {
-    config = BuildConfig.fromArgResult(argResults);
     await _setupReloadScript();
-    return build(config);
+    return build(config.build);
   }
 
   Future<void> _setupReloadScript() async {
-    // TODO: Use optional configuration.
-    await File('${config.buildFolder}/reload.js')
-        .writeAsString(getReloadScript(4041));
+    await File(
+      '${config.build.buildFolder}/reload.js',
+    ).writeAsString(getReloadScript(config.serve.websocketPort));
   }
 }

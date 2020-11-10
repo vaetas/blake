@@ -1,9 +1,7 @@
 import 'package:blake/src/cli.dart';
 import 'package:logging/logging.dart';
 
-void setupLogging({Level level = Level.ALL}) {
-  Logger.root.level = level;
-
+void setupLogging({bool verbose = false}) {
   Logger.root.onRecord.listen((record) {
     final name = record.loggerName;
     final level = record.level;
@@ -26,7 +24,9 @@ void setupLogging({Level level = Level.ALL}) {
       return;
     }
 
-    print(output);
+    if (verbose) {
+      print(output);
+    }
   });
 }
 

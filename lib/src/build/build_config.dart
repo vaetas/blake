@@ -1,5 +1,6 @@
 import 'package:args/args.dart';
 import 'package:blake/src/utils.dart';
+import 'package:yaml/yaml.dart';
 
 class BuildConfig {
   const BuildConfig({
@@ -8,13 +9,18 @@ class BuildConfig {
     this.contentFolder = 'content',
     this.templatesFolder = 'templates',
     this.staticFolder = 'static',
-    this.baseUrl = 'http://127.0.0.1'
+    this.baseUrl = 'http://127.0.0.1',
   });
 
   BuildConfig.fromArgResult(ArgResults results)
       : this(
-          verbose: results?.get('verbose') as bool,
-          buildFolder: results?.get('build_folder') as String,
+          verbose: results.get<bool>('verbose'),
+        );
+
+  BuildConfig.fromYaml(YamlMap map)
+      : this(
+          verbose: map.get<bool>('verbose'),
+          buildFolder: map.get<String>('folder').replaceFirst('/', ''),
         );
 
   final bool verbose;

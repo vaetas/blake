@@ -15,7 +15,7 @@ class Page extends Content {
   });
 
   @override
-  String get name => (metadata?.get('title') as String) ?? p.basename(path);
+  String get name => metadata?.get<String>('title') ?? p.basename(path);
 
   @override
   final String path;

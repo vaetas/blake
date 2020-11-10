@@ -10,13 +10,19 @@ extension IterableExtension<E> on Iterable<E> {
 }
 
 extension ArgResultsExtension on ArgResults {
-  dynamic get(String name) {
-    return this[name];
+  T get<T>(String name) {
+    return this[name] as T;
   }
 }
 
 extension YamlMapExtension on YamlMap {
-  dynamic get(String key) {
-    return this[key];
+  T get<T>(String key) {
+    return this[key] as T;
+  }
+}
+
+extension MapExtension on Map<String, dynamic> {
+  T get<T>(String key) {
+    return this[key] as T;
   }
 }

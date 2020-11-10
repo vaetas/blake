@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:blake/src/build/build_config.dart';
+import 'package:blake/src/config.dart';
+import 'package:yaml/yaml.dart';
 
 Future<List<FileSystemEntity>> listDirectory(String path) {
   return Directory(path).list().toList();
@@ -50,4 +52,11 @@ Future<Directory> getStaticDirectory(BuildConfig config) async {
 
 Future<File> getConfigFile() async {
   return File('config.yaml').create();
+}
+
+Future<Config> getConfig() async {
+  final file = await getConfigFile();
+  final config = await file.readAsString();
+  final yaml = loadYaml(config) as YamlMap;
+  return Config.fromYaml(yaml);
 }
