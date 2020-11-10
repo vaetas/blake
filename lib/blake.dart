@@ -5,7 +5,7 @@ import 'package:blake/src/commands/serve_command.dart';
 import 'package:blake/src/log.dart';
 
 export 'src/build/build.dart';
-export 'src/content.dart';
+export 'src/content/content.dart';
 export 'src/file_system.dart';
 
 class Blake {

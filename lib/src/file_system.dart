@@ -17,11 +17,11 @@ extension DirectoryExtension on Directory {
 }
 
 extension FileSystemEntityExtension on FileSystemEntity {
-  R when<R>(
+  R when<R>({
     R Function(File file) file,
     R Function(Directory directory) directory,
     R Function(Link link) link,
-  ) {
+  }) {
     if (FileSystemEntity.isFileSync(path)) {
       return file?.call(this as File);
     } else if (FileSystemEntity.isDirectorySync(path)) {

@@ -1,71 +1,28 @@
 import 'package:blake/src/build/build_config.dart';
+import 'package:blake/src/content/content.dart';
+import 'package:blake/src/content/section.dart';
+import 'package:blake/src/utils.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
-
-abstract class Content {
-  String get name;
-
-  String get path;
-
-  R when<R>({R Function(Section section) section, R Function(Page page) page});
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'name': name,
-      'path': path,
-    };
-  }
-}
-
-/// [Section] is node with other subsections or pages.
-class Section extends Content {
-  Section({
-    @required this.name,
-    this.path,
-    this.children = const [],
-  }) : assert(name != null);
-
-  @override
-  final String name;
-
-  @override
-  final String path;
-
-  /// [Page] or [Section] content.
-  final List<Content> children;
-
-  @override
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'name': name,
-      'path': path,
-      'children': children.map((e) => e.toMap()).toList(),
-    };
-  }
-
-  @override
-  R when<R>({R Function(Section section) section, R Function(Page page) page}) {
-    return section?.call(this);
-  }
-
-  @override
-  String toString() => 'Section{name: $name, path: $path, children: $children}';
-}
+import 'package:yaml/yaml.dart';
 
 /// [Page] is leaf node which cannot have other subpages.
 class Page extends Content {
   Page({
-    @required this.name,
     @required this.path,
     this.content,
-    this.metadata = const <String, dynamic>{},
+    this.metadata,
   });
 
   @override
-  final String name;
+  String get name => (metadata?.get('title') as String) ?? p.basename(path);
 
   @override
   final String path;
+
+  final String content;
+
+  final YamlMap metadata;
 
   /// Get final build path for this [Page].
   ///
@@ -84,23 +41,22 @@ class Page extends Content {
     final basename = p.basenameWithoutExtension(buildPath);
     final dirName = p.dirname(buildPath);
 
-    if (basename == 'index') {
+    if (isIndex) {
       return '$dirName/$basename.html';
     } else {
       return '$dirName/$basename/index.html';
     }
   }
 
-  final String content;
-
-  final Map<String, dynamic> metadata;
+  bool get isIndex => p.basenameWithoutExtension(path) == 'index';
 
   @override
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap(BuildConfig config) {
     return <String, dynamic>{
       'name': name,
-      'path': path,
+      'path': getCanonicalPath(config),
       'content': content,
+      'metadata': metadata,
     };
   }
 
