@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:blake/src/build/build.dart';
 import 'package:blake/src/build/build_config.dart';
+import 'package:blake/src/log.dart';
 import 'package:blake/src/serve/local_server.dart';
 import 'package:blake/src/serve/serve_config.dart';
 import 'package:blake/src/serve/watch.dart';
@@ -22,6 +23,8 @@ Future<int> serve({
     stopwatch.stop();
     _onReload.add(null);
   });
+
+  log.warning('Serve config: ${serveConfig}');
 
   await LocalServer(
     buildConfig.buildFolder,

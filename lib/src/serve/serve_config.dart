@@ -2,7 +2,7 @@ import 'package:args/args.dart';
 import 'package:yaml/yaml.dart';
 
 class ServeConfig {
-  const ServeConfig({
+  ServeConfig({
     this.address = 'http://127.0.0.1',
     this.port = 80,
     this.websocketPort = 4041,
@@ -22,9 +22,9 @@ class ServeConfig {
           websocketPort: yaml['websocket_port'] as int,
         );
 
-  final String address;
-  final int port;
-  final int websocketPort;
+  String address;
+  int port;
+  int websocketPort;
 
   @override
   String toString() {

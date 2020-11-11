@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:args/command_runner.dart';
-import 'package:blake/src/build/build_config.dart';
 import 'package:blake/src/cli.dart';
+import 'package:blake/src/config.dart';
 import 'package:blake/src/serve/serve.dart';
-import 'package:blake/src/serve/serve_config.dart';
 
 class ServeCommand extends Command<int> {
-  ServeCommand() {
+  ServeCommand(this.config) {
     argParser
       ..addOption('address', abbr: 'a', defaultsTo: '127.0.0.1')
       ..addOption('port', abbr: 'p', defaultsTo: '4040')
@@ -23,15 +22,15 @@ class ServeCommand extends Command<int> {
   @override
   final String description = _description;
 
+  final Config config;
+
   @override
   FutureOr<int> run() async {
     printInfo('Serving...');
-    final serveConfig = ServeConfig.fromArgResult(argResults);
-    final buildConfig = const BuildConfig();
-
+    // TODO: Merge CLI options with config.
     return serve(
-      serveConfig: serveConfig,
-      buildConfig: buildConfig,
+      serveConfig: config.serve,
+      buildConfig: config.build,
     );
   }
 }

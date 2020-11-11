@@ -18,7 +18,7 @@ class Blake {
 
     runner
       ..addCommand(BuildCommand(config))
-      ..addCommand(ServeCommand())
+      ..addCommand(ServeCommand(config))
       ..addCommand(InitCommand());
 
     return runner.run(args);
