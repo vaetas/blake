@@ -12,7 +12,7 @@ import 'package:mustache_template/mustache_template.dart';
 
 /// Build static site
 Future<int> build(BuildConfig config) async {
-  log.fine('Building');
+  log.info('Building content');
   final stopwatch = Stopwatch()..start();
   final contentDir = await getContentDirectory(config);
 
@@ -24,7 +24,7 @@ Future<int> build(BuildConfig config) async {
     return 1;
   }
 
-  log.fine('Files: $tree');
+  log.debug('Files: $tree');
 
   await generateContent(tree, config);
   await copyStaticFiles(config);
@@ -59,7 +59,7 @@ Future<void> _buildSection(Section section, BuildConfig config) async {
 }
 
 Future<void> _buildPage(Page page, BuildConfig config) async {
-  log.fine('Build: $page');
+  log.debug('Build: $page');
 
   final templatesDir = await getTemplatesDirectory(config);
   final template = await File(
@@ -86,7 +86,7 @@ Future<void> _buildIndexPage(
   BuildConfig config, {
   List<Content> children = const [],
 }) async {
-  log.fine('Build: $page (index)');
+  log.debug('Build: $page (index)');
 
   final templatesDir = await getTemplatesDirectory(config);
   final template = await File(
@@ -118,7 +118,6 @@ Future<void> copyStaticFiles(BuildConfig config) async {
 
   for (var directory in directories) {
     final path = directory.path.replaceFirst('static', config.buildFolder);
-    print(path);
     await Directory(path).create(
       recursive: true,
     );
@@ -129,6 +128,6 @@ Future<void> copyStaticFiles(BuildConfig config) async {
   }
 
   if (config.verbose) {
-    print('Static files copied');
+    log.info('Static files copied');
   }
 }

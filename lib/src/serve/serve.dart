@@ -23,7 +23,7 @@ Future<int> serve(Config config) async {
     _onReload.add(null);
   });
 
-  log.warning('Serve config: ${config.serve}');
+  log.info('Serve config: ${config.serve}');
 
   await LocalServer(
     config.build.buildFolder,

@@ -1,4 +1,4 @@
-import 'package:blake/src/cli.dart';
+import 'package:blake/src/log.dart';
 import 'package:blake/src/markdown/footnote_syntax.dart';
 import 'package:blake/src/markdown/markdown_file.dart';
 import 'package:markdown/markdown.dart';
@@ -9,7 +9,7 @@ final _delimiter = RegExp(r'(---)(\n|\r)');
 MarkdownFile parse(String markdown) {
   if (_delimiter.allMatches(markdown).length < 2 ||
       _delimiter.firstMatch(markdown).start != 0) {
-    printWarning('Front matter is invalid or missing.');
+    log.warning('Front matter is invalid or missing.');
   }
 
   final matches = _delimiter.allMatches(markdown).toList();

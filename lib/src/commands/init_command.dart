@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:blake/src/cli.dart';
+import 'package:blake/src/log.dart';
 import 'package:blake/src/yaml.dart';
 
 class InitCommand extends Command<int> {
@@ -20,9 +20,9 @@ class InitCommand extends Command<int> {
     final name = argResults.rest.isEmpty ? '' : argResults.rest.first + '/';
 
     if (name.isEmpty) {
-      print(bluePen('Initializing project in current directory...'));
+      log.info('Initializing project in current directory...');
     } else {
-      printInfo('Initializing project in $name directory');
+      log.info('Initializing project in $name directory');
     }
 
     try {
@@ -32,11 +32,11 @@ class InitCommand extends Command<int> {
       await Directory(name + 'templates').create();
       await Directory(name + 'static').create();
     } catch (e) {
-      print('Error: $e');
+      log.severe('Init failed', e);
       return 1;
     }
 
-    printInfo('Site initialized successfully');
+    log.info('Site initialized successfully');
     return 0;
   }
 
@@ -45,11 +45,11 @@ class InitCommand extends Command<int> {
     final config = await configFile.readAsString();
 
     if (config.trim().isNotEmpty) {
-      printWarning('WARNING: config.yaml file already exists.');
+      log.warning('WARNING: config.yaml file already exists.');
       return;
     }
 
-    printInfo('Populating with default values...');
+    log.info('Populating with default values...');
 
     final defaultConfig = <String, dynamic>{
       'title': 'Static Site',
@@ -57,12 +57,12 @@ class InitCommand extends Command<int> {
     };
 
     final yaml = jsonToYaml(defaultConfig);
-    print(yaml);
+    log.debug(yaml);
 
     try {
       await configFile.writeAsString(yaml);
     } catch (e) {
-      printError(e);
+      log.severe(e);
     }
   }
 }

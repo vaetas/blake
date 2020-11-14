@@ -1,33 +1,76 @@
-import 'package:blake/src/cli.dart';
-import 'package:logging/logging.dart';
+import 'package:ansicolor/ansicolor.dart';
+import 'package:meta/meta.dart';
 
-void setupLogging({bool verbose = false}) {
-  Logger.root.onRecord.listen((record) {
-    final name = record.loggerName;
-    final level = record.level;
-    final message = record.message;
+class Logger {
+  Logger({this.enableColors = true});
 
-    final output = '${name.isNotEmpty ? '[$name] ' : ''}${message}';
+  final bool enableColors;
 
-    if (level == Level.SEVERE) {
-      printError(output);
-      return;
-    }
+  void debug(dynamic message) => _log(LogLevel.debug, message: message);
 
-    if (level == Level.WARNING) {
-      printWarning(output);
-      return;
-    }
+  void info(dynamic message) => _log(LogLevel.info, message: message);
 
-    if (level == Level.INFO) {
-      printInfo(output);
-      return;
-    }
+  void warning(dynamic message) => _log(LogLevel.warning, message: message);
 
-    if (verbose) {
-      print(output);
-    }
-  });
+  void severe(dynamic message, [Object error]) {
+    _log(LogLevel.severe, message: message, error: error);
+  }
+
+  void _log(LogLevel level, {@required dynamic message, Object error}) {
+    assert(message != null);
+
+    final pen = enableColors
+        ? level.when(
+            fine: (name) => _greyPen('[$name]'),
+            info: (name) => _bluePen('[$name]'),
+            warning: (name) => _yellowPen('[$name]'),
+            severe: (name) => _redPen('[$name]'),
+          )
+        : '[${level.name}]';
+
+    print('$pen $message');
+  }
+
+  final _greyPen = AnsiPen()..xterm(243, bg: false);
+  final _bluePen = AnsiPen()..blue(bg: false, bold: true);
+  final _redPen = AnsiPen()..red(bg: false, bold: true);
+  final _yellowPen = AnsiPen()..yellow(bg: false, bold: true);
 }
 
-final log = Logger('');
+typedef _WhenCallback<T> = T Function(String name);
+
+class LogLevel {
+  const LogLevel._(this.name);
+
+  final String name;
+
+  static const debug = LogLevel._('DEBUG');
+
+  static const info = LogLevel._('INFO');
+
+  static const warning = LogLevel._('WARNING');
+
+  static const severe = LogLevel._('SEVERE');
+
+  T when<T>({
+    _WhenCallback<T> fine,
+    _WhenCallback<T> info,
+    _WhenCallback<T> warning,
+    _WhenCallback<T> severe,
+  }) {
+    switch (name) {
+      case 'DEBUG':
+        return fine?.call(name);
+      case 'INFO':
+        return info?.call(name);
+      case 'WARNING':
+        return warning?.call(name);
+      case 'SEVERE':
+        return severe?.call(name);
+      default:
+        throw ArgumentError('LogLevel $name is not valid.');
+    }
+  }
+}
+
+final log = Logger();
