@@ -28,10 +28,7 @@ class ServeCommand extends Command<int> {
   FutureOr<int> run() async {
     printInfo('Serving...');
     // TODO: Merge CLI options with config.
-    return serve(
-      serveConfig: config.serve,
-      buildConfig: config.build,
-    );
+    return serve(config);
   }
 }
 

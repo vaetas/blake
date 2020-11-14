@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:blake/src/cli.dart';
 import 'package:http_server/http_server.dart';
 
 class LocalServer {
@@ -27,8 +26,6 @@ class LocalServer {
 
   HttpServer server;
 
-  var _websocketListened = false;
-
   Future<void> start() async {
     final directory = VirtualDirectory(path);
 
@@ -47,26 +44,16 @@ class LocalServer {
     await server.forEach(directory.serveRequest);
   }
 
-  // TODO: Set websocket port as a CLI option.
   Future<void> _startWebsocket() async {
     StreamSubscription<void> _sub;
     final websocket = await HttpServer.bind(address, websocketPort);
     await websocket.transform(WebSocketTransformer()).listen(
       (WebSocket socket) async {
-        _websocketListened = true;
         await _sub?.cancel();
         _sub = onReload.listen((event) {
           socket.add('reload_event');
         });
       },
     );
-
-    onReload.listen((event) {
-      if (!_websocketListened) {
-        printWarning(
-          'No WebSocket client is connected. Please refresh your browser.',
-        );
-      }
-    });
   }
 }

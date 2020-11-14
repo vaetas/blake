@@ -1,16 +1,43 @@
+import 'dart:io';
+
+import 'package:blake/src/config.dart';
 import 'package:mustache_template/mustache_template.dart';
 
-const _reloadScript = '''
-var socket = new WebSocket('ws://localhost:{{ websocket_port }}');
-socket.onmessage = function(event) {
-  location.reload();
-};
-''';
+Future<void> setupReloadScript(Config config) async {
+  await File(
+    '${config.build.buildFolder}/reload.js',
+  ).writeAsString(_getReloadScript(config));
+}
 
-String getReloadScript(int websocketPort) {
+String _getReloadScript(Config config) {
   return Template(_reloadScript).renderString(
     <String, dynamic>{
-      'websocket_port': websocketPort,
+      'websocket_port': config.serve.websocketPort,
     },
   );
 }
+
+const _reloadScript = r'''
+const address = 'ws://localhost:{{ websocket_port }}';
+
+function connect() {
+  try {
+    const socket = new WebSocket(address);
+
+    socket.onmessage = function() {
+      location.reload();
+    };
+    socket.onclose = function() {
+      console.log('Connection closed.')
+      connect();
+    }
+  } catch (error) {
+    console.log(`Error ${error}`);
+    setInterval(() => {
+      connect();
+    }, 1000);
+  }
+}
+
+connect();
+''';

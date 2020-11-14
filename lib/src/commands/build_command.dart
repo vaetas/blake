@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:blake/src/assets/reload_js.dart';
 import 'package:blake/src/build/build.dart';
 import 'package:blake/src/config.dart';
 
@@ -28,13 +26,6 @@ class BuildCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    await _setupReloadScript();
     return build(config.build);
-  }
-
-  Future<void> _setupReloadScript() async {
-    await File(
-      '${config.build.buildFolder}/reload.js',
-    ).writeAsString(getReloadScript(config.serve.websocketPort));
   }
 }
