@@ -9,7 +9,7 @@ import 'package:blake/src/serve/watch.dart';
 
 Future<int> serve(Config config) async {
   // Build once before starting server to ensure there is something to show.
-  await build(config.build);
+  await build(config);
 
   log.info('Copy reload.js script');
   await setupReloadScript(config);
@@ -18,7 +18,7 @@ Future<int> serve(Config config) async {
 
   await watch('.').listen((event) async {
     final stopwatch = Stopwatch()..start();
-    await build(config.build);
+    await build(config);
     stopwatch.stop();
     _onReload.add(null);
   });

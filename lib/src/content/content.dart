@@ -1,4 +1,4 @@
-import 'package:blake/src/build/build_config.dart';
+import 'package:blake/src/config.dart';
 import 'package:blake/src/content/page.dart';
 import 'package:blake/src/content/section.dart';
 import 'package:path/path.dart' as p;
@@ -10,7 +10,7 @@ abstract class Content {
 
   R when<R>({R Function(Section section) section, R Function(Page page) page});
 
-  Map<String, dynamic> toMap(BuildConfig config) {
+  Map<String, dynamic> toMap(Config config) {
     return <String, dynamic>{
       'name': name,
       'path': path,

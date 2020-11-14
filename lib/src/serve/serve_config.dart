@@ -26,6 +26,8 @@ class ServeConfig {
   int port;
   int websocketPort;
 
+  String get baseUrl => '$address:$port';
+
   @override
   String toString() {
     return 'ServeConfig{address: $address, port: $port, websocketPort: $websocketPort}';

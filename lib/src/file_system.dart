@@ -34,20 +34,20 @@ extension FileSystemEntityExtension on FileSystemEntity {
   }
 }
 
-Future<Directory> getBuildDirectory(BuildConfig config) async {
-  return Directory(config.buildFolder).create();
+Future<Directory> getBuildDirectory(Config config) async {
+  return Directory(config.build.buildFolder).create();
 }
 
-Future<Directory> getContentDirectory(BuildConfig config) async {
-  return Directory(config.contentFolder).create();
+Future<Directory> getContentDirectory(Config config) async {
+  return Directory(config.build.contentFolder).create();
 }
 
-Future<Directory> getTemplatesDirectory(BuildConfig config) async {
-  return Directory(config.templatesFolder).create();
+Future<Directory> getTemplatesDirectory(Config config) async {
+  return Directory(config.build.templatesFolder).create();
 }
 
-Future<Directory> getStaticDirectory(BuildConfig config) async {
-  return Directory(config.staticFolder).create();
+Future<Directory> getStaticDirectory(Config config) async {
+  return Directory(config.build.staticFolder).create();
 }
 
 Future<File> getConfigFile() async {

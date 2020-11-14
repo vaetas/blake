@@ -1,4 +1,4 @@
-import 'package:blake/src/build/build_config.dart';
+import 'package:blake/src/config.dart';
 import 'package:blake/src/content/content.dart';
 import 'package:blake/src/content/section.dart';
 import 'package:blake/src/utils.dart';
@@ -32,10 +32,10 @@ class Page extends Content {
   /// Example:
   ///   content/post.md   ->  public/post/index.html
   ///   content/index.md  ->  public/index.html
-  String getCanonicalPath(BuildConfig config) {
+  String getCanonicalPath(Config config) {
     final buildPath = path.replaceFirst(
-      config.contentFolder,
-      config.buildFolder,
+      config.build.contentFolder,
+      config.build.buildFolder,
     );
 
     final basename = p.basenameWithoutExtension(buildPath);
@@ -51,12 +51,12 @@ class Page extends Content {
   bool get isIndex => p.basenameWithoutExtension(path) == 'index';
 
   @override
-  Map<String, dynamic> toMap(BuildConfig config) {
+  Map<String, dynamic> toMap(Config config) {
     // TODO: Refactor path.
     return <String, dynamic>{
       'name': name,
       'path': getCanonicalPath(config)
-          .replaceFirst(config.buildFolder, '')
+          .replaceFirst(config.build.buildFolder, '')
           .replaceFirst('index.html', ''),
       'content': content,
       'metadata': metadata,

@@ -26,6 +26,6 @@ class BuildCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    return build(config.build);
+    return build(config);
   }
 }
