@@ -16,14 +16,18 @@ class Blake {
   final runner = CommandRunner<int>('blake', 'Blake Static Site Generator');
 
   Future<int> call(List<String> args) async {
-    final config = await getConfig();
+    try {
+      final config = await getConfig();
 
-    runner
-      ..addCommand(BuildCommand(config))
-      ..addCommand(ServeCommand(config))
-      ..addCommand(InitCommand());
+      runner
+        ..addCommand(BuildCommand(config))
+        ..addCommand(ServeCommand(config))
+        ..addCommand(InitCommand());
 
-    return runner.run(args);
+      return runner.run(args);
+    } catch (e) {
+      return runner.run(args);
+    }
   }
 }
 

@@ -54,8 +54,12 @@ Future<File> getConfigFile() async {
 }
 
 Future<Config> getConfig() async {
-  final file = await getConfigFile();
-  final config = await file.readAsString();
-  final yaml = loadYaml(config) as YamlMap;
-  return Config.fromYaml(yaml);
+  if (await File('config.yaml').exists()) {
+    final file = await getConfigFile();
+    final config = await file.readAsString();
+    final yaml = loadYaml(config) as YamlMap;
+    return Config.fromYaml(yaml);
+  }
+
+  throw 'Config file does not exists in current location\n';
 }

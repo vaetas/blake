@@ -23,3 +23,7 @@ dependencies:
 
 dev_dependencies:
   pedantic: ^1.9.2
+
+scripts:
+  compile:
+    windows: dart2native bin\blake.dart -o bin\blake.exe
