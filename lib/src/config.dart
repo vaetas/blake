@@ -8,8 +8,8 @@ class Config {
     title = map.get<String>(_kTitle, '');
     author = map.get<String>(_kAuthor, '');
     baseUrl = map.get<String>(_kBaseUrl, '');
-    build = BuildConfig.fromYaml(map.get<YamlMap>(_kBuild));
-    serve = ServeConfig.fromYaml(map.get<YamlMap>(_kServe));
+    build = BuildConfig.fromYaml(map.get(_kBuild, YamlMap()));
+    serve = ServeConfig.fromYaml(map.get(_kServe, YamlMap()));
     extra = map.get(_kExtra, YamlMap());
   }
 

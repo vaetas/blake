@@ -11,6 +11,7 @@ class BuildConfig {
   });
 
   factory BuildConfig.fromYaml(YamlMap map) {
+    assert(map != null);
     return BuildConfig(
       verbose: map.get(_kVerbose, false),
       publicFolder: map.get(_kPublicFolder, 'public'),

@@ -3,22 +3,27 @@ import 'package:yaml/yaml.dart';
 
 class ServeConfig {
   ServeConfig({
-    String address = '127.0.0.1',
-    this.port = 4040,
-    this.websocketPort = 4041,
-  }) : baseUrl = _parseAddress(address, port);
+    String address,
+    int port,
+    int websocketPort,
+  }) {
+    this.port = port ?? 4040;
+    this.websocketPort = websocketPort ?? 4041;
+    baseUrl = _parseAddress(address ?? '127.0.0.1', this.port);
+  }
 
-  factory ServeConfig.fromYaml(YamlMap yaml) {
+  factory ServeConfig.fromYaml(YamlMap map) {
+    assert(map != null);
     return ServeConfig(
-      address: yaml.get('address', '127.0.0.1'),
-      port: yaml.get(_kPort, 4040),
-      websocketPort: yaml.get(_kWebsocketPort, 4041),
+      address: map.get('address'),
+      port: map.get(_kPort),
+      websocketPort: map.get(_kWebsocketPort),
     );
   }
 
-  final Uri baseUrl;
-  final int port;
-  final int websocketPort;
+  Uri baseUrl;
+  int port;
+  int websocketPort;
 
   @override
   String toString() => 'ServeConfig${toMap()}';
