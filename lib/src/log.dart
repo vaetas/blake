@@ -17,8 +17,6 @@ class Logger {
   }
 
   void _log(LogLevel level, {@required dynamic message, Object error}) {
-    assert(message != null);
-
     final pen = enableColors
         ? level.when(
             fine: (name) => _greyPen('[$name]'),

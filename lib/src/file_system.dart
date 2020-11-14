@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:blake/src/build/build_config.dart';
 import 'package:blake/src/config.dart';
 import 'package:yaml/yaml.dart';
 
@@ -34,8 +33,8 @@ extension FileSystemEntityExtension on FileSystemEntity {
   }
 }
 
-Future<Directory> getBuildDirectory(Config config) async {
-  return Directory(config.build.buildFolder).create();
+Future<Directory> getPublicDirectory(Config config) async {
+  return Directory(config.build.publicFolder).create();
 }
 
 Future<Directory> getContentDirectory(Config config) async {

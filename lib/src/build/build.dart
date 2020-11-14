@@ -123,7 +123,7 @@ Future<void> copyStaticFiles(Config config) async {
   for (var directory in directories) {
     final path = directory.path.replaceFirst(
       config.build.staticFolder,
-      config.build.buildFolder,
+      config.build.publicFolder,
     );
     await Directory(path).create(
       recursive: true,
@@ -134,7 +134,7 @@ Future<void> copyStaticFiles(Config config) async {
     await file.copy(
       file.path.replaceFirst(
         config.build.staticFolder,
-        config.build.buildFolder,
+        config.build.publicFolder,
       ),
     );
   }

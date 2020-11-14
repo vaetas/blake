@@ -20,8 +20,8 @@ extension ArgResultsExtension on ArgResults {
 }
 
 extension YamlMapExtension on YamlMap {
-  T get<T>(String key) {
-    return this[key] as T;
+  T get<T>(String key, [T defaultValue]) {
+    return this[key] as T ?? defaultValue;
   }
 }
 

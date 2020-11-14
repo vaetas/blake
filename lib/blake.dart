@@ -5,8 +5,12 @@ import 'package:blake/src/commands/serve_command.dart';
 import 'package:blake/src/file_system.dart';
 
 export 'src/build/build.dart';
+export 'src/build/build_config.dart';
 export 'src/content/content.dart';
 export 'src/file_system.dart';
+export 'src/serve/local_server.dart';
+export 'src/serve/serve.dart';
+export 'src/serve/serve_config.dart';
 
 class Blake {
   final runner = CommandRunner<int>('blake', 'Blake Static Site Generator');

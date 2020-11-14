@@ -35,7 +35,7 @@ class Page extends Content {
   String getCanonicalPath(Config config) {
     final buildPath = path.replaceFirst(
       config.build.contentFolder,
-      config.build.buildFolder,
+      config.build.publicFolder,
     );
 
     final basename = p.basenameWithoutExtension(buildPath);
@@ -56,7 +56,7 @@ class Page extends Content {
     return <String, dynamic>{
       'name': name,
       'path': getCanonicalPath(config)
-          .replaceFirst(config.build.buildFolder, '')
+          .replaceFirst(config.build.publicFolder, '')
           .replaceFirst('index.html', ''),
       'content': content,
       'metadata': metadata,
