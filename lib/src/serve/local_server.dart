@@ -37,8 +37,13 @@ class LocalServer {
         directory.serveFile(File(indexUri.toFilePath()), request);
       };
 
-    // ignore: unawaited_futures
-    _startWebsocket();
+    try {
+      // ignore: unawaited_futures
+      _startWebsocket();
+    } catch (e) {
+      log.severe('Failed to start WebSocket server.');
+      return;
+    }
 
     server = await HttpServer.bind(address, port);
     log.info('Server started on http://$address:$port');

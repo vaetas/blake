@@ -11,6 +11,10 @@ extension IterableExtension<E> on Iterable<E> {
 
 extension ArgResultsExtension on ArgResults {
   T get<T>(String name) {
+    if (T is int) {
+      return int.parse(this[name] as String) as T;
+    }
+
     return this[name] as T;
   }
 }

@@ -23,7 +23,6 @@ const address = 'ws://localhost:{{ websocket_port }}';
 function connect() {
   try {
     const socket = new WebSocket(address);
-
     socket.onmessage = function() {
       location.reload();
     };

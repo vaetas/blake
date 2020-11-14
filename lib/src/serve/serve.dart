@@ -23,12 +23,13 @@ Future<int> serve(Config config) async {
     _onReload.add(null);
   });
 
-  log.info('Serve config: ${config.serve}');
+  log.info(config.serve);
 
   await LocalServer(
     config.build.buildFolder,
-    address: config.serve.address,
-    port: config.serve.port,
+    address: config.serve.baseUrl.host,
+    port: config.serve.baseUrl.port,
+    websocketPort: config.serve.websocketPort,
     onReload: _onReload.stream.asBroadcastStream(),
   ).start();
 

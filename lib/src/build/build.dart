@@ -71,10 +71,10 @@ Future<void> _buildPage(Page page, Config config) async {
   final metadata = <dynamic, dynamic>{
     'title': page.name,
     'content': page.content,
-    'base_url': config.baseUrl,
+    'base_url': config.serve.baseUrl,
   };
 
-  log.debug(metadata);
+  // log.debug(metadata);
 
   final output = mustache.renderString(metadata);
 
@@ -103,6 +103,7 @@ Future<void> _buildIndexPage(
       'title': page.name,
       'content': page.content,
       'children': children.whereType<Page>().map((e) => e.toMap(config)),
+      'base_url': config.serve.baseUrl,
     },
   );
 
@@ -120,15 +121,22 @@ Future<void> copyStaticFiles(Config config) async {
   final files = staticContent.whereType<File>();
 
   for (var directory in directories) {
-    final path =
-        directory.path.replaceFirst('static', config.build.buildFolder);
+    final path = directory.path.replaceFirst(
+      config.build.staticFolder,
+      config.build.buildFolder,
+    );
     await Directory(path).create(
       recursive: true,
     );
   }
 
   for (var file in files) {
-    await file.copy(file.path.replaceFirst('static', config.build.buildFolder));
+    await file.copy(
+      file.path.replaceFirst(
+        config.build.staticFolder,
+        config.build.buildFolder,
+      ),
+    );
   }
 
   log.info('Static files copied');
