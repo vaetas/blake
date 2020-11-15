@@ -6,6 +6,7 @@ import 'package:blake/src/config.dart';
 import 'package:blake/src/content/content.dart';
 import 'package:blake/src/content/page.dart';
 import 'package:blake/src/content/section.dart';
+import 'package:blake/src/errors.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:mustache_template/mustache_template.dart';
@@ -24,7 +25,14 @@ Future<int> build(Config config) async {
     return 1;
   }
 
-  await generateContent(tree, config);
+  try {
+    await generateContent(tree, config);
+  } catch (e) {
+    log.severe(e);
+    return 1;
+    // throw BuildException(e);
+  }
+
   await copyStaticFiles(config);
 
   stopwatch.stop();
@@ -33,10 +41,14 @@ Future<int> build(Config config) async {
 }
 
 Future<void> generateContent(Content content, Config config) async {
-  await content.when(
-    section: (section) => _buildSection(section, config),
-    page: (page) => _buildPage(page, config),
-  );
+  try {
+    await content.when(
+      section: (section) => _buildSection(section, config),
+      page: (page) => _buildPage(page, config),
+    );
+  } catch (e) {
+    rethrow;
+  }
 }
 
 Future<void> _buildSection(Section section, Config config) async {
@@ -48,31 +60,31 @@ Future<void> _buildSection(Section section, Config config) async {
     );
   }
 
-  for (var child in section.children) {
-    await child.when(
-      section: (section) => _buildSection(section, config),
-      page: (page) => _buildPage(page, config),
-    );
+  try {
+    for (var child in section.children) {
+      await child.when(
+        section: (section) => _buildSection(section, config),
+        page: (page) => _buildPage(page, config),
+      );
+    }
+  } catch (e) {
+    rethrow;
   }
 }
 
 Future<void> _buildPage(Page page, Config config) async {
   log.debug('Build: $page');
 
-  final templatesDir = await getTemplatesDirectory(config);
-  final template = await File(
-    '${templatesDir.path}/page.mustache',
-  ).readAsString();
-
-  final mustache = Template(template);
+  final template = await getTemplate(page, config);
 
   final metadata = <dynamic, dynamic>{
     'title': page.name,
     'content': page.content,
     'site': config.toMap(),
+    'template': template.name,
   }..addAll(page.metadata);
 
-  final output = mustache.renderString(metadata);
+  final output = template.renderString(metadata);
 
   final path = page.getCanonicalPath(config);
 
@@ -87,19 +99,15 @@ Future<void> _buildIndexPage(
 }) async {
   log.debug('Build: $page (index)');
 
-  final templatesDir = await getTemplatesDirectory(config);
-  final template = await File(
-    '${templatesDir.path}/section.mustache',
-  ).readAsString();
+  final template = await getTemplate(page, config);
 
-  final mustache = Template(template);
-
-  final output = mustache.renderString(
+  final output = template.renderString(
     <dynamic, dynamic>{
       'site': config.toMap(),
       'title': page.name,
       'content': page.content,
       'children': children.whereType<Page>().map((e) => e.toMap(config)),
+      'template': template.name,
     }..addAll(page.metadata),
   );
 
@@ -136,4 +144,19 @@ Future<void> copyStaticFiles(Config config) async {
   }
 
   log.info('Static files copied');
+}
+
+Future<Template> getTemplate(Page page, Config config) async {
+  // Template set in front matter has precedence.
+  var templateName = page.metadata['template'] as String;
+  templateName ??=
+      page.isIndex ? config.templates.section : config.templates.page;
+
+  final file = File('${config.build.templatesFolder}/$templateName');
+
+  if (!await file.exists()) {
+    throw BuildError('Template $templateName does not exists');
+  }
+
+  return Template(await file.readAsString(), name: templateName);
 }

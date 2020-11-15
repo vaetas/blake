@@ -1,4 +1,4 @@
-import 'package:blake/src/exceptions.dart';
+import 'package:blake/src/errors.dart';
 import 'package:blake/src/utils.dart';
 import 'package:yaml/yaml.dart';
 
@@ -51,7 +51,7 @@ Uri parseAddress(String address, int port) {
     final host = address.substring(match.start, match.end);
     return Uri(scheme: 'http', host: host, port: port);
   } else {
-    throw ConfigException('Invalid address format: $address');
+    throw ConfigError('Invalid address format: $address');
   }
 }
 

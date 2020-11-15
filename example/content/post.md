@@ -1,4 +1,6 @@
 ---
+title: Post
+template: page.mustache
 ---
 
 # Hello Word

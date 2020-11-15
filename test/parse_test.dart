@@ -1,4 +1,4 @@
-import 'package:blake/src/exceptions.dart';
+import 'package:blake/src/errors.dart';
 import 'package:blake/src/serve/serve_config.dart';
 import 'package:test/test.dart';
 
@@ -20,7 +20,7 @@ void main() {
       try {
         parseAddress('http://127.0.0.1/test', 4040);
       } catch (e) {
-        expect(e, isA<ConfigException>());
+        expect(e, isA<ConfigError>());
       }
     });
   });
