@@ -13,7 +13,7 @@ class Config {
     baseUrl = map.get<String>(_kBaseUrl, '');
     build = BuildConfig.fromYaml(map.get(_kBuild, _emptyMap));
     serve = ServeConfig.fromYaml(map.get(_kServe, _emptyMap));
-    templates = TemplatesConfig.fromYaml(map.get('templates', _emptyMap));
+    templates = TemplatesConfig.fromYaml(map.get(_kTemplates, _emptyMap));
     extra = map.get(_kExtra, _emptyMap);
   }
 
@@ -27,13 +27,13 @@ class Config {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'title': title,
-      'author': author,
-      'base_url': baseUrl,
-      'build': build.toMap(),
-      'serve': serve.toMap(),
-      'extra': extra,
-      'templates': templates,
+      _kTitle: title,
+      _kAuthor: author,
+      _kBaseUrl: baseUrl,
+      _kBuild: build.toMap(),
+      _kServe: serve.toMap(),
+      _kTemplates: templates,
+      _kExtra: extra,
     };
   }
 
@@ -46,4 +46,5 @@ const _kAuthor = 'author';
 const _kBaseUrl = 'base_url';
 const _kBuild = 'build';
 const _kServe = 'serve';
+const _kTemplates = 'templates';
 const _kExtra = 'extra';

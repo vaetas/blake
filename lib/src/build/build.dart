@@ -24,8 +24,6 @@ Future<int> build(Config config) async {
     return 1;
   }
 
-  log.debug('Files: $tree');
-
   await generateContent(tree, config);
   await copyStaticFiles(config);
 
@@ -71,10 +69,8 @@ Future<void> _buildPage(Page page, Config config) async {
   final metadata = <dynamic, dynamic>{
     'title': page.name,
     'content': page.content,
-    'base_url': config.serve.baseUrl,
-  };
-
-  // log.debug(metadata);
+    'site': config.toMap(),
+  }..addAll(page.metadata);
 
   final output = mustache.renderString(metadata);
 
@@ -100,11 +96,11 @@ Future<void> _buildIndexPage(
 
   final output = mustache.renderString(
     <dynamic, dynamic>{
+      'site': config.toMap(),
       'title': page.name,
       'content': page.content,
       'children': children.whereType<Page>().map((e) => e.toMap(config)),
-      'base_url': config.serve.baseUrl,
-    },
+    }..addAll(page.metadata),
   );
 
   final path = page.getCanonicalPath(config);

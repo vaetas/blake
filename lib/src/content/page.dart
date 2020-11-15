@@ -69,5 +69,5 @@ class Page extends Content {
   }
 
   @override
-  String toString() => 'Page{name: $name, path: $path}';
+  String toString() => 'Page{path: $path, metadata: $metadata}';
 }
