@@ -1,3 +1,4 @@
+import 'package:blake/src/exceptions.dart';
 import 'package:blake/src/utils.dart';
 import 'package:yaml/yaml.dart';
 
@@ -9,7 +10,7 @@ class ServeConfig {
   }) {
     this.port = port ?? 4040;
     this.websocketPort = websocketPort ?? 4041;
-    baseUrl = _parseAddress(address ?? '127.0.0.1', this.port);
+    baseUrl = parseAddress(address ?? '127.0.0.1', this.port);
   }
 
   factory ServeConfig.fromYaml(YamlMap map) {
@@ -44,17 +45,16 @@ const _kWebsocketPort = 'websocket_port';
 ///
 /// This will extract address properties from both `127.0.0.1` or `http://127.0.0.1/`
 /// and configuration is more permissive.
-Uri _parseAddress(String address, int port) {
-  if (_ipv4Pattern.hasMatch(address)) {
-    return Uri(scheme: 'http', host: address, port: port);
-  } else if (_httpPattern.hasMatch(address)) {
-    final match = _httpPattern.firstMatch(address);
-    final _url = address.substring(match.start, match.end);
-    return Uri(scheme: 'http', host: _url, port: port);
+Uri parseAddress(String address, int port) {
+  if (_addressPattern.hasMatch(address)) {
+    final match = _hostPattern.firstMatch(address);
+    final host = address.substring(match.start, match.end);
+    return Uri(scheme: 'http', host: host, port: port);
   } else {
-    throw ArgumentError('Invalid base_url');
+    throw ConfigException('Invalid address format: $address');
   }
 }
 
-final _ipv4Pattern = RegExp(r'^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$');
-final _httpPattern = RegExp(r'(?:[0-9]{1,3}\.){3}[0-9]{1,3}');
+final _hostPattern = RegExp(r'(?:[0-9]{1,3}\.){3}[0-9]{1,3}');
+final _addressPattern =
+    RegExp(r'^(http\:\/\/)?(?:[0-9]{1,3}\.){3}[0-9]{1,3}(\/)?$');
