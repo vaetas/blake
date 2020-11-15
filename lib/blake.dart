@@ -12,6 +12,8 @@ export 'src/serve/local_server.dart';
 export 'src/serve/serve.dart';
 export 'src/serve/serve_config.dart';
 
+/// [Blake] class ties together all commands and exports callable method for
+/// running this program.
 class Blake {
   final runner = CommandRunner<int>('blake', 'Blake Static Site Generator');
 
@@ -31,4 +33,5 @@ class Blake {
   }
 }
 
+/// Callable [Blake] instance for running commands.
 final blake = Blake();

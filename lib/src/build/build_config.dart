@@ -1,6 +1,7 @@
 import 'package:blake/src/utils.dart';
 import 'package:yaml/yaml.dart';
 
+/// Configuration for building static site.
 class BuildConfig {
   const BuildConfig({
     this.verbose = false,

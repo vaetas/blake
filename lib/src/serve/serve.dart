@@ -7,6 +7,7 @@ import 'package:blake/src/log.dart';
 import 'package:blake/src/serve/local_server.dart';
 import 'package:blake/src/serve/watch.dart';
 
+/// Build and serve static files on local server with live-reload support.
 Future<int> serve(Config config) async {
   // Build once before starting server to ensure there is something to show.
   await build(config);

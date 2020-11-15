@@ -4,6 +4,10 @@ import 'dart:io';
 import 'package:blake/src/log.dart';
 import 'package:http_server/http_server.dart';
 
+/// Local web server used for `blake serve` command.
+///
+/// This server binds to [address] and starts both HTTP and WebSocket (for live-reload)
+/// handler.
 class LocalServer {
   LocalServer(
     this.path, {

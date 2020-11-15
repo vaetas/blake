@@ -40,6 +40,7 @@ Future<int> build(Config config) async {
   return 0;
 }
 
+/// Generate static files from content tree.
 Future<void> generateContent(Content content, Config config) async {
   try {
     await content.when(
@@ -117,6 +118,7 @@ Future<void> _buildIndexPage(
   await file.writeAsString(output);
 }
 
+/// Move all files from static folder into public folder.
 Future<void> copyStaticFiles(Config config) async {
   final staticDir = await getStaticDirectory(config);
 
@@ -146,6 +148,8 @@ Future<void> copyStaticFiles(Config config) async {
   log.info('Static files copied');
 }
 
+/// Get template to render given [page]. If there is a `template` field in page
+/// front-matter it is used. Otherwise default template will used.
 Future<Template> getTemplate(Page page, Config config) async {
   // Template set in front matter has precedence.
   var templateName = page.metadata['template'] as String;

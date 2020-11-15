@@ -2,6 +2,7 @@ import 'package:blake/src/errors.dart';
 import 'package:blake/src/utils.dart';
 import 'package:yaml/yaml.dart';
 
+/// Configuration specific to `build serve` command.
 class ServeConfig {
   ServeConfig({
     String address,
