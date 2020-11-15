@@ -1,6 +1,6 @@
 name: blake
 version: 0.1.0
-description: Static Site Generator
+description: Experimental static site generator for Dart with Markdown support, mustache templates and live-reload.
 homepage: https://github.com/vaetas/blake
 
 environment:
@@ -27,4 +27,8 @@ dev_dependencies:
 
 scripts:
   compile:
-    windows: dart2native bin\blake.dart -o bin\blake.exe
+    win: dart2native bin\blake.dart -o bin\blake.exe
+    mac:
+      - mkdir -p build/mac
+      - dart2native bin/blake.dart -o build/mac/blake
+      - tar -czf build/mac/blake-mac.tar.gz build/mac/blake

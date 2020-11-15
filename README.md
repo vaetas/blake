@@ -1,3 +1,5 @@
+![Pub Version](https://img.shields.io/pub/v/blake)
+
 # Blake: Static Site Generator
 
 > Did he smile his work to see? \
