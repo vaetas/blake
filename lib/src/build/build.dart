@@ -27,6 +27,7 @@ Future<int> build(Config config) async {
   }
 
   try {
+    await Directory(config.build.publicFolder).create();
     await generateContent(tree, config);
   } catch (e) {
     log.severe(e);
