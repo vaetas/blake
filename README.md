@@ -5,7 +5,7 @@
 > Did he smile his work to see? \
 > Did he who made the Lamb make thee?
 
-Blake is an experimental static site generator in Dart language.
+Blake is an experimental static site generator written in the Dart language.
 
 Features as of now:
 
@@ -14,8 +14,15 @@ Features as of now:
 * Mustache templates.
 * Live-reload.
 * Single native binary.
+* YAML/JSON data content.
 
 Remember that this project is WIP. Everything can change at any time.
+
+## Install
+
+You can download compiled binary on [release page](https://github.com/vaetas/blake/releases). Builds are currently done manually and not every platform (i.e. Windows/Mac/Linux) will be available for each release.
+
+Another option is using `pub global activate blake`.
 
 ## Usage
 
@@ -31,11 +38,13 @@ And as usual, `blake` or `blake help` will show usage help.
 
 `content` directory contains all Markdown files which will be transformed into HTML files.
 
-`static` directory files will be copied into `public` folder without change.
+`static` directory files will be copied into the `public` folder without change.
 
 `public` contains generated files.
 
 `templates` should contain templates which will be used to process Markdown files inside `content`.
+
+`data` contains YAML/JSON files which you can use inside templates.
 
 `config.yaml` configures build options for your site.
 
@@ -51,12 +60,14 @@ dart2native bin/blake.dart -o bin/blake.exe
 dart2native bin/blake.dart -o bin/blake
 ```
 
-You can also run this project without compiling native binary.
+You can also run this project without compiling to the binary.
 
 ```
 dart bin/blake.dart
 ```
 
-## Activate `blake` globally
+You can activate Blake globally from a local path which might be useful during development.
 
-Use `blake` everywhere by using `pub global activate --source path .` inside this project's root.
+```
+pub global activate --source path .
+```
