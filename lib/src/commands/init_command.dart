@@ -17,7 +17,7 @@ class InitCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    final name = argResults.rest.isEmpty ? '' : argResults.rest.first;
+    final name = argResults.rest.isEmpty ? '.' : argResults.rest.first;
 
     if (name.isEmpty) {
       log.info('Initializing project in current directory...');
@@ -31,8 +31,9 @@ class InitCommand extends Command<int> {
       await Directory('$name/content').create();
       await Directory('$name/templates').create();
       await Directory('$name/static').create();
+      await Directory('$name/data').create();
     } catch (e) {
-      log.severe('Init failed', e);
+      log.severe(e);
       return 1;
     }
 
@@ -41,7 +42,8 @@ class InitCommand extends Command<int> {
   }
 
   Future<void> _initConfig(String root) async {
-    final configFile = await File('$root/config.yaml').create(recursive: true);
+    final configFile = await File('${root.isEmpty ? '$root/' : ''}config.yaml')
+        .create(recursive: true);
     final config = await configFile.readAsString();
 
     if (config.trim().isNotEmpty) {
