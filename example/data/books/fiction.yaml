@@ -1,0 +1,16 @@
+- title:  "The Hitchhiker's Guide to the Galaxy"
+  author: "Douglas Adams"
+  rating: 5
+
+- title: "Norse Mythology"
+  author: "Neil Gaiman"
+  rating: 4
+
+- title: "Of Mice and Men "
+  author: "John Steinbeck"
+  rating: 5
+
+- title: "Steppenwolf"
+  author: "Hermann Hesse"
+  finished: 2020
+  rating: 3

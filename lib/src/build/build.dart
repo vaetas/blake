@@ -6,6 +6,7 @@ import 'package:blake/src/config.dart';
 import 'package:blake/src/content/content.dart';
 import 'package:blake/src/content/page.dart';
 import 'package:blake/src/content/section.dart';
+import 'package:blake/src/data.dart';
 import 'package:blake/src/errors.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
@@ -77,12 +78,14 @@ Future<void> _buildPage(Page page, Config config) async {
   log.debug('Build: $page');
 
   final template = await getTemplate(page, config);
+  final data = await parseDataTree(config);
 
   final metadata = <dynamic, dynamic>{
     'title': page.name,
     'content': page.content,
     'site': config.toMap(),
     'template': template.name,
+    'data': data,
   }..addAll(page.metadata);
 
   final output = template.renderString(metadata);

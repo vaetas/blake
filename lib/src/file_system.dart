@@ -65,6 +65,10 @@ Future<Directory> getStaticDirectory(Config config) async {
   return Directory(config.build.staticFolder).create();
 }
 
+Future<Directory> getDataDirectory(Config config) async {
+  return Directory(config.build.dataFolder).create();
+}
+
 /// Returns content of `config.yaml` file or throws when the file does
 /// not exists.
 Future<Config> getConfig() async {

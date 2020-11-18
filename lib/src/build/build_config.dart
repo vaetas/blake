@@ -9,6 +9,7 @@ class BuildConfig {
     this.contentFolder = 'content',
     this.templatesFolder = 'templates',
     this.staticFolder = 'static',
+    this.dataFolder = 'data',
   });
 
   factory BuildConfig.fromYaml(YamlMap map) {
@@ -19,6 +20,7 @@ class BuildConfig {
       contentFolder: map.get(_kContentFolder, 'content'),
       templatesFolder: map.get(_kTemplatesFolder, 'templates'),
       staticFolder: map.get(_kStaticFolder, 'static'),
+      dataFolder: map.get(_kDataFolder, 'data'),
     );
   }
 
@@ -36,6 +38,9 @@ class BuildConfig {
   /// Static assets like CSS or JS.
   final String staticFolder;
 
+  /// YAML/JSON data accessible for rendering
+  final String dataFolder;
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       _kVerbose: verbose,
@@ -43,6 +48,7 @@ class BuildConfig {
       _kContentFolder: contentFolder,
       _kTemplatesFolder: templatesFolder,
       _kStaticFolder: staticFolder,
+      _kDataFolder: dataFolder,
     };
   }
 
@@ -55,3 +61,4 @@ const _kPublicFolder = 'public_folder';
 const _kContentFolder = 'content_folder';
 const _kTemplatesFolder = 'templates_folder';
 const _kStaticFolder = 'static_folder';
+const _kDataFolder = 'data_folder';
