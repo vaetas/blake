@@ -6,8 +6,8 @@ import 'package:http_server/http_server.dart';
 
 /// Local web server used for `blake serve` command.
 ///
-/// This server binds to [address] and starts both HTTP and WebSocket (for live-reload)
-/// handler.
+/// This server binds to [address] and starts both HTTP and WebSocket (for
+/// live-reload) handler.
 class LocalServer {
   LocalServer(
     this.path, {
@@ -57,7 +57,7 @@ class LocalServer {
   Future<void> _startWebsocket() async {
     StreamSubscription<void> _sub;
     final websocket = await HttpServer.bind(address, websocketPort);
-    await websocket.transform(WebSocketTransformer()).listen(
+    websocket.transform(WebSocketTransformer()).listen(
       (WebSocket socket) async {
         await _sub?.cancel();
         _sub = onReload.listen((event) {

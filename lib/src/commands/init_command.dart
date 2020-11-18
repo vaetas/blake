@@ -17,7 +17,7 @@ class InitCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    final name = argResults.rest.isEmpty ? '' : argResults.rest.first + '/';
+    final name = argResults.rest.isEmpty ? '' : argResults.rest.first;
 
     if (name.isEmpty) {
       log.info('Initializing project in current directory...');
@@ -28,9 +28,9 @@ class InitCommand extends Command<int> {
     try {
       await _initConfig(name);
 
-      await Directory(name + 'content').create();
-      await Directory(name + 'templates').create();
-      await Directory(name + 'static').create();
+      await Directory('$name/content').create();
+      await Directory('$name/templates').create();
+      await Directory('$name/static').create();
     } catch (e) {
       log.severe('Init failed', e);
       return 1;
@@ -41,7 +41,7 @@ class InitCommand extends Command<int> {
   }
 
   Future<void> _initConfig(String root) async {
-    final configFile = await File(root + 'config.yaml').create(recursive: true);
+    final configFile = await File('$root/config.yaml').create(recursive: true);
     final config = await configFile.readAsString();
 
     if (config.trim().isNotEmpty) {
@@ -67,7 +67,7 @@ class InitCommand extends Command<int> {
   }
 }
 
-final _description = '''
+const _description = '''
 Setup new project. 
 
 Use `blake init` to initialize project in current repository.

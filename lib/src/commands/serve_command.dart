@@ -32,5 +32,5 @@ class ServeCommand extends Command<int> {
   }
 }
 
-final _description = '''Starts local web server and watches for file changes. 
+const _description = '''Starts local web server and watches for file changes. 
 After every change the website will be rebuilt.''';

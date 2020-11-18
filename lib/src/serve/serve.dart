@@ -17,7 +17,7 @@ Future<int> serve(Config config) async {
 
   final _onReload = StreamController<void>();
 
-  await watch('.').listen((event) async {
+  watch('.').listen((event) async {
     final stopwatch = Stopwatch()..start();
     await build(config);
     stopwatch.stop();

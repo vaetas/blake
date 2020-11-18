@@ -3,8 +3,8 @@ import 'package:blake/src/content/page.dart';
 import 'package:blake/src/content/section.dart';
 import 'package:path/path.dart' as p;
 
-/// [Content] symbolizes node in content tree. See [Page] or [Section] for concrete
-/// implementation.
+/// [Content] symbolizes node in content tree. See [Page] or [Section] for
+/// concrete implementation.
 abstract class Content {
   String get name => p.basename(path);
 

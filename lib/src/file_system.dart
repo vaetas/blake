@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:blake/src/config.dart';
+import 'package:blake/src/errors.dart';
 import 'package:yaml/yaml.dart';
 
 /// List all files and directories inside folder with given [path].
@@ -57,14 +58,15 @@ Future<Directory> getTemplatesDirectory(Config config) async {
   return Directory(config.build.templatesFolder).create();
 }
 
-/// Static folder contains files to be copied into public folder, like CSS or JS.
+/// Static folder contains files to be copied into public folder like CSS or JS.
 ///
 /// Config: `build.static_folder`
 Future<Directory> getStaticDirectory(Config config) async {
   return Directory(config.build.staticFolder).create();
 }
 
-/// Returns content of `config.yaml` file or throws when the file does not exists.
+/// Returns content of `config.yaml` file or throws when the file does
+/// not exists.
 Future<Config> getConfig() async {
   if (await File('config.yaml').exists()) {
     final file = await _getConfigFile();
@@ -73,7 +75,7 @@ Future<Config> getConfig() async {
     return Config.fromYaml(yaml);
   }
 
-  throw 'Config file does not exists in current location\n';
+  throw const ConfigError('Config file does not exists in current location');
 }
 
 Future<File> _getConfigFile() async {

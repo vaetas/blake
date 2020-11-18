@@ -39,14 +39,14 @@ void _writeList(
 }) {
   assert(buffer != null);
 
-  list.forEach((dynamic e) {
+  for (final e in list) {
     if (e is Map<dynamic, dynamic>) {
       buffer.write('-'.indent(indentation));
       _writeMap(e, buffer: buffer, indentation: 1);
     } else {
       buffer.write('.- $e\n'.indent(indentation));
     }
-  });
+  }
 }
 
 extension on String {

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:ansicolor/ansicolor.dart';
 import 'package:meta/meta.dart';
 

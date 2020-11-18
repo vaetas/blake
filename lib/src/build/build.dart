@@ -62,7 +62,7 @@ Future<void> _buildSection(Section section, Config config) async {
   }
 
   try {
-    for (var child in section.children) {
+    for (final child in section.children) {
       await child.when(
         section: (section) => _buildSection(section, config),
         page: (page) => _buildPage(page, config),
@@ -126,17 +126,15 @@ Future<void> copyStaticFiles(Config config) async {
   final directories = staticContent.whereType<Directory>();
   final files = staticContent.whereType<File>();
 
-  for (var directory in directories) {
+  for (final directory in directories) {
     final path = directory.path.replaceFirst(
       config.build.staticFolder,
       config.build.publicFolder,
     );
-    await Directory(path).create(
-      recursive: true,
-    );
+    await Directory(path).create(recursive: true);
   }
 
-  for (var file in files) {
+  for (final file in files) {
     await file.copy(
       file.path.replaceFirst(
         config.build.staticFolder,

@@ -15,8 +15,8 @@ class FootnoteReferenceSyntax extends TextSyntax {
 class FootnoteSyntax extends LongBlockHtmlSyntax {
   FootnoteSyntax() : super(_startPattern, _endPattern);
 
-  static final _startPattern = r'\[\^[0-9]+\]:';
-  static final _endPattern = r'(?:    | {0,3}\t)(.*)|(^(?:[ \t]*)$)';
+  static const _startPattern = r'\[\^[0-9]+\]:';
+  static const _endPattern = r'(?:    | {0,3}\t)(.*)|(^(?:[ \t]*)$)';
 
   @override
   Node parse(BlockParser parser) {

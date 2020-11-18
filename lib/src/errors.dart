@@ -1,24 +1,18 @@
 class ConfigError extends _Error {
-  const ConfigError([this.message = '']);
-
-  @override
-  final Object message;
+  const ConfigError(String message) : super(message);
 
   @override
   String get name => 'ConfigError';
 }
 
 class BuildError extends _Error {
-  const BuildError([this.message]);
-
-  @override
-  final Object message;
+  const BuildError(String message) : super(message);
 
   @override
   String get name => 'BuildError';
 }
 
-abstract class _Error {
+abstract class _Error implements Exception {
   const _Error([this.message]);
 
   final Object message;
