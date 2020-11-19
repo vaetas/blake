@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:args/args.dart';
 import 'package:yaml/yaml.dart';
 
@@ -29,4 +31,8 @@ extension MapExtension on Map<String, dynamic> {
   T get<T>(String key) {
     return this[key] as T;
   }
+}
+
+String prettyJson(Object json) {
+  return const JsonEncoder.withIndent(' ').convert(json);
 }

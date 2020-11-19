@@ -14,11 +14,16 @@ class Logger {
 
   void warning(dynamic message) => _log(LogLevel.warning, message: message);
 
-  void severe(dynamic message, [Object error]) {
-    _log(LogLevel.severe, message: message, error: error);
+  void severe(dynamic message, {Object error, String help}) {
+    _log(LogLevel.severe, message: message, error: error, help: help);
   }
 
-  void _log(LogLevel level, {@required dynamic message, Object error}) {
+  void _log(
+    LogLevel level, {
+    @required dynamic message,
+    Object error,
+    String help,
+  }) {
     final pen = enableColors
         ? level.when(
             fine: (name) => _greyPen('[$name]'),
@@ -28,7 +33,8 @@ class Logger {
           )
         : '[${level.name}]';
 
-    print('$pen $message');
+    // TODO: Show help message on new line?
+    print('$pen $message ${help ?? ''}');
   }
 
   final _greyPen = AnsiPen()..xterm(243, bg: false);

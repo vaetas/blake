@@ -1,0 +1,3 @@
+title: {{ name }}
+date: {{ date }}
+template: page.mustache

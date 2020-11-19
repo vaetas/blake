@@ -12,6 +12,13 @@ class BuildError extends _Error {
   String get name => 'BuildError';
 }
 
+class CommandError extends _Error {
+  const CommandError(String message) : super(message);
+
+  @override
+  String get name => 'CommandError';
+}
+
 abstract class _Error implements Exception {
   const _Error([this.message]);
 
