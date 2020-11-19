@@ -1,3 +1,4 @@
+import 'package:ansicolor/ansicolor.dart';
 import 'package:args/command_runner.dart';
 import 'package:blake/src/commands/build_command.dart';
 import 'package:blake/src/commands/init_command.dart';
@@ -19,6 +20,8 @@ class Blake {
 
   Future<int> call(List<String> args) async {
     runner.addCommand(InitCommand());
+
+    ansiColorDisabled = false;
 
     try {
       final config = await getConfig();

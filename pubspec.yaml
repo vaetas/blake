@@ -10,12 +10,12 @@ executables:
   blake:
 
 dependencies:
-  ansicolor: ^1.0.5
+  ansicolor: ^1.1.0
   args: ^1.6.0
   html: ^0.14.0+4
   http_server: ^0.9.8+3
   markdown: ^3.0.0
-  meta: ^1.2.3
+  meta: ^1.2.4
   mustache_template: ^1.0.0+1
   path: ^1.7.0
   watcher: ^0.9.7+15
@@ -28,8 +28,10 @@ dev_dependencies:
 
 scripts:
   compile:
-    win: dart2native bin\blake.dart -o bin\blake.exe
+    win:
+      - mkdir build
+      - dart2native bin/blake.dart -o build/blake.exe
     mac:
-      - mkdir -p build/mac
+      - mkdir -p build
       - dart2native bin/blake.dart -o build/mac/blake
       - tar -czf build/mac/blake-mac.tar.gz build/mac/blake
