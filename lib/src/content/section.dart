@@ -8,7 +8,7 @@ class Section extends Content {
     this.index,
     this.path,
     this.children = const [],
-  }) : assert(name != null);
+  });
 
   @override
   final String path;
