@@ -1,9 +1,9 @@
-## [0.2.1] - 2020-11-19
+## 0.2.1
 
 * fix: invalid assert in `Section` class
 * chore: update deps
 
-## [0.2.0] - 2020-11-18
+## 0.2.0
 
 * feat: allow YAML/JSON data content
 * fix: error during project init
@@ -11,11 +11,11 @@
 * refactor: use stricter lint rules
 * docs: update example to show data content
 
-## [0.1.1] - 2020-11-16
+## 0.1.1
 
 * Add docs to public API members.
 * Add README to the example.
 
-## [0.1.0] - 2020-11-15
+## 0.1.0
 
 * Initial release.
