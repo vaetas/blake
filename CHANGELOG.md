@@ -1,3 +1,8 @@
+## [0.2.1] - 2020-11-19
+
+* fix: invalid assert in `Section` class
+* chore: update deps
+
 ## [0.2.0] - 2020-11-18
 
 * feat: allow YAML/JSON data content
