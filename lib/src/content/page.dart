@@ -15,7 +15,26 @@ class Page extends Content {
   });
 
   @override
-  String get name => metadata?.get<String>('title') ?? p.basename(path);
+  String get name => metadata?.get<String>('title', p.basename(path));
+
+  DateTime get date {
+    final _date = metadata?.get<String>('date');
+    if (_date == null) {
+      return null;
+    }
+    return DateTime.parse(_date);
+  }
+
+  DateTime get updated {
+    final _updated = metadata?.get<String>('updated');
+    if (_updated != null) {
+      return DateTime.parse(_updated);
+    } else {
+      return date;
+    }
+
+    // TODO: Check Git times.
+  }
 
   @override
   final String path;
