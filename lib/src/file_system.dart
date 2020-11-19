@@ -38,35 +38,35 @@ extension FileSystemEntityExtension on FileSystemEntity {
 
 /// Public directory contains generated static files suitable for publishing.
 ///
-/// Config: `build.public_folder`
+/// Config: `build.public_dir`
 Future<Directory> getPublicDirectory(Config config) async {
-  return Directory(config.build.publicFolder).create();
+  return Directory(config.build.publicDir).create();
 }
 
 /// Content directory contains Markdown files.
 ///
-/// Config: `build.content_folder`
+/// Config: `build.content_dir`
 Future<Directory> getContentDirectory(Config config) async {
-  return Directory(config.build.contentFolder).create();
+  return Directory(config.build.contentDir).create();
 }
 
 /// Templates folder contains Mustache templates for rendering Markdown files
 /// inside content folder.
 ///
-/// Config: `build.templates_folder`
+/// Config: `build.templates_dir`
 Future<Directory> getTemplatesDirectory(Config config) async {
-  return Directory(config.build.templatesFolder).create();
+  return Directory(config.build.templatesDir).create();
 }
 
 /// Static folder contains files to be copied into public folder like CSS or JS.
 ///
-/// Config: `build.static_folder`
+/// Config: `build.static_dir`
 Future<Directory> getStaticDirectory(Config config) async {
-  return Directory(config.build.staticFolder).create();
+  return Directory(config.build.staticDir).create();
 }
 
 Future<Directory> getDataDirectory(Config config) async {
-  return Directory(config.build.dataFolder).create();
+  return Directory(config.build.dataDir).create();
 }
 
 /// Returns content of `config.yaml` file or throws when the file does

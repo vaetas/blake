@@ -8,10 +8,10 @@ import 'package:blake/src/log.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
-/// Parse all YAML and JSON files inside `data_folder` and create data Map which
+/// Parse all YAML and JSON files inside `data_dir` and create data Map which
 /// you can access inside templates.
 ///
-/// Each subfolder inside `data_folder` becomes a key inside the returned
+/// Each subfolder inside `data_dir` becomes a key inside the returned
 /// Map<String, dynamic>. Therefore it does not matter if you use single file
 /// with deeply nested data or split the data into more files (data tree will
 /// be the same).
@@ -19,7 +19,7 @@ import 'package:yaml/yaml.dart';
 /// See `example` directory for reference.
 Future<Map<String, dynamic>> parseDataTree(Config config, {String path}) async {
   final data = <String, dynamic>{};
-  path ??= config.build.dataFolder;
+  path ??= config.build.dataDir;
   final nodes = await Directory(path).list().toList();
 
   for (final e in nodes) {

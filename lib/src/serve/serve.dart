@@ -27,7 +27,7 @@ Future<int> serve(Config config) async {
   log.info(config.serve);
 
   await LocalServer(
-    config.build.publicFolder,
+    config.build.publicDir,
     address: config.serve.baseUrl.host,
     port: config.serve.baseUrl.port,
     websocketPort: config.serve.websocketPort,

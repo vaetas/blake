@@ -5,7 +5,7 @@ import 'package:mustache_template/mustache_template.dart';
 
 Future<void> setupReloadScript(Config config) async {
   await File(
-    '${config.build.publicFolder}/reload.js',
+    '${config.build.publicDir}/reload.js',
   ).writeAsString(_getReloadScript(config));
 }
 

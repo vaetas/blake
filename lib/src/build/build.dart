@@ -27,7 +27,7 @@ Future<int> build(Config config) async {
   }
 
   try {
-    await Directory(config.build.publicFolder).create();
+    await Directory(config.build.publicDir).create();
     await generateContent(tree, config);
   } catch (e) {
     log.severe(e);
@@ -132,8 +132,8 @@ Future<void> copyStaticFiles(Config config) async {
 
   for (final directory in directories) {
     final path = directory.path.replaceFirst(
-      config.build.staticFolder,
-      config.build.publicFolder,
+      config.build.staticDir,
+      config.build.publicDir,
     );
     await Directory(path).create(recursive: true);
   }
@@ -141,8 +141,8 @@ Future<void> copyStaticFiles(Config config) async {
   for (final file in files) {
     await file.copy(
       file.path.replaceFirst(
-        config.build.staticFolder,
-        config.build.publicFolder,
+        config.build.staticDir,
+        config.build.publicDir,
       ),
     );
   }
@@ -158,7 +158,7 @@ Future<Template> getTemplate(Page page, Config config) async {
   templateName ??=
       page.isIndex ? config.templates.section : config.templates.page;
 
-  final file = File('${config.build.templatesFolder}/$templateName');
+  final file = File('${config.build.templatesDir}/$templateName');
 
   if (!await file.exists()) {
     throw BuildError('Template $templateName does not exists');

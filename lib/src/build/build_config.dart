@@ -5,30 +5,30 @@ import 'package:yaml/yaml.dart';
 class BuildConfig {
   const BuildConfig({
     bool verbose = false,
-    String publicFolder,
-    String contentFolder,
-    String templatesFolder,
-    String staticFolder,
-    String dataFolder,
-    String typesFolder,
+    String publicDir,
+    String contentDir,
+    String templatesDir,
+    String staticDir,
+    String dataDir,
+    String typesDir,
   })  : verbose = verbose ?? false,
-        publicFolder = publicFolder ?? 'public',
-        contentFolder = contentFolder ?? 'content',
-        templatesFolder = templatesFolder ?? 'templates',
-        staticFolder = staticFolder ?? 'static',
-        dataFolder = dataFolder ?? 'data',
-        typesFolder = typesFolder ?? 'types';
+        publicDir = publicDir ?? 'public',
+        contentDir = contentDir ?? 'content',
+        templatesDir = templatesDir ?? 'templates',
+        staticDir = staticDir ?? 'static',
+        dataDir = dataDir ?? 'data',
+        typesDir = typesDir ?? 'types';
 
   factory BuildConfig.fromYaml(YamlMap map) {
     assert(map != null);
     return BuildConfig(
       verbose: map.get<bool>(_kVerbose),
-      publicFolder: map.get<String>(_kPublicFolder),
-      contentFolder: map.get<String>(_kContentFolder),
-      templatesFolder: map.get<String>(_kTemplatesFolder),
-      staticFolder: map.get<String>(_kStaticFolder),
-      dataFolder: map.get<String>(_kDataFolder),
-      typesFolder: map.get<String>(_kTypesFolder),
+      publicDir: map.get<String>(_kPublicDir),
+      contentDir: map.get<String>(_kContentDir),
+      templatesDir: map.get<String>(_kTemplatesDir),
+      staticDir: map.get<String>(_kStaticDir),
+      dataDir: map.get<String>(_kDataDir),
+      typesDir: map.get<String>(_kTypesDir),
     );
   }
 
@@ -36,31 +36,31 @@ class BuildConfig {
   final bool verbose;
 
   /// Folder with generated site files.
-  final String publicFolder;
+  final String publicDir;
 
   /// Markdown content.
-  final String contentFolder;
+  final String contentDir;
 
   /// Templates for rendering markdown files.
-  final String templatesFolder;
+  final String templatesDir;
 
   /// Static assets like CSS or JS.
-  final String staticFolder;
+  final String staticDir;
 
   /// YAML/JSON data accessible for rendering
-  final String dataFolder;
+  final String dataDir;
 
-  final String typesFolder;
+  final String typesDir;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       _kVerbose: verbose,
-      _kPublicFolder: publicFolder,
-      _kContentFolder: contentFolder,
-      _kTemplatesFolder: templatesFolder,
-      _kStaticFolder: staticFolder,
-      _kDataFolder: dataFolder,
-      _kTypesFolder: typesFolder,
+      _kPublicDir: publicDir,
+      _kContentDir: contentDir,
+      _kTemplatesDir: templatesDir,
+      _kStaticDir: staticDir,
+      _kDataDir: dataDir,
+      _kTypesDir: typesDir,
     };
   }
 
@@ -69,9 +69,9 @@ class BuildConfig {
 }
 
 const _kVerbose = 'verbose';
-const _kPublicFolder = 'public_folder';
-const _kContentFolder = 'content_folder';
-const _kTemplatesFolder = 'templates_folder';
-const _kStaticFolder = 'static_folder';
-const _kDataFolder = 'data_folder';
-const _kTypesFolder = 'types_folder';
+const _kPublicDir = 'public_dir';
+const _kContentDir = 'content_dir';
+const _kTemplatesDir = 'templates_dir';
+const _kStaticDir = 'static_dir';
+const _kDataDir = 'data_dir';
+const _kTypesDir = 'types_dir';

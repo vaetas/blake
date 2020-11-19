@@ -32,6 +32,7 @@ class InitCommand extends Command<int> {
       await Directory('$name/templates').create();
       await Directory('$name/static').create();
       await Directory('$name/data').create();
+      await Directory('$name/types').create();
     } catch (e) {
       log.severe(e);
       return 1;
