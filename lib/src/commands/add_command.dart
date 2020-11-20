@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:blake/src/config.dart';
 import 'package:blake/src/log.dart';
@@ -37,17 +38,16 @@ class AddCommand extends Command<int> {
   final String name = 'add';
 
   @override
-  final String description = 'Add new content';
+  final String description = 'Add new content based on predefined type.';
+
+  @override
+  String get invocation => 'blake add <type> <name>';
 
   final Config config;
 
   @override
   FutureOr<int> run() async {
-    final types = await getTypes();
-    final args = argResults.rest;
-    final shouldForce = argResults['force'] as bool;
-
-    if (args.length != 2) {
+    if (argResults.rest.length != 2) {
       log.severe(
         'Invalid usage of `add` command. '
         'Correct usage is `blake add <type> <name>`',
@@ -55,28 +55,29 @@ class AddCommand extends Command<int> {
       return 1;
     }
 
-    if (shouldForce) {
+    final args = _CommandArgs.fromResults(argResults);
+
+    if (args.force) {
       log.debug(
         'Force option is enabled. Existing files will be overwritten.',
       );
     }
 
-    final type = args[0];
-    final name = args[1];
+    final types = await getTypes();
 
-    if (!types.containsKey(type)) {
+    if (!types.containsKey(args.type)) {
       log.severe(
-        'Type $type does not exists. '
-        'To use this type create a `$type.yaml` file inside types folder.',
+        'Type ${args.type} does not exists. '
+        'You need to create a `${args.type}.yaml` file inside types folder.',
       );
     }
 
     log.debug('Available types: ${types.keys.toList()}');
 
-    final file = File('${config.build.contentDir}/$name.md');
+    final file = File('${config.build.contentDir}/${args.name}.md');
 
     if (await file.exists()) {
-      if (shouldForce) {
+      if (args.force) {
         log.warning(
           'File ${file.path} already exists and will be overwritten.',
         );
@@ -94,9 +95,9 @@ class AddCommand extends Command<int> {
     }
 
     // TODO: Transform to pretty title.
-    final title = p.basename(name);
+    final title = p.basename(args.name);
 
-    final template = Template(types[type]);
+    final template = Template(types[args.type]);
     final data = <String, dynamic>{
       'name': title,
       'date': DateTime.now().toIso8601String(),
@@ -110,7 +111,7 @@ class AddCommand extends Command<int> {
   }
 
   Future<Map<String, String>> getTypes() async {
-    final dirContent = await getTypesDir().list().toList();
+    final dirContent = await Directory(config.build.typesDir).list().toList();
     final types = dirContent.whereType<File>();
 
     return {
@@ -118,8 +119,19 @@ class AddCommand extends Command<int> {
         p.basenameWithoutExtension(t.path): await t.readAsString()
     };
   }
+}
 
-  Directory getTypesDir() {
-    return Directory(config.build.typesDir);
-  }
+class _CommandArgs {
+  _CommandArgs.fromResults(
+    ArgResults results,
+  )   : force = results['force'] as bool,
+        type = results.rest[0],
+        name = results.rest[1];
+
+  final bool force;
+  final String type;
+  final String name;
+
+  @override
+  String toString() => '_CommandArgs{force: $force, type: $type, name: $name}';
 }
