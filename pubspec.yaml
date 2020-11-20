@@ -33,5 +33,5 @@ scripts:
       - dart2native bin/blake.dart -o build/blake.exe
     mac:
       - mkdir -p build
-      - dart2native bin/blake.dart -o build/mac/blake
-      - tar -czf build/mac/blake-mac.tar.gz build/mac/blake
+      - dart2native bin/blake.dart -o build/blake
+      - tar -czf build/blake-mac.tar.gz build/blake

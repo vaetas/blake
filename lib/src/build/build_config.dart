@@ -11,13 +11,15 @@ class BuildConfig {
     String staticDir,
     String dataDir,
     String typesDir,
+    bool generateSearchIndex,
   })  : verbose = verbose ?? false,
         publicDir = publicDir ?? 'public',
         contentDir = contentDir ?? 'content',
         templatesDir = templatesDir ?? 'templates',
         staticDir = staticDir ?? 'static',
         dataDir = dataDir ?? 'data',
-        typesDir = typesDir ?? 'types';
+        typesDir = typesDir ?? 'types',
+        generateSearchIndex = generateSearchIndex ?? false;
 
   factory BuildConfig.fromYaml(YamlMap map) {
     assert(map != null);
@@ -29,6 +31,7 @@ class BuildConfig {
       staticDir: map.get<String>(_kStaticDir),
       dataDir: map.get<String>(_kDataDir),
       typesDir: map.get<String>(_kTypesDir),
+      generateSearchIndex: map.get<bool>(_kGenerateSearchIndex),
     );
   }
 
@@ -50,7 +53,11 @@ class BuildConfig {
   /// YAML/JSON data accessible for rendering
   final String dataDir;
 
+  /// Types used for creating new content.
   final String typesDir;
+
+  /// Create public JSON search index when true.
+  final bool generateSearchIndex;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -75,3 +82,4 @@ const _kTemplatesDir = 'templates_dir';
 const _kStaticDir = 'static_dir';
 const _kDataDir = 'data_dir';
 const _kTypesDir = 'types_dir';
+const _kGenerateSearchIndex = 'generate_search_index';

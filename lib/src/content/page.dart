@@ -71,7 +71,7 @@ class Page extends Content {
 
   @override
   Map<String, dynamic> toMap(Config config) {
-    // TODO: Refactor path.
+    // TODO: Remove dependency from [config]?
     return <String, dynamic>{
       'name': name,
       'path': getCanonicalPath(config)

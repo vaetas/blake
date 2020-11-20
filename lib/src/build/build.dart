@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:blake/src/build/content_tree.dart';
@@ -10,6 +11,7 @@ import 'package:blake/src/data.dart';
 import 'package:blake/src/errors.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
+import 'package:blake/src/search.dart';
 import 'package:mustache_template/mustache_template.dart';
 
 /// Build static site
@@ -32,10 +34,17 @@ Future<int> build(Config config) async {
   } catch (e) {
     log.severe(e);
     return 1;
-    // throw BuildException(e);
   }
 
   await copyStaticFiles(config);
+
+  if (config.build.generateSearchIndex) {
+    final index = createSearchIndex(tree, config);
+    final indexFile = await File(
+      '${config.build.publicDir}/search_index.json',
+    ).create();
+    await indexFile.writeAsString(json.encode(index));
+  }
 
   stopwatch.stop();
   log.info('Build done in ${stopwatch.elapsedMilliseconds}ms');
