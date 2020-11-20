@@ -24,7 +24,7 @@ dependencies:
 dev_dependencies:
   analysis_options:
     git: https://github.com/vaetas/analysis_options.git
-  test: ^1.15.5
+  test: ^1.15.6
 
 scripts:
   compile:
