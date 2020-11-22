@@ -44,6 +44,12 @@ Future<int> build(Config config) async {
       '${config.build.publicDir}/search_index.json',
     ).create();
     await indexFile.writeAsString(json.encode(index));
+    log.info('Search index generated');
+
+    final size = await indexFile.length();
+    if (size >= 1000000) {
+      log.warning('Search index file is over 1MB');
+    }
   }
 
   stopwatch.stop();
