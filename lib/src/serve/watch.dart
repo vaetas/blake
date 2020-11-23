@@ -1,14 +1,15 @@
+import 'package:glob/glob.dart';
+import 'package:meta/meta.dart';
 import 'package:watcher/watcher.dart';
 
 /// Watch [directory] for changes in whole subtree except `public` directory.
-Stream<WatchEvent> watch(String directory) {
+Stream<WatchEvent> watch(
+  String directory, {
+  @required Glob files,
+}) {
+  assert(files != null);
   return DirectoryWatcher(
     directory,
     pollingDelay: const Duration(milliseconds: 250),
-  ).events.where((e) => !_publicDirRegexp.hasMatch(e.path));
+  ).events.where((e) => files.matches(e.path));
 }
-
-/// Valid for paths starting with `public` directory.
-///
-/// Examples: public/index.html, public\index.html, ./public/index.html
-final _publicDirRegexp = RegExp(r'^(\.\\|\.\/|\\|\/)?public[\\\/]{1}');

@@ -6,8 +6,18 @@ import 'package:blake/src/config.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/serve/local_server.dart';
 import 'package:blake/src/serve/watch.dart';
+import 'package:glob/glob.dart';
 
 /// Build and serve static files on local server with live-reload support.
+///
+/// Only following files and folders are watched:
+///   config.yaml
+///   content/
+///   data/
+///   static/
+///   templates/
+///
+/// Changing other files will not trigger rebuild.
 Future<int> serve(Config config) async {
   // Build once before starting server to ensure there is something to show.
   await build(config);
@@ -17,7 +27,17 @@ Future<int> serve(Config config) async {
 
   final _onReload = StreamController<void>();
 
-  watch('.').listen((event) async {
+  final glob = Glob(
+    '{'
+    'config.yaml,'
+    '${config.build.contentDir}/**,'
+    '${config.build.dataDir}/**,'
+    '${config.build.staticDir}/**,'
+    '${config.build.templatesDir}/**'
+    '}',
+  );
+
+  watch('.', files: glob).listen((event) async {
     final stopwatch = Stopwatch()..start();
     await build(config);
     stopwatch.stop();
