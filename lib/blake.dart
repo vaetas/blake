@@ -5,6 +5,8 @@ import 'package:blake/src/commands/build_command.dart';
 import 'package:blake/src/commands/init_command.dart';
 import 'package:blake/src/commands/serve_command.dart';
 import 'package:blake/src/file_system.dart';
+import 'package:blake/src/log.dart';
+import 'package:glob/glob.dart';
 
 export 'src/build/build.dart';
 export 'src/build/build_config.dart';
@@ -21,23 +23,26 @@ class Blake {
 
   Future<int> call(List<String> args) async {
     runner.addCommand(InitCommand());
-
     ansiColorDisabled = false;
 
-    try {
+    if (!await isProjectDirectory()) {
+      return runner.run(args);
+    } else {
       final config = await getConfig();
+      return config.when(
+        (error) {
+          log.severe(error.message);
+          return 1;
+        },
+        (config) {
+          runner
+            ..addCommand(BuildCommand(config))
+            ..addCommand(ServeCommand(config))
+            ..addCommand(AddCommand(config)); // :)
 
-      runner
-        ..addCommand(BuildCommand(config))
-        ..addCommand(ServeCommand(config))
-        ..addCommand(AddCommand(config)); // :)
-
-      return runner.run(args);
-    } catch (e) {
-      return runner.run(args);
+          return runner.run(args);
+        },
+      );
     }
   }
 }
-
-/// Callable [Blake] instance for running commands.
-final blake = Blake();
