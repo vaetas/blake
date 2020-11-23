@@ -93,11 +93,18 @@ Future<void> _buildSection(Section section, Config config) async {
 Future<void> _buildPage(Page page, Config config) async {
   log.debug('Build: $page');
 
+  // Abort on non-public pages (i.e. data only page).
+  final public = page.metadata['public'] as bool ?? true;
+  if (!public) {
+    log.debug('Page ${page.path} is not public');
+    return;
+  }
+
   final template = await getTemplate(page, config);
   final data = await parseDataTree(config);
 
   final metadata = <dynamic, dynamic>{
-    'title': page.name,
+    'title': page.title,
     'content': page.content,
     'site': config.toMap(),
     'template': template.name,
@@ -117,16 +124,16 @@ Future<void> _buildIndexPage(
   Config config, {
   List<Content> children = const [],
 }) async {
-  log.debug('Build: $page (index)');
-
   final template = await getTemplate(page, config);
 
+  // TODO: Flatten metadata map for children param.
   final output = template.renderString(
     <dynamic, dynamic>{
       'site': config.toMap(),
-      'title': page.name,
+      'title': page.title,
       'content': page.content,
-      'children': children.whereType<Page>().map((e) => e.toMap(config)),
+      'children':
+          children.whereType<Page>().map((e) => e.toMap(config)).toList(),
       'template': template.name,
     }..addAll(page.metadata),
   );

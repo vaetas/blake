@@ -15,7 +15,7 @@ class Page extends Content {
   });
 
   @override
-  String get name => metadata?.get<String>('title', p.basename(path));
+  String get title => metadata?.get<String>('title', p.basename(path));
 
   DateTime get date {
     final _date = metadata?.get<String>('date');
@@ -73,7 +73,7 @@ class Page extends Content {
   Map<String, dynamic> toMap(Config config) {
     // TODO: Remove dependency from [config]?
     return <String, dynamic>{
-      'name': name,
+      'title': title,
       'path': getCanonicalPath(config)
           .replaceFirst(config.build.publicDir, '')
           .replaceFirst('index.html', ''),

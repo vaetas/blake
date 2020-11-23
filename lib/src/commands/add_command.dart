@@ -99,7 +99,7 @@ class AddCommand extends Command<int> {
 
     final template = Template(types[args.type]);
     final data = <String, dynamic>{
-      'name': title,
+      'title': title,
       'date': DateTime.now().toIso8601String(),
     };
     final output = template.renderString(data);

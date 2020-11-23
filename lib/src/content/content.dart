@@ -6,7 +6,7 @@ import 'package:path/path.dart' as p;
 /// [Content] symbolizes node in content tree. See [Page] or [Section] for
 /// concrete implementation.
 abstract class Content {
-  String get name => p.basename(path);
+  String get title => p.basename(path);
 
   String get path;
 
@@ -14,7 +14,7 @@ abstract class Content {
 
   Map<String, dynamic> toMap(Config config) {
     return <String, dynamic>{
-      'name': name,
+      'title': title,
       'path': path,
     };
   }
