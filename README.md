@@ -1,4 +1,5 @@
-![Pub Version](https://img.shields.io/pub/v/blake)
+[![Pub Version](https://img.shields.io/pub/v/blake)](https://pub.dev/packages/blake)
+[![GitHub](https://img.shields.io/github/license/vaetas/blake)](https://github.com/vaetas/blake/blob/main/LICENSE)
 
 # Blake: Static Site Generator
 
