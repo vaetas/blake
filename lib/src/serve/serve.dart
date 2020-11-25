@@ -43,9 +43,9 @@ Future<int> serve(Config config) async {
   );
 
   watch('.', files: glob).listen((event) async {
-    final stopwatch = Stopwatch()..start();
+    print('');
+    log.info('Event: $event');
     await build(config);
-    stopwatch.stop();
     _onReload.add(null);
   });
 

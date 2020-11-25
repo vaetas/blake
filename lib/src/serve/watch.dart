@@ -11,5 +11,8 @@ Stream<WatchEvent> watch(
   return DirectoryWatcher(
     directory,
     pollingDelay: const Duration(milliseconds: 250),
-  ).events.where((e) => files.matches(e.path));
+  )
+      .events
+      .where((e) => files.matches(e.path))
+      .map((event) => WatchEvent(event.type, Uri.file(event.path).toString()));
 }
