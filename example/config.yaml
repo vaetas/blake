@@ -17,6 +17,7 @@ build:
   generate_search_index: true
 
 serve:
+  verbose: false
   address: '127.0.0.1'
   port: 4040
   websocket_port: 4041

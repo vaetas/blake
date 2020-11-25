@@ -12,8 +12,13 @@ Future<int> serve(Config config) async {
   // Build once before starting server to ensure there is something to show.
   await build(config);
 
-  log.info('Copy reload.js script');
-  await setupReloadScript(config);
+  try {
+    await setupReloadScript(config);
+    log.debug('Reload script copied');
+  } catch (e) {
+    log.severe('Failed to copy reload script');
+    return 1;
+  }
 
   final _onReload = StreamController<void>();
 
@@ -24,7 +29,7 @@ Future<int> serve(Config config) async {
     _onReload.add(null);
   });
 
-  log.info(config.serve);
+  log.debug(config.serve);
 
   await LocalServer(
     config.build.publicDir,

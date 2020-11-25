@@ -156,7 +156,7 @@ Future<void> copyStaticFiles(Config config) async {
     );
   }
 
-  log.info('Static files copied');
+  log.debug('Static files copied');
 }
 
 /// Get template to render given [page]. If there is a `template` field in page

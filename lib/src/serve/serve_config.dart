@@ -8,10 +8,12 @@ class ServeConfig {
     String address,
     int port,
     int websocketPort,
+    bool verbose,
   }) {
     this.port = port ?? 4040;
     this.websocketPort = websocketPort ?? 4041;
     baseUrl = parseAddress(address ?? '127.0.0.1', this.port);
+    this.verbose = verbose ?? false;
   }
 
   factory ServeConfig.fromYaml(YamlMap map) {
@@ -20,12 +22,14 @@ class ServeConfig {
       address: map.get('address'),
       port: map.get(_kPort),
       websocketPort: map.get(_kWebsocketPort),
+      verbose: map.get(_kVerbose),
     );
   }
 
   Uri baseUrl;
   int port;
   int websocketPort;
+  bool verbose;
 
   @override
   String toString() => 'ServeConfig${toMap()}';
@@ -35,12 +39,14 @@ class ServeConfig {
       'base_url': baseUrl.toString(),
       _kPort: port,
       _kWebsocketPort: websocketPort,
+      _kVerbose: verbose,
     };
   }
 }
 
 const _kPort = 'port';
 const _kWebsocketPort = 'websocket_port';
+const _kVerbose = 'verbose';
 
 /// Parse configured base_url.
 ///

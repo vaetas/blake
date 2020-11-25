@@ -4,9 +4,10 @@ import 'package:ansicolor/ansicolor.dart';
 import 'package:meta/meta.dart';
 
 class Logger {
-  Logger({this.enableColors = true});
+  Logger({this.enableColors = true, this.verbose = false});
 
-  final bool enableColors;
+  bool enableColors;
+  bool verbose;
 
   void debug(dynamic message) => _log(LogLevel.debug, message: message);
 
@@ -24,6 +25,8 @@ class Logger {
     Object error,
     String help,
   }) {
+    if (!verbose && level == LogLevel.debug) return;
+
     final pen = enableColors
         ? level.when(
             fine: (name) => _greyPen('[$name]'),

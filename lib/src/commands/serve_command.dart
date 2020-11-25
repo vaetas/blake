@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:args/command_runner.dart';
 import 'package:blake/src/config.dart';
-import 'package:blake/src/log.dart';
 import 'package:blake/src/serve/serve.dart';
 
 class ServeCommand extends Command<int> {
@@ -26,7 +25,6 @@ class ServeCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    log.info('Starting local server');
     // TODO: Merge CLI options with config.
     return serve(config);
   }

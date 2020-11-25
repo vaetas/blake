@@ -5,6 +5,7 @@ import 'package:blake/src/commands/build_command.dart';
 import 'package:blake/src/commands/init_command.dart';
 import 'package:blake/src/commands/serve_command.dart';
 import 'package:blake/src/file_system.dart';
+import 'package:blake/src/log.dart';
 
 export 'src/build/build.dart';
 export 'src/build/build_config.dart';
@@ -26,6 +27,7 @@ class Blake {
 
     try {
       final config = await getConfig();
+      log.verbose = config.serve.verbose;
 
       runner
         ..addCommand(BuildCommand(config))
