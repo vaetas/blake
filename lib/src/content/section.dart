@@ -21,7 +21,7 @@ class Section extends Content {
   @override
   Map<String, dynamic> toMap(Config config) {
     return <String, dynamic>{
-      'name': name,
+      'title': title,
       'path': path,
     };
   }
