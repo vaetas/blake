@@ -4,7 +4,7 @@ import 'package:blake/src/markdown/markdown_file.dart';
 import 'package:markdown/markdown.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
-final _delimiter = RegExp(r'(---)(\n|\r)');
+final _delimiter = RegExp(r'(---)(\n|\r)?');
 
 MarkdownFile parse(String markdown) {
   if (_delimiter.allMatches(markdown).length < 2 ||
