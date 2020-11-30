@@ -15,7 +15,9 @@ Features as of now:
 * Mustache templates.
 * Live-reload.
 * Single native binary.
-* YAML/JSON data content.
+* YAML/JSON data content and non-public Data pages.
+* Define content types for quick creation.
+* Basic JSON search index.
 
 Remember that this project is WIP. Everything can change at any time.
 
@@ -33,6 +35,8 @@ Use `blake build` to generate the site from your files. By default, generated fi
 
 Use `blake serve` to start a webserver to see your site instantly. The site will be rebuilt every time you change files in your project and the browser tab will be reloaded automatically.
 
+Use `blake new` to create new content based on types defined in `types` folder.
+
 And as usual, `blake` or `blake help` will show usage help.
 
 ## Structure
@@ -46,6 +50,8 @@ And as usual, `blake` or `blake help` will show usage help.
 `templates` should contain templates which will be used to process Markdown files inside `content`.
 
 `data` contains YAML/JSON files which you can use inside templates.
+
+`types` is used by the `new` command to quickly create content.
 
 `config.yaml` configures build options for your site.
 
