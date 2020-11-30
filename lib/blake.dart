@@ -1,6 +1,6 @@
 import 'package:ansicolor/ansicolor.dart';
 import 'package:args/command_runner.dart';
-import 'package:blake/src/commands/add_command.dart';
+import 'package:blake/src/commands/new_command.dart';
 import 'package:blake/src/commands/build_command.dart';
 import 'package:blake/src/commands/init_command.dart';
 import 'package:blake/src/commands/serve_command.dart';
@@ -36,7 +36,7 @@ class Blake {
           runner
             ..addCommand(BuildCommand(config))
             ..addCommand(ServeCommand(config))
-            ..addCommand(AddCommand(config)); // :)
+            ..addCommand(NewCommand(config)); // :)
 
           return runner.run(args);
         },

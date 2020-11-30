@@ -8,9 +8,9 @@ import 'package:blake/src/log.dart';
 import 'package:mustache_template/mustache_template.dart';
 import 'package:path/path.dart' as p;
 
-/// Allows adding new content based on predefined types.
+/// Create new content based on predefined types.
 ///
-/// Usage: blake add <type> <name>
+/// Usage: blake new <type> <name>
 ///
 /// <type> must be an existing file inside `types_dir` without the extension.
 /// For example, say you have following content of `types_dir`:
@@ -21,11 +21,11 @@ import 'package:path/path.dart' as p;
 ///   - ...
 ///
 /// To create a new post based on `post.yaml` inside `blog` subfolder, you would
-/// call following command: `blake add post blog/my-post`. This will create file
+/// call following command: `blake new post blog/my-post`. This will create file
 /// with this path: `content/blog/my-post.md` and fills the Markdown frontmatter
 /// based on `post.yaml` type.
-class AddCommand extends Command<int> {
-  AddCommand(this.config) {
+class NewCommand extends Command<int> {
+  NewCommand(this.config) {
     argParser.addFlag(
       'force',
       defaultsTo: false,
@@ -35,13 +35,13 @@ class AddCommand extends Command<int> {
   }
 
   @override
-  final String name = 'add';
+  final String name = 'new';
 
   @override
-  final String description = 'Add new content based on predefined type.';
+  final String description = 'Create new content based on predefined type.';
 
   @override
-  String get invocation => 'blake add <type> <name>';
+  String get invocation => 'blake new <type> <name>';
 
   final Config config;
 
@@ -49,8 +49,8 @@ class AddCommand extends Command<int> {
   FutureOr<int> run() async {
     if (argResults.rest.length != 2) {
       log.severe(
-        'Invalid usage of `add` command. '
-        'Correct usage is `blake add <type> <name>`',
+        'Invalid usage of `new` command. '
+        'Correct usage is `blake new <type> <name>`',
       );
       return 1;
     }
@@ -105,7 +105,7 @@ class AddCommand extends Command<int> {
     final output = template.renderString(data);
     await file.writeAsString('---\n$output\n---\n');
 
-    log.debug('New file: ${file.path}');
+    log.info('File ${file.path} created.');
 
     return 0;
   }

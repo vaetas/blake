@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="example: add" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
-    <option name="arguments" value="add post blog/hello-post --force" />
+  <configuration default="false" name="example: new" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+    <option name="arguments" value="new post blog/hello-post --force" />
     <option name="filePath" value="$PROJECT_DIR$/bin/blake.dart" />
     <option name="workingDirectory" value="$PROJECT_DIR$/example" />
     <method v="2" />
