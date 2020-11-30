@@ -1,3 +1,10 @@
+## 0.3.0
+
+* feat: date & update metadata
+* feat: 'new' command for creating content
+* feat: basic generated JSON search index
+* feat: non-public pages (aka data pages)
+
 ## 0.2.1
 
 * fix: invalid assert in `Section` class
