@@ -74,7 +74,11 @@ class NewCommand extends Command<int> {
 
     log.debug('Available types: ${types.keys.toList()}');
 
-    final file = File('${config.build.contentDir}/${args.name}.md');
+    final _pattern = RegExp(r'\.md$');
+
+    final file = File(
+      '${config.build.contentDir}/${_pattern.hasMatch(args.name) ? args.name : '${args.name}.md'}',
+    );
 
     if (await file.exists()) {
       if (args.force) {
