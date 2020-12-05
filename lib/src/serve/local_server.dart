@@ -45,7 +45,7 @@ class LocalServer {
       // ignore: unawaited_futures
       _startWebsocket();
     } catch (e) {
-      log.severe('Failed to start WebSocket server.');
+      log.error('Failed to start WebSocket server.');
       return;
     }
 

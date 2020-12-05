@@ -48,7 +48,7 @@ class NewCommand extends Command<int> {
   @override
   FutureOr<int> run() async {
     if (argResults.rest.length != 2) {
-      log.severe(
+      log.error(
         'Invalid usage of `new` command. '
         'Correct usage is `blake new <type> <name>`',
       );
@@ -66,7 +66,7 @@ class NewCommand extends Command<int> {
     final types = await getTypes();
 
     if (!types.containsKey(args.type)) {
-      log.severe(
+      log.error(
         'Type ${args.type} does not exists. '
         'You need to create a `${args.type}.yaml` file inside types folder.',
       );
@@ -87,7 +87,7 @@ class NewCommand extends Command<int> {
         );
         await file.delete();
       } else {
-        log.severe(
+        log.error(
           'File with path ${file.path} already exists. '
           'Nothing will be created.',
           help: 'Either manually delete this file or choose a different name.',

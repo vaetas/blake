@@ -34,7 +34,7 @@ Future<Map<String, dynamic>> parseDataTree(Config config, {String path}) async {
           final dynamic content = await _parseData(file) as dynamic;
           data[name] = content;
         } catch (e) {
-          log.severe(e);
+          log.error(e);
         }
       },
     );

@@ -15,8 +15,8 @@ class Logger {
 
   void warning(dynamic message) => _log(LogLevel.warning, message: message);
 
-  void severe(dynamic message, {Object error, String help}) {
-    _log(LogLevel.severe, message: message, error: error, help: help);
+  void error(dynamic message, {Object error, String help}) {
+    _log(LogLevel.error, message: message, error: error, help: help);
   }
 
   void _log(
@@ -32,7 +32,7 @@ class Logger {
             fine: (name) => _greyPen('[$name]'),
             info: (name) => _bluePen('[$name]'),
             warning: (name) => _yellowPen('[$name]'),
-            severe: (name) => _redPen('[$name]'),
+            error: (name) => _redPen('[$name]'),
           )
         : '[${level.name}]';
 
@@ -59,13 +59,13 @@ class LogLevel {
 
   static const warning = LogLevel._('WARNING');
 
-  static const severe = LogLevel._('SEVERE');
+  static const error = LogLevel._('ERROR');
 
   T when<T>({
     _WhenCallback<T> fine,
     _WhenCallback<T> info,
     _WhenCallback<T> warning,
-    _WhenCallback<T> severe,
+    _WhenCallback<T> error,
   }) {
     switch (name) {
       case 'DEBUG':
@@ -74,8 +74,8 @@ class LogLevel {
         return info?.call(name);
       case 'WARNING':
         return warning?.call(name);
-      case 'SEVERE':
-        return severe?.call(name);
+      case 'ERROR':
+        return error?.call(name);
       default:
         throw ArgumentError('LogLevel $name is not valid.');
     }

@@ -24,7 +24,7 @@ Future<int> build(Config config) async {
   try {
     tree = await parseContentTree(contentDir);
   } catch (e) {
-    log.severe('Build failed: Could not parse content tree');
+    log.error('Build failed: Could not parse content tree');
     return 1;
   }
 
@@ -32,7 +32,7 @@ Future<int> build(Config config) async {
     await Directory(config.build.publicDir).create();
     await generateContent(tree, config);
   } catch (e) {
-    log.severe(e);
+    log.error(e);
     return 1;
   }
 

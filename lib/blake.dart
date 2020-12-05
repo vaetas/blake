@@ -29,7 +29,7 @@ class Blake {
       final config = await getConfig();
       return config.when(
         (error) {
-          log.severe(error.message);
+          log.error(error.message);
           return 1;
         },
         (config) {

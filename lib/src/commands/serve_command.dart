@@ -49,7 +49,7 @@ class ServeCommand extends Command<int> {
       await setupReloadScript(config);
       log.debug('Reload script copied');
     } catch (e) {
-      log.severe('Failed to copy reload script');
+      log.error('Failed to copy reload script');
       return 1;
     }
 

@@ -34,7 +34,7 @@ class InitCommand extends Command<int> {
       await Directory('$name/data').create();
       await Directory('$name/types').create();
     } catch (e) {
-      log.severe(e);
+      log.error(e);
       return 1;
     }
 
@@ -65,7 +65,7 @@ class InitCommand extends Command<int> {
     try {
       await configFile.writeAsString(yaml);
     } catch (e) {
-      log.severe(e);
+      log.error(e);
     }
   }
 }
