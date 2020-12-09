@@ -6,7 +6,7 @@ class ConfigError extends _Error {
 }
 
 class BuildError extends _Error {
-  const BuildError(String message) : super(message);
+  const BuildError(String message, [String help]) : super(message, help);
 
   @override
   String get name => 'BuildError';
@@ -20,9 +20,11 @@ class CommandError extends _Error {
 }
 
 abstract class _Error implements Exception {
-  const _Error([this.message]);
+  const _Error([this.message, this.help]);
 
   final Object message;
+
+  final String help;
 
   String get name;
 

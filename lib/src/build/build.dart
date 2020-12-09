@@ -23,8 +23,8 @@ Future<int> build(Config config) async {
   Content tree;
   try {
     tree = await parseContentTree(contentDir);
-  } catch (e) {
-    log.error('Build failed: Could not parse content tree');
+  } on BuildError catch (e) {
+    log.error(e, help: e.help);
     return 1;
   }
 

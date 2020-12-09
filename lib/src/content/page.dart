@@ -2,9 +2,12 @@ import 'package:blake/src/config.dart';
 import 'package:blake/src/content/content.dart';
 import 'package:blake/src/content/section.dart';
 import 'package:blake/src/utils.dart';
+import 'package:glob/glob.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
+
+final _kIndexGlob = Glob('{index,_index}');
 
 /// [Page] is leaf node which cannot have other subpages.
 class Page extends Content {
@@ -67,7 +70,7 @@ class Page extends Content {
     }
   }
 
-  bool get isIndex => p.basenameWithoutExtension(path) == 'index';
+  bool get isIndex => _kIndexGlob.matches(p.basenameWithoutExtension(path));
 
   @override
   Map<String, dynamic> toMap(Config config) {

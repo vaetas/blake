@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:blake/blake.dart';
 import 'package:blake/src/content/page.dart';
 import 'package:blake/src/content/section.dart';
+import 'package:blake/src/errors.dart';
 import 'package:blake/src/markdown/parser.dart';
 import 'package:blake/src/utils.dart';
 
@@ -23,6 +24,15 @@ Future<Content> parseContentTree(FileSystemEntity entity) async {
       final children = await directory.list().toList();
 
       final content = (await children.asyncMap(parseContentTree)).toList();
+
+      final index = content.where((e) => e is Page && e.isIndex);
+      if (index.length > 1) {
+        throw BuildError(
+          'Only one index file can be provided: '
+              '${index.map((e) => e.path).toList()}',
+          "Use either 'index.md' or '_index.md', not both.",
+        );
+      }
 
       return Section(
         path: directory.path,
