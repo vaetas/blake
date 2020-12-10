@@ -30,7 +30,7 @@ Future<Content> parseContentTree(FileSystemEntity entity) async {
         throw BuildError(
           'Only one index file can be provided: '
               '${index.map((e) => e.path).toList()}',
-          "Use either 'index.md' or '_index.md', not both.",
+          "Use either 'index.md' or 'index.md', not both.",
         );
       }
 

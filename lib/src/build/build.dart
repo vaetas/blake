@@ -71,10 +71,15 @@ Future<void> generateContent(Content content, Config config) async {
 
 Future<void> _buildSection(Section section, Config config) async {
   if (section.index != null) {
-    await _buildIndexPage(
+    await _buildPage(
       section.index,
       config,
-      children: section.children,
+      extraData: <dynamic, dynamic>{
+        'children': section.children
+            .whereType<Page>()
+            .map((e) => e.toMap(config))
+            .toList(),
+      },
     );
   }
 
@@ -90,7 +95,11 @@ Future<void> _buildSection(Section section, Config config) async {
   }
 }
 
-Future<void> _buildPage(Page page, Config config) async {
+Future<void> _buildPage(
+  Page page,
+  Config config, {
+  Map<dynamic, dynamic> extraData = const <dynamic, dynamic>{},
+}) async {
   log.debug('Build: $page');
 
   // Abort on non-public pages (i.e. data only page).
@@ -109,37 +118,12 @@ Future<void> _buildPage(Page page, Config config) async {
     'site': config.toMap(),
     'template': template.name,
     'data': data,
-  }..addAll(page.metadata);
+  }
+    ..addAll(page.metadata)
+    ..addAll(extraData);
 
   final output = template.renderString(metadata);
-
   final path = page.getCanonicalPath(config);
-
-  final file = await File(path).create(recursive: true);
-  await file.writeAsString(output);
-}
-
-Future<void> _buildIndexPage(
-  Page page,
-  Config config, {
-  List<Content> children = const [],
-}) async {
-  final template = await getTemplate(page, config);
-
-  // TODO: Flatten metadata map for children param.
-  final output = template.renderString(
-    <dynamic, dynamic>{
-      'site': config.toMap(),
-      'title': page.title,
-      'content': page.content,
-      'children':
-          children.whereType<Page>().map((e) => e.toMap(config)).toList(),
-      'template': template.name,
-    }..addAll(page.metadata),
-  );
-
-  final path = page.getCanonicalPath(config);
-
   final file = await File(path).create(recursive: true);
   await file.writeAsString(output);
 }

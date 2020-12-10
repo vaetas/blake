@@ -64,7 +64,10 @@ class Page extends Content {
     final dirName = p.dirname(buildPath);
 
     if (isIndex) {
-      return '$dirName/$basename.html';
+      // Index file may be named `index` or `_index`.
+      // Underscore needs to be removed.
+      final name = basename.startsWith('_') ? basename.substring(1) : basename;
+      return '$dirName/$name.html';
     } else {
       return '$dirName/$basename/index.html';
     }
