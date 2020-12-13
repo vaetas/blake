@@ -57,10 +57,13 @@ Future<Directory> getPublicDirectory(Config config) async {
 /// Content directory contains Markdown files.
 ///
 /// Config: `build.content_dir`
-Future<Directory> getContentDirectory(Config config) async {
-  return _getOrThrow(
-    Directory(config.build.contentDir),
-  );
+Future<Either<BuildError, Directory>> getContentDirectory(Config config) async {
+  final directory = Directory(config.build.contentDir);
+  if (await directory.exists()) {
+    return Right(directory);
+  } else {
+    return Left(BuildError('Directory ${directory.path} does not exists'));
+  }
 }
 
 /// Templates folder contains Mustache templates for rendering Markdown files

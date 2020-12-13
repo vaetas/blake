@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:args/command_runner.dart';
 import 'package:blake/src/assets/reload_js.dart';
-import 'package:blake/src/build/build.dart';
+import 'package:blake/src/commands/build_command.dart';
 import 'package:blake/src/config.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/serve/local_server.dart';
@@ -42,8 +42,9 @@ class ServeCommand extends Command<int> {
   FutureOr<int> run() async => _serve();
 
   Future<int> _serve() async {
+    final buildCommand = BuildCommand(config);
     // Build once before starting server to ensure there is something to show.
-    await build(config);
+    await buildCommand.build(config);
 
     try {
       await setupReloadScript(config);
@@ -66,9 +67,10 @@ class ServeCommand extends Command<int> {
     );
 
     watch('.', files: glob).listen((event) async {
+      // ignore: avoid_print
       print('');
       log.info('Event: $event');
-      await build(config);
+      await buildCommand.build(config);
       _onReload.add(null);
     });
 
