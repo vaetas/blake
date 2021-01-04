@@ -35,4 +35,18 @@ class Section extends Content {
   String toString() {
     return 'Section{path: $path, index: $index, children: $children}';
   }
+
+  @override
+  List<Page> getPages() {
+    final list = <Page>[];
+
+    if (index != null) {
+      list.add(index);
+    }
+
+    for (final child in children) {
+      list.addAll(child.getPages());
+    }
+    return list;
+  }
 }

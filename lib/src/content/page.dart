@@ -1,6 +1,7 @@
 import 'package:blake/src/config.dart';
 import 'package:blake/src/content/content.dart';
 import 'package:blake/src/content/section.dart';
+import 'package:blake/src/log.dart';
 import 'package:blake/src/utils.dart';
 import 'package:glob/glob.dart';
 import 'package:meta/meta.dart';
@@ -73,6 +74,30 @@ class Page extends Content {
     }
   }
 
+  String getPublicUrl(Config config) {
+    return getCanonicalPath(config);
+
+    final buildPath = path.replaceFirst(
+      config.build.contentDir,
+      '',
+    );
+    final basename = p.basenameWithoutExtension(buildPath);
+    final dirName = p.dirname(buildPath);
+
+    String url;
+    if (isIndex) {
+      // Index file may be named `index` or `_index`.
+      // Underscore needs to be removed.
+      final name = basename.startsWith('_') ? basename.substring(1) : basename;
+      url = '$dirName/';
+    } else {
+      url = '$dirName/$basename/';
+    }
+
+    log.warning(config.baseUrl);
+    return p.join(config.baseUrl, url);
+  }
+
   bool get isIndex => _kIndexGlob.matches(p.basenameWithoutExtension(path));
 
   @override
@@ -95,4 +120,7 @@ class Page extends Content {
 
   @override
   String toString() => 'Page{path: $path, metadata: $metadata}';
+
+  @override
+  List<Page> getPages() => [this];
 }

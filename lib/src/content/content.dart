@@ -18,4 +18,6 @@ abstract class Content {
       'path': path,
     };
   }
+
+  List<Page> getPages();
 }

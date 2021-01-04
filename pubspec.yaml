@@ -21,6 +21,7 @@ dependencies:
   mustache_template: ^1.0.0+1
   path: ^1.7.0
   watcher: ^0.9.7+15
+  xml: ^4.5.1
   yaml: ^2.2.1
 
 dev_dependencies:

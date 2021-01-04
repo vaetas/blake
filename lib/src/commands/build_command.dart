@@ -14,6 +14,7 @@ import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/search.dart';
 import 'package:blake/src/shortcode.dart';
+import 'package:blake/src/sitemap_builder.dart';
 import 'package:blake/src/util/either.dart';
 import 'package:blake/src/utils.dart';
 import 'package:mustache_template/mustache_template.dart';
@@ -61,6 +62,12 @@ class BuildCommand extends Command<int> {
     );
     await _generateContent(content);
     await _copyStaticFiles();
+
+    final sitemapBuilder = SitemapBuilder(
+      config: config,
+      pages: content.getPages(),
+    );
+    await sitemapBuilder.build();
 
     if (config.build.generateSearchIndex) {
       final index = createSearchIndex(content, config);
