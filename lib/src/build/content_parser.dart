@@ -1,23 +1,32 @@
-import 'package:blake/blake.dart';
+import 'dart:io';
+
+import 'package:blake/src/config.dart';
+import 'package:blake/src/content/content.dart';
 import 'package:blake/src/content/page.dart';
 import 'package:blake/src/content/section.dart';
 import 'package:blake/src/errors.dart';
+import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/markdown/footnote_syntax.dart';
 import 'package:blake/src/markdown/markdown_file.dart';
 import 'package:blake/src/shortcode.dart';
 import 'package:blake/src/utils.dart';
+import 'package:file/file.dart';
 import 'package:markdown/markdown.dart';
+import 'package:meta/meta.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
 final _delimiter = RegExp(r'(---)(\n|\r)?');
 
 class ContentParser {
   const ContentParser({
-    this.shortcodes = const [],
-  });
+    @required this.shortcodes,
+    @required this.config,
+  })  : assert(shortcodes != null),
+        assert(config != null);
 
   final List<Shortcode> shortcodes;
+  final Config config;
 
   /// Recursively parse file tree starting from [entity].
   Future<Content> parse(FileSystemEntity entity) async {
@@ -26,8 +35,14 @@ class ContentParser {
         final content = await file.readAsString();
         final parsed = _parseFile(content);
 
+        // Remove leading 'content/' part of the directory.
+        final path = Path.normalize(file.path).replaceFirst(
+          '${config.build.contentDir}/',
+          '',
+        );
+
         return Page(
-          path: file.path,
+          path: path,
           content: parsed.content,
           metadata: parsed.metadata,
         );
@@ -46,8 +61,14 @@ class ContentParser {
           );
         }
 
+        // Remove leading 'content/' part of the directory.
+        final path = Path.normalize(directory.path).replaceFirst(
+          '${config.build.contentDir}/',
+          '',
+        );
+
         return Section(
-          path: directory.path,
+          path: path,
           index: content.firstWhere(
             (element) => element is Page && element.isIndex,
             orElse: () => null,

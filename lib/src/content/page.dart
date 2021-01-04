@@ -5,7 +5,6 @@ import 'package:blake/src/log.dart';
 import 'package:blake/src/utils.dart';
 import 'package:glob/glob.dart';
 import 'package:meta/meta.dart';
-import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 final _kIndexGlob = Glob('{index,_index}');
@@ -19,7 +18,9 @@ class Page extends Content {
   });
 
   @override
-  String get title => metadata?.get<String>('title', p.basename(path));
+  String get title => metadata?.get<String>('title', Path.basename(path));
+
+  bool get public => metadata?.get<bool>('public') ?? true;
 
   DateTime get date {
     final _date = metadata?.get<String>('date');
@@ -55,34 +56,49 @@ class Page extends Content {
   /// Example:
   ///   content/post.md   ->  public/post/index.html
   ///   content/index.md  ->  public/index.html
-  String getCanonicalPath(Config config) {
-    final buildPath = path.replaceFirst(
-      config.build.contentDir,
-      config.build.publicDir,
-    );
-
-    final basename = p.basenameWithoutExtension(buildPath);
-    final dirName = p.dirname(buildPath);
+  String getBuildPath(Config config) {
+    final basename = Path.basenameWithoutExtension(path);
+    final dirName = Path.dirname(path);
 
     if (isIndex) {
       // Index file may be named `index` or `_index`.
       // Underscore needs to be removed.
       final name = basename.startsWith('_') ? basename.substring(1) : basename;
-      return '$dirName/$name.html';
+      return Path.normalize(
+        Path.join(
+          config.build.publicDir,
+          dirName,
+          '$name.html',
+        ),
+      );
     } else {
-      return '$dirName/$basename/index.html';
+      return Path.normalize(
+        Path.join(
+          config.build.publicDir,
+          dirName,
+          basename,
+          'index.html',
+        ),
+      );
     }
   }
 
   String getPublicUrl(Config config) {
-    return getCanonicalPath(config);
+    return getBuildPath(config)
+        .replaceFirst(
+          config.build.publicDir,
+          config.baseUrl,
+        )
+        .replaceFirst('index.html', '');
+    log.warning(getBuildPath(config));
+    return getBuildPath(config);
 
     final buildPath = path.replaceFirst(
       config.build.contentDir,
       '',
     );
-    final basename = p.basenameWithoutExtension(buildPath);
-    final dirName = p.dirname(buildPath);
+    final basename = Path.basenameWithoutExtension(buildPath);
+    final dirName = Path.dirname(buildPath);
 
     String url;
     if (isIndex) {
@@ -95,17 +111,17 @@ class Page extends Content {
     }
 
     log.warning(config.baseUrl);
-    return p.join(config.baseUrl, url);
+    return Path.join(config.baseUrl, url);
   }
 
-  bool get isIndex => _kIndexGlob.matches(p.basenameWithoutExtension(path));
+  bool get isIndex => _kIndexGlob.matches(Path.basenameWithoutExtension(path));
 
   @override
   Map<String, dynamic> toMap(Config config) {
     // TODO: Remove dependency from [config]?
     return <String, dynamic>{
       'title': title,
-      'path': getCanonicalPath(config)
+      'path': getBuildPath(config)
           .replaceFirst(config.build.publicDir, '')
           .replaceFirst('index.html', ''),
       'content': content,
@@ -122,5 +138,5 @@ class Page extends Content {
   String toString() => 'Page{path: $path, metadata: $metadata}';
 
   @override
-  List<Page> getPages() => [this];
+  List<Page> getPages() => public ? [this] : [];
 }

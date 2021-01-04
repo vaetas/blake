@@ -5,8 +5,8 @@ import 'package:args/command_runner.dart';
 import 'package:blake/blake.dart';
 import 'package:blake/src/config.dart';
 import 'package:blake/src/log.dart';
+import 'package:blake/src/utils.dart';
 import 'package:mustache_template/mustache_template.dart';
-import 'package:path/path.dart' as p;
 
 /// Create new content based on predefined types.
 ///
@@ -99,7 +99,7 @@ class NewCommand extends Command<int> {
     }
 
     // TODO: Transform to pretty title.
-    final title = p.basename(args.name);
+    final title = Path.basename(args.name);
 
     final template = Template(types[args.type]);
     final data = <String, dynamic>{
@@ -121,7 +121,7 @@ class NewCommand extends Command<int> {
 
     return {
       for (final t in types)
-        p.basenameWithoutExtension(t.path): await t.readAsString()
+        Path.basenameWithoutExtension(t.path): await t.readAsString()
     };
   }
 }

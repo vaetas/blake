@@ -18,7 +18,6 @@ import 'package:blake/src/sitemap_builder.dart';
 import 'package:blake/src/util/either.dart';
 import 'package:blake/src/utils.dart';
 import 'package:mustache_template/mustache_template.dart';
-import 'package:path/path.dart' as p;
 
 class BuildCommand extends Command<int> {
   BuildCommand(this.config) {
@@ -71,8 +70,13 @@ class BuildCommand extends Command<int> {
 
     if (config.build.generateSearchIndex) {
       final index = createSearchIndex(content, config);
-      final indexFile =
-          await fs.file('${config.build.publicDir}/search_index.json').create();
+
+      final indexFilePath = Path.join(
+        config.build.publicDir,
+        'search_index.json',
+      );
+
+      final indexFile = await fs.file(indexFilePath).create();
       await indexFile.writeAsString(json.encode(index));
       log.debug('Search index generated');
 
@@ -90,20 +94,23 @@ class BuildCommand extends Command<int> {
     Directory contentDir,
   ) async {
     try {
-      final shortcodesDir = p.join(config.build.templatesDir, 'shortcodes');
+      final shortcodesDir = Path.join(config.build.templatesDir, 'shortcodes');
       final shortcodeFiles = await fs.directory(shortcodesDir).list().toList();
 
       final shortcodes =
           await shortcodeFiles.whereType<File>().asyncMap<Shortcode>(
         (e) async {
           return Shortcode(
-            name: p.basenameWithoutExtension(e.path),
+            name: Path.basenameWithoutExtension(e.path),
             template: await e.readAsString(),
           );
         },
       );
 
-      final parser = ContentParser(shortcodes: shortcodes);
+      final parser = ContentParser(
+        shortcodes: shortcodes,
+        config: config,
+      );
       final content = await parser.parse(contentDir);
       return Right(content);
     } on BuildError catch (e) {
@@ -177,7 +184,7 @@ class BuildCommand extends Command<int> {
       ..addAll(extraData);
 
     final output = template.renderString(metadata);
-    final path = page.getCanonicalPath(config);
+    final path = page.getBuildPath(config);
     final file = await fs.file(path).create(recursive: true);
     await file.writeAsString(output);
   }
@@ -218,7 +225,8 @@ class BuildCommand extends Command<int> {
     templateName ??=
         page.isIndex ? config.templates.section : config.templates.page;
 
-    final file = fs.file('${config.build.templatesDir}/$templateName');
+    final path = Path.join(config.build.templatesDir, templateName);
+    final file = fs.file(path);
 
     if (!await file.exists()) {
       throw BuildError('Template $templateName does not exists');

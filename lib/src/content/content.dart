@@ -1,12 +1,12 @@
 import 'package:blake/src/config.dart';
 import 'package:blake/src/content/page.dart';
 import 'package:blake/src/content/section.dart';
-import 'package:path/path.dart' as p;
+import 'package:blake/src/utils.dart';
 
 /// [Content] symbolizes node in content tree. See [Page] or [Section] for
 /// concrete implementation.
 abstract class Content {
-  String get title => p.basename(path);
+  String get title => Path.basename(path);
 
   String get path;
 

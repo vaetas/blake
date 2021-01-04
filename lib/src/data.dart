@@ -4,7 +4,7 @@ import 'package:blake/src/config.dart';
 import 'package:blake/src/errors.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
-import 'package:path/path.dart' as p;
+import 'package:blake/src/utils.dart';
 import 'package:yaml/yaml.dart';
 
 /// Parse all YAML and JSON files inside `data_dir` and create data Map which
@@ -24,11 +24,11 @@ Future<Map<String, dynamic>> parseDataTree(Config config, {String path}) async {
   for (final e in nodes) {
     await e.when(
       directory: (directory) async {
-        final name = p.basename(directory.path);
+        final name = Path.basename(directory.path);
         data[name] = await parseDataTree(config, path: directory.path);
       },
       file: (file) async {
-        final name = p.basenameWithoutExtension(file.path);
+        final name = Path.basenameWithoutExtension(file.path);
         try {
           final dynamic content = await _parseData(file) as dynamic;
           data[name] = content;
@@ -43,7 +43,8 @@ Future<Map<String, dynamic>> parseDataTree(Config config, {String path}) async {
 }
 
 dynamic _parseData(File file) async {
-  final extension = p.extension(file.path).toLowerCase().replaceFirst('.', '');
+  final extension =
+      Path.extension(file.path).toLowerCase().replaceFirst('.', '');
   final content = await file.readAsString();
 
   switch (extension) {
