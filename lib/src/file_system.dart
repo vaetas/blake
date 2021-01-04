@@ -1,13 +1,17 @@
-import 'dart:io';
-
 import 'package:blake/src/config.dart';
 import 'package:blake/src/errors.dart';
 import 'package:blake/src/util/either.dart';
+import 'package:file/file.dart';
+import 'package:file/local.dart';
 import 'package:yaml/yaml.dart';
+
+export 'package:file/file.dart';
+
+const fs = LocalFileSystem();
 
 /// List all files and directories inside folder with given [path].
 Future<List<FileSystemEntity>> listDirectory(String path) {
-  return Directory(path).list().toList();
+  return fs.directory(path).list().toList();
 }
 
 extension DirectoryExtension on Directory {
@@ -27,9 +31,9 @@ extension FileSystemEntityExtension on FileSystemEntity {
     R Function(Directory directory) directory,
     R Function(Link link) link,
   }) {
-    if (FileSystemEntity.isFileSync(path)) {
+    if (fs.isFileSync(path)) {
       return file?.call(this as File);
-    } else if (FileSystemEntity.isDirectorySync(path)) {
+    } else if (fs.isDirectorySync(path)) {
       return directory?.call(this as Directory);
     } else {
       return link?.call(this as Link);
@@ -50,7 +54,7 @@ Future<Directory> _getOrThrow(Directory directory) async {
 /// Config: `build.public_dir`
 Future<Directory> getPublicDirectory(Config config) async {
   return _getOrThrow(
-    Directory(config.build.publicDir),
+    fs.directory(config.build.publicDir),
   );
 }
 
@@ -58,7 +62,7 @@ Future<Directory> getPublicDirectory(Config config) async {
 ///
 /// Config: `build.content_dir`
 Future<Either<BuildError, Directory>> getContentDirectory(Config config) async {
-  final directory = Directory(config.build.contentDir);
+  final directory = fs.directory(config.build.contentDir);
   if (await directory.exists()) {
     return Right(directory);
   } else {
@@ -72,7 +76,7 @@ Future<Either<BuildError, Directory>> getContentDirectory(Config config) async {
 /// Config: `build.templates_dir`
 Future<Directory> getTemplatesDirectory(Config config) async {
   return _getOrThrow(
-    Directory(config.build.templatesDir),
+    fs.directory(config.build.templatesDir),
   );
 }
 
@@ -81,13 +85,13 @@ Future<Directory> getTemplatesDirectory(Config config) async {
 /// Config: `build.static_dir`
 Future<Directory> getStaticDirectory(Config config) async {
   return _getOrThrow(
-    Directory(config.build.staticDir),
+    fs.directory(config.build.staticDir),
   );
 }
 
 Future<Directory> getDataDirectory(Config config) async {
   return _getOrThrow(
-    Directory(config.build.dataDir),
+    fs.directory(config.build.dataDir),
   );
 }
 
@@ -107,11 +111,11 @@ Future<Either<ConfigError, Config>> getConfig() async {
 }
 
 Future<bool> isProjectDirectory() {
-  return File(_kConfigFile).exists();
+  return fs.file(_kConfigFile).exists();
 }
 
 Future<File> _getConfigFile() async {
-  return File(_kConfigFile).create();
+  return fs.file(_kConfigFile).create();
 }
 
 const _kConfigFile = 'config.yaml';

@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:blake/blake.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/yaml.dart';
 
@@ -28,11 +28,11 @@ class InitCommand extends Command<int> {
     try {
       await _initConfig(name);
 
-      await Directory('$name/content').create();
-      await Directory('$name/templates').create();
-      await Directory('$name/static').create();
-      await Directory('$name/data').create();
-      await Directory('$name/types').create();
+      await fs.directory('$name/content').create();
+      await fs.directory('$name/templates').create();
+      await fs.directory('$name/static').create();
+      await fs.directory('$name/data').create();
+      await fs.directory('$name/types').create();
     } catch (e) {
       log.error(e);
       return 1;
@@ -43,7 +43,8 @@ class InitCommand extends Command<int> {
   }
 
   Future<void> _initConfig(String root) async {
-    final configFile = await File('${root.isEmpty ? '$root/' : ''}config.yaml')
+    final configFile = await fs
+        .file('${root.isEmpty ? '$root/' : ''}config.yaml')
         .create(recursive: true);
     final config = await configFile.readAsString();
 

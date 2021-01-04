@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:blake/src/config.dart';
 import 'package:blake/src/errors.dart';
@@ -20,7 +19,7 @@ import 'package:yaml/yaml.dart';
 Future<Map<String, dynamic>> parseDataTree(Config config, {String path}) async {
   final data = <String, dynamic>{};
   path ??= config.build.dataDir;
-  final nodes = await Directory(path).list().toList();
+  final nodes = await fs.directory(path).list().toList();
 
   for (final e in nodes) {
     await e.when(

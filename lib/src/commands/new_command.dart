@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
+import 'package:blake/blake.dart';
 import 'package:blake/src/config.dart';
 import 'package:blake/src/log.dart';
 import 'package:mustache_template/mustache_template.dart';
@@ -76,7 +76,7 @@ class NewCommand extends Command<int> {
 
     final _pattern = RegExp(r'\.md$');
 
-    final file = File(
+    final file = fs.file(
       '${config.build.contentDir}/${_pattern.hasMatch(args.name) ? args.name : '${args.name}.md'}',
     );
 
@@ -115,7 +115,8 @@ class NewCommand extends Command<int> {
   }
 
   Future<Map<String, String>> getTypes() async {
-    final dirContent = await Directory(config.build.typesDir).list().toList();
+    final dirContent =
+        await fs.directory(config.build.typesDir).list().toList();
     final types = dirContent.whereType<File>();
 
     return {

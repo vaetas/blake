@@ -1,12 +1,13 @@
-import 'dart:io';
-
+import 'package:blake/blake.dart';
 import 'package:blake/src/config.dart';
 import 'package:mustache_template/mustache_template.dart';
 
 Future<void> setupReloadScript(Config config) async {
-  await File(
-    '${config.build.publicDir}/reload.js',
-  ).writeAsString(_getReloadScript(config));
+  final publicDir = await getPublicDirectory(config);
+
+  await publicDir
+      .childFile('reload.js')
+      .writeAsString(_getReloadScript(config));
 }
 
 String _getReloadScript(Config config) {

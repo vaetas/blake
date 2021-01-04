@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:io' show HttpServer, WebSocket, WebSocketTransformer;
 
+import 'package:blake/blake.dart';
 import 'package:blake/src/log.dart';
 import 'package:http_server/http_server.dart';
 
@@ -38,7 +39,7 @@ class LocalServer {
       ..allowDirectoryListing = true
       ..directoryHandler = (dir, request) {
         final indexUri = Uri.file(dir.path).resolve('index.html');
-        directory.serveFile(File(indexUri.toFilePath()), request);
+        directory.serveFile(fs.file(indexUri.toFilePath()), request);
       };
 
     try {

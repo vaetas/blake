@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:blake/blake.dart';
 import 'package:blake/src/content/page.dart';
 import 'package:blake/src/content/section.dart';

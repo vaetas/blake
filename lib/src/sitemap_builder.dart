@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:blake/blake.dart';
 import 'package:blake/src/config.dart';
 import 'package:blake/src/content/page.dart';
 import 'package:meta/meta.dart';
@@ -53,9 +52,11 @@ class SitemapBuilder {
   }
 
   Future<void> _createFile(String content) async {
-    final file = await File(
-      p.join(config.build.publicDir, 'sitemap.xml'),
-    ).create();
+    final file = await fs
+        .file(
+          p.join(config.build.publicDir, 'sitemap.xml'),
+        )
+        .create();
 
     await file.writeAsString(content);
   }

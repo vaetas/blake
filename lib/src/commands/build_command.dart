@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' show exit;
 
 import 'package:args/command_runner.dart';
 import 'package:blake/src/build/content_parser.dart';
@@ -71,9 +71,8 @@ class BuildCommand extends Command<int> {
 
     if (config.build.generateSearchIndex) {
       final index = createSearchIndex(content, config);
-      final indexFile = await File(
-        '${config.build.publicDir}/search_index.json',
-      ).create();
+      final indexFile =
+          await fs.file('${config.build.publicDir}/search_index.json').create();
       await indexFile.writeAsString(json.encode(index));
       log.debug('Search index generated');
 
@@ -92,7 +91,7 @@ class BuildCommand extends Command<int> {
   ) async {
     try {
       final shortcodesDir = p.join(config.build.templatesDir, 'shortcodes');
-      final shortcodeFiles = await Directory(shortcodesDir).list().toList();
+      final shortcodeFiles = await fs.directory(shortcodesDir).list().toList();
 
       final shortcodes =
           await shortcodeFiles.whereType<File>().asyncMap<Shortcode>(
@@ -179,7 +178,7 @@ class BuildCommand extends Command<int> {
 
     final output = template.renderString(metadata);
     final path = page.getCanonicalPath(config);
-    final file = await File(path).create(recursive: true);
+    final file = await fs.file(path).create(recursive: true);
     await file.writeAsString(output);
   }
 
@@ -196,7 +195,7 @@ class BuildCommand extends Command<int> {
         config.build.staticDir,
         config.build.publicDir,
       );
-      await Directory(path).create(recursive: true);
+      await fs.directory(path).create(recursive: true);
     }
 
     for (final file in files) {
@@ -219,7 +218,7 @@ class BuildCommand extends Command<int> {
     templateName ??=
         page.isIndex ? config.templates.section : config.templates.page;
 
-    final file = File('${config.build.templatesDir}/$templateName');
+    final file = fs.file('${config.build.templatesDir}/$templateName');
 
     if (!await file.exists()) {
       throw BuildError('Template $templateName does not exists');
