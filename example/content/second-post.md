@@ -2,6 +2,16 @@
 title: Second post
 ---
 
+{{< code >}}
+```dart
+void main() {
+    print('Hello world');
+}
+```
+{{< /code >}}
+
+{{ info text="Hello!" }}
+
 Hello.
 
 | a | b | c | d | e |

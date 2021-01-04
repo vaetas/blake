@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:blake/src/build/content_tree.dart';
+import 'package:blake/src/build/content_parser.dart';
 import 'package:blake/src/config.dart';
 import 'package:blake/src/content/content.dart';
 import 'package:blake/src/content/page.dart';
@@ -13,8 +13,11 @@ import 'package:blake/src/errors.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/search.dart';
+import 'package:blake/src/shortcode.dart';
 import 'package:blake/src/util/either.dart';
+import 'package:blake/src/utils.dart';
 import 'package:mustache_template/mustache_template.dart';
+import 'package:path/path.dart' as p;
 
 class BuildCommand extends Command<int> {
   BuildCommand(this.config) {
@@ -81,7 +84,21 @@ class BuildCommand extends Command<int> {
     Directory contentDir,
   ) async {
     try {
-      final content = await parseContentTree(contentDir);
+      final shortcodesDir = p.join(config.build.templatesDir, 'shortcodes');
+      final shortcodeFiles = await Directory(shortcodesDir).list().toList();
+
+      final shortcodes =
+          await shortcodeFiles.whereType<File>().asyncMap<Shortcode>(
+        (e) async {
+          return Shortcode(
+            name: p.basenameWithoutExtension(e.path),
+            template: await e.readAsString(),
+          );
+        },
+      );
+
+      final parser = ContentParser(shortcodes: shortcodes);
+      final content = await parser.parse(contentDir);
       return Right(content);
     } on BuildError catch (e) {
       return Left(e);
