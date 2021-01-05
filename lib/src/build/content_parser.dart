@@ -117,31 +117,61 @@ class ContentParser {
   }
 
   String _renderShortcodes(String content) {
+    for (final shortcode in shortcodes) {
+      // Inline shortcodes
+      final pattern = RegExp('\\{{2} ${shortcode.name} ((?!\\/).)* \\}{2}');
+      final inlineMatches = pattern.allMatches(content);
+
+      for (final match in inlineMatches) {
+        final variables =
+            _parseInlineShortcode(content.substring(match.start, match.end));
+      }
+
+      // Block shortcodes
+
+      // final startPattern = RegExp('\\{{2}< code ((?!\\/).)* >\\}{2}');
+      // final endPattern = RegExp('\\{{2}< /code >\\}{2}');
+      //
+      // final startMatches = startPattern.allMatches(content);
+      // final endMatches = endPattern.allMatches(content);
+      //
+      // for (final match in startMatches) {}
+    }
     return null;
-    // final bodyStartPattern = RegExp(r'\{{2}< ((?!\/).)* >\}{2}(\n|\r)');
-    // final bodyEndPattern = RegExp(r'\{{2}< \/.* >\}{2}(\n|\r)');
-    //
-    // final bodyMatches = bodyStartPattern.allMatches(content);
-    //
-    // for (final match in bodyMatches) {
-    //   log.info(
-    //     '${match.start} ${match.end} '
-    //     '${content.substring(match.start, match.end - 1)}',
-    //   );
-    // }
-    //
-    // final inlinePattern = RegExp(r'\{{2} .* \}{2}(\n|\r)');
-    // final matches = inlinePattern.allMatches(content);
-
-    // for (final match in matches) {
-    //   log.info('Match: $match');
-    // }
   }
-}
 
-class ShortcodeRenderer {
-  const ShortcodeRenderer({this.shortcode, this.content});
+  Map<String, dynamic> _parseInlineShortcode(String content) {
+    final values = <String, dynamic>{};
 
-  final Shortcode shortcode;
-  final String content;
+    // Raw arguments will look like [{{ ,shorcode, arg="hello", }}]. This hack
+    // will remove initial {{ and shortcode name together with trailing }}.
+    final args = content.split(' ').sublist(2)..removeLast();
+
+    for (final arg in args) {
+      final parts = arg.split('=');
+      final key = parts[0];
+      final dynamic value = _parseArgValue(parts[1]);
+
+      values[key] = value;
+    }
+
+    return values;
+  }
+
+  dynamic _parseArgValue(String value) {
+    switch (value) {
+      case 'true':
+        return true;
+      case 'false':
+        return false;
+      default:
+        String _value;
+
+        if (value.startsWith('"') && value.endsWith('"')) {
+          _value = value.substring(1, value.length - 1);
+        }
+
+        return _value;
+    }
+  }
 }
