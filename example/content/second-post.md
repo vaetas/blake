@@ -2,7 +2,7 @@
 title: Second post
 ---
 
-{{< code >}}
+{{< code file="main.dart" >}}
 ```dart
 void main() {
     print('Hello world');
@@ -10,7 +10,7 @@ void main() {
 ```
 {{< /code >}}
 
-{{ info text="Hello!" }}
+{{ info text="Hello-world!" }}
 
 Hello.
 

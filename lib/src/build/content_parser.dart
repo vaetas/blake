@@ -96,8 +96,9 @@ class ContentParser {
 
     final m = yaml.loadYaml(metadata) as yaml.YamlMap;
 
-    final content = markdown.substring(matches[1].end).trim();
-    _renderShortcodes(content);
+    final content = ShortcodeRenderer(shortcodes: shortcodes).render(
+      markdown.substring(matches[1].end).trim(),
+    );
 
     final parsed = markdownToHtml(
       content,
@@ -115,37 +116,99 @@ class ContentParser {
       metadata: m ?? yaml.YamlMap.wrap(<dynamic, dynamic>{}),
     );
   }
+}
 
-  String _renderShortcodes(String content) {
+/// Replace every shortcode inside text file with its value.
+///
+/// To render an `input` call `render` method.
+class ShortcodeRenderer {
+  ShortcodeRenderer({@required this.shortcodes}) : assert(shortcodes != null);
+
+  final List<Shortcode> shortcodes;
+
+  String render(String input) {
+    var _result = input;
+
     for (final shortcode in shortcodes) {
-      // Inline shortcodes
+      /*
+       Inline shortcodes
+      */
+
       final pattern = RegExp('\\{{2} ${shortcode.name} ((?!\\/).)* \\}{2}');
-      final inlineMatches = pattern.allMatches(content);
+      final inlineMatches = pattern.allMatches(input);
 
       for (final match in inlineMatches) {
-        final variables =
-            _parseInlineShortcode(content.substring(match.start, match.end));
+        final variables = _parseInlineShortcode(
+          input.substring(match.start, match.end),
+        );
+
+        final output = shortcode.render(variables);
+
+        _result = _result.replaceFirst(
+          input.substring(match.start, match.end),
+          output,
+        );
       }
 
-      // Block shortcodes
+      /*
+       Block shortcodes
+      */
 
-      // final startPattern = RegExp('\\{{2}< code ((?!\\/).)* >\\}{2}');
-      // final endPattern = RegExp('\\{{2}< /code >\\}{2}');
-      //
-      // final startMatches = startPattern.allMatches(content);
-      // final endMatches = endPattern.allMatches(content);
-      //
-      // for (final match in startMatches) {}
+      final startPattern =
+          RegExp('\\{{2}< ${shortcode.name}((?!\\/).)* >\\}{2}');
+      final endPattern = RegExp('\\{{2}< /${shortcode.name} >\\}{2}');
+
+      final startMatches = startPattern.allMatches(input);
+      final endMatches = endPattern.allMatches(input);
+
+      if (startMatches.length != endMatches.length) {
+        log.error(
+          'Body shortcodes must have both opening closing tag.',
+          help: 'Invalid use of ${shortcode.name} shortcode.',
+        );
+
+        throw const BuildError(
+          'Body shortcodes must have both opening closing tag.',
+        );
+      }
+
+      for (var x = 0; x < startMatches.length; x++) {
+        final startMatch = startMatches.elementAt(x);
+        final endMatch = endMatches.elementAt(x);
+
+        final variables = _parseBodyShortcode(
+          input.substring(startMatch.end, endMatch.start),
+          shortcode: input.substring(startMatch.start, startMatch.end),
+        );
+        final output = shortcode.render(variables);
+
+        _result = _result.replaceFirst(
+          input.substring(startMatch.start, endMatch.end),
+          output,
+        );
+      }
     }
-    return null;
+    return _result;
   }
 
-  Map<String, dynamic> _parseInlineShortcode(String content) {
+  Map<String, dynamic> _parseInlineShortcode(String input) {
+    return _parseArgs(input);
+  }
+
+  Map<String, dynamic> _parseBodyShortcode(String body, {String shortcode}) {
+    final values = <String, dynamic>{};
+    values['body'] = body;
+    values.addAll(_parseArgs(shortcode));
+    log.warning(values);
+    return values;
+  }
+
+  Map<String, dynamic> _parseArgs(String input) {
     final values = <String, dynamic>{};
 
     // Raw arguments will look like [{{ ,shorcode, arg="hello", }}]. This hack
     // will remove initial {{ and shortcode name together with trailing }}.
-    final args = content.split(' ').sublist(2)..removeLast();
+    final args = input.split(' ').sublist(2)..removeLast();
 
     for (final arg in args) {
       final parts = arg.split('=');

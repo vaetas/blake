@@ -18,6 +18,8 @@ Features as of now:
 * YAML/JSON data content and non-public Data pages.
 * Define content types for quick creation.
 * Basic JSON search index.
+* Sitemap generation.
+* Inline & body shortcodes.
 
 Remember that this project is WIP. Everything can change at any time.
 
