@@ -1,7 +1,8 @@
+import 'package:blake/blake.dart';
 import 'package:blake/src/config.dart';
 import 'package:blake/src/content/content.dart';
 import 'package:blake/src/content/section.dart';
-import 'package:blake/src/log.dart';
+import 'package:blake/src/git_util.dart';
 import 'package:blake/src/utils.dart';
 import 'package:glob/glob.dart';
 import 'package:meta/meta.dart';
@@ -41,12 +42,18 @@ class Page extends Content {
     // TODO: Check Git times.
   }
 
+  Future<DateTime> getModified(Config config) async {
+    return GitUtil.getModified(
+      fs.file(Path.join(config.build.contentDir, path)),
+    );
+  }
+
   @override
   final String path;
 
   final String content;
 
-  final YamlMap metadata;
+  final Map<String,dynamic> metadata;
 
   /// Get final build path for this [Page].
   ///
@@ -90,28 +97,6 @@ class Page extends Content {
           config.baseUrl,
         )
         .replaceFirst('index.html', '');
-    log.warning(getBuildPath(config));
-    return getBuildPath(config);
-
-    final buildPath = path.replaceFirst(
-      config.build.contentDir,
-      '',
-    );
-    final basename = Path.basenameWithoutExtension(buildPath);
-    final dirName = Path.dirname(buildPath);
-
-    String url;
-    if (isIndex) {
-      // Index file may be named `index` or `_index`.
-      // Underscore needs to be removed.
-      final name = basename.startsWith('_') ? basename.substring(1) : basename;
-      url = '$dirName/';
-    } else {
-      url = '$dirName/$basename/';
-    }
-
-    log.warning(config.baseUrl);
-    return Path.join(config.baseUrl, url);
   }
 
   bool get isIndex => _kIndexGlob.matches(Path.basenameWithoutExtension(path));

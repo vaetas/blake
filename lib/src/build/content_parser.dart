@@ -6,6 +6,7 @@ import 'package:blake/src/content/page.dart';
 import 'package:blake/src/content/section.dart';
 import 'package:blake/src/errors.dart';
 import 'package:blake/src/file_system.dart';
+import 'package:blake/src/git_util.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/markdown/footnote_syntax.dart';
 import 'package:blake/src/markdown/markdown_file.dart';
@@ -33,7 +34,7 @@ class ContentParser {
     return entity.when(
       file: (file) async {
         final content = await file.readAsString();
-        final parsed = _parseFile(content);
+        final parsed = await _parseFile(content);
 
         // Remove leading 'content/' part of the directory.
         final path = Path.normalize(file.path).replaceFirst(
@@ -41,10 +42,17 @@ class ContentParser {
           '',
         );
 
+        final metadata = Map<String, dynamic>.from(parsed.metadata);
+
+        if (!metadata.containsKey('date')) {
+          final date = await GitUtil.getModified(file);
+          metadata['date'] = date.toIso8601String();
+        }
+
         return Page(
           path: path,
           content: parsed.content,
-          metadata: parsed.metadata,
+          metadata: metadata,
         );
       },
       directory: (directory) async {
@@ -84,7 +92,7 @@ class ContentParser {
     );
   }
 
-  MarkdownFile _parseFile(String markdown) {
+  Future<MarkdownFile> _parseFile(String markdown) async {
     if (_delimiter.allMatches(markdown).length < 2 ||
         _delimiter.firstMatch(markdown).start != 0) {
       log.warning('Front matter is invalid or missing.');
@@ -199,7 +207,6 @@ class ShortcodeRenderer {
     final values = <String, dynamic>{};
     values['body'] = body;
     values.addAll(_parseArgs(shortcode));
-    log.warning(values);
     return values;
   }
 

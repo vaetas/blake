@@ -58,8 +58,8 @@ extension YamlMapExtension on YamlMap {
 }
 
 extension MapExtension on Map<String, dynamic> {
-  T get<T>(String key) {
-    return this[key] as T;
+  T get<T>(String key, [T defaultValue]) {
+    return this[key] as T ?? defaultValue;
   }
 }
 

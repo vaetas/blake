@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ansicolor/ansicolor.dart';
 import 'package:args/command_runner.dart';
 import 'package:blake/src/commands/build_command.dart';
@@ -5,6 +7,7 @@ import 'package:blake/src/commands/init_command.dart';
 import 'package:blake/src/commands/new_command.dart';
 import 'package:blake/src/commands/serve_command.dart';
 import 'package:blake/src/file_system.dart';
+import 'package:blake/src/git_util.dart';
 import 'package:blake/src/log.dart';
 
 export 'src/build/build_config.dart';
@@ -25,6 +28,8 @@ class Blake {
     if (!await isProjectDirectory()) {
       return runner.run(args);
     } else {
+      await _ensureGit();
+
       final config = await getConfig();
       return config.when(
         (error) {
@@ -40,6 +45,21 @@ class Blake {
           return runner.run(args);
         },
       );
+    }
+  }
+
+  Future<void> _ensureGit() async {
+    if (!await GitUtil.isGitInstalled()) {
+      log.error('Git must be installed on the system to use Blake.');
+      exit(1);
+    }
+
+    if (!await GitUtil.isGitDir()) {
+      log.error(
+        'Project is not a git repository.',
+        help: 'Use `git init` to initialize a repository.',
+      );
+      exit(1);
     }
   }
 }
