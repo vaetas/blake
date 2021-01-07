@@ -23,11 +23,7 @@ class SitemapBuilder {
       ..processing('xml', 'version="1.0" encoding="utf-8" standalone="yes"')
       ..element(
         'urlset',
-        nest: () {
-          for (final page in pages) {
-            _buildPageElement(builder, page);
-          }
-        },
+        nest: await _buildNodes(),
         attributes: {
           'xmlns': 'http://www.sitemaps.org/schemas/sitemap/0.9',
           'xmlns:xhtml': 'http://www.w3.org/1999/xhtml',
@@ -37,17 +33,27 @@ class SitemapBuilder {
     await _createFile(builder.buildDocument().toXmlString(pretty: true));
   }
 
-  void _buildPageElement(XmlBuilder builder, Page page) {
-    builder.element('url', nest: () {
-      builder.element('loc', nest: () {
-        builder.text(page.getPublicUrl(config));
-      });
+  Future<Iterable<XmlNode>> _buildNodes() async {
+    return pages.asyncMap((e) async {
+      final _updated = await e.getUpdated(config);
 
-      if (page.updated != null) {
-        builder.element('lastmod', nest: () {
-          builder.text(page.updated.toIso8601String());
-        });
-      }
+      return XmlElement(
+        XmlName('url'),
+        [],
+        [
+          XmlElement(
+            XmlName('loc'),
+            [],
+            [XmlText(e.getPublicUrl(config))],
+          ),
+          if (_updated != null)
+            XmlElement(
+              XmlName('lastmod'),
+              [],
+              [XmlText(_updated.toIso8601String())],
+            )
+        ],
+      );
     });
   }
 

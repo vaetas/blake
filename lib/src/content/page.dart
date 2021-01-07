@@ -6,7 +6,6 @@ import 'package:blake/src/git_util.dart';
 import 'package:blake/src/utils.dart';
 import 'package:glob/glob.dart';
 import 'package:meta/meta.dart';
-import 'package:yaml/yaml.dart';
 
 final _kIndexGlob = Glob('{index,_index}');
 
@@ -25,27 +24,20 @@ class Page extends Content {
 
   DateTime get date {
     final _date = metadata?.get<String>('date');
-    if (_date == null) {
-      return null;
-    }
-    return DateTime.parse(_date);
+    return _date != null ? DateTime.parse(_date) : null;
   }
 
-  DateTime get updated {
+  Future<DateTime> getUpdated(Config config) async {
     final _updated = metadata?.get<String>('updated');
     if (_updated != null) {
       return DateTime.parse(_updated);
     } else {
-      return date;
+      // TODO: Git value may be cached after obtaining.
+      final _gitModified = await GitUtil.getModified(
+        fs.file(Path.join(config.build.contentDir, path)),
+      );
+      return _gitModified ?? date;
     }
-
-    // TODO: Check Git times.
-  }
-
-  Future<DateTime> getModified(Config config) async {
-    return GitUtil.getModified(
-      fs.file(Path.join(config.build.contentDir, path)),
-    );
   }
 
   @override
@@ -53,7 +45,7 @@ class Page extends Content {
 
   final String content;
 
-  final Map<String,dynamic> metadata;
+  final Map<String, dynamic> metadata;
 
   /// Get final build path for this [Page].
   ///
