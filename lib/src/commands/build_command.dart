@@ -69,7 +69,10 @@ class BuildCommand extends Command<int> {
     await sitemapBuilder.build();
 
     if (config.build.generateSearchIndex) {
-      final index = createSearchIndex(content, config);
+      final index = SearchIndexBuilder(
+        config: config,
+        pages: content.getPages(),
+      ).build();
 
       final indexFilePath = Path.join(
         config.build.publicDir,
