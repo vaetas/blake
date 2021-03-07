@@ -31,9 +31,6 @@
 .pub/
 /build/
 
-# Lock file should be excluded from package
-pubspec.lock
-
 # Web related
 lib/generated_plugin_registrant.dart
 
