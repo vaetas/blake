@@ -21,14 +21,13 @@ import 'package:mustache_template/mustache_template.dart';
 
 class BuildCommand extends Command<int> {
   BuildCommand(this.config) {
-    argParser
-      ..addFlag(
-        'verbose',
-        abbr: 'v',
-        help: 'Show more logs.',
-        defaultsTo: false,
-        negatable: false,
-      );
+    argParser.addFlag(
+      'verbose',
+      abbr: 'v',
+      help: 'Show more logs.',
+      defaultsTo: false,
+      negatable: false,
+    );
   }
 
   final Config config;
@@ -194,30 +193,34 @@ class BuildCommand extends Command<int> {
 
   /// Move all files from static folder into public folder.
   Future<void> _copyStaticFiles() async {
-    final staticDir = await getStaticDirectory(config);
+    try {
+      final staticDir = await getStaticDirectory(config);
 
-    final staticContent = await staticDir.list(recursive: true).toList();
-    final directories = staticContent.whereType<Directory>();
-    final files = staticContent.whereType<File>();
+      final staticContent = await staticDir.list(recursive: true).toList();
+      final directories = staticContent.whereType<Directory>();
+      final files = staticContent.whereType<File>();
 
-    for (final directory in directories) {
-      final path = directory.path.replaceFirst(
-        config.build.staticDir,
-        config.build.publicDir,
-      );
-      await fs.directory(path).create(recursive: true);
-    }
-
-    for (final file in files) {
-      await file.copy(
-        file.path.replaceFirst(
+      for (final directory in directories) {
+        final path = directory.path.replaceFirst(
           config.build.staticDir,
           config.build.publicDir,
-        ),
-      );
-    }
+        );
+        await fs.directory(path).create(recursive: true);
+      }
 
-    log.debug('Static files copied');
+      for (final file in files) {
+        await file.copy(
+          file.path.replaceFirst(
+            config.build.staticDir,
+            config.build.publicDir,
+          ),
+        );
+      }
+
+      log.debug('Static files copied');
+    } catch (e) {
+      log.info('Skipping static directory.');
+    }
   }
 
   /// Get template to render given [page]. If there is a `template` field in
