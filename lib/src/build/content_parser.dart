@@ -21,12 +21,12 @@ final _delimiter = RegExp(r'(---)(\n|\r)?');
 
 class ContentParser {
   const ContentParser({
-    @required this.shortcodes,
+    @required this.shortcodeTemplates,
     @required this.config,
-  })  : assert(shortcodes != null),
+  })  : assert(shortcodeTemplates != null),
         assert(config != null);
 
-  final List<Shortcode> shortcodes;
+  final List<ShortcodeTemplate> shortcodeTemplates;
   final Config config;
 
   /// Recursively parse file tree starting from [entity].
@@ -104,7 +104,8 @@ class ContentParser {
 
     final m = yaml.loadYaml(metadata) as yaml.YamlMap;
 
-    final content = ShortcodeRenderer(shortcodes: shortcodes).render(
+    final content =
+        ShortcodeRenderer(shortcodeTemplates: shortcodeTemplates).render(
       markdown.substring(matches[1].end).trim(),
     );
 
@@ -128,16 +129,18 @@ class ContentParser {
 
 /// Replace every shortcode inside text file with its value.
 ///
-/// To render an `input` call `render` method.
+/// To render an `input` call [ShortcodeRenderer.render] method.
 class ShortcodeRenderer {
-  ShortcodeRenderer({@required this.shortcodes}) : assert(shortcodes != null);
+  ShortcodeRenderer({
+    @required this.shortcodeTemplates,
+  }) : assert(shortcodeTemplates != null);
 
-  final List<Shortcode> shortcodes;
+  final List<ShortcodeTemplate> shortcodeTemplates;
 
   String render(String input) {
     var _result = input;
 
-    for (final shortcode in shortcodes) {
+    for (final shortcode in shortcodeTemplates) {
       /*
        Inline shortcodes
       */
@@ -150,7 +153,7 @@ class ShortcodeRenderer {
           input.substring(match.start, match.end),
         );
 
-        final output = shortcode.render(variables);
+        final output = shortcode.render(variables.getValues());
 
         _result = _result.replaceFirst(
           input.substring(match.start, match.end),
@@ -185,10 +188,9 @@ class ShortcodeRenderer {
         final endMatch = endMatches.elementAt(x);
 
         final variables = _parseBodyShortcode(
-          input.substring(startMatch.end, endMatch.start),
-          shortcode: input.substring(startMatch.start, startMatch.end),
+          input.substring(startMatch.start, endMatch.end),
         );
-        final output = shortcode.render(variables);
+        final output = shortcode.render(variables.getValues());
 
         _result = _result.replaceFirst(
           input.substring(startMatch.start, endMatch.end),
@@ -199,19 +201,23 @@ class ShortcodeRenderer {
     return _result;
   }
 
-  Map<String, dynamic> _parseInlineShortcode(String input) {
-    return _parseArgs(input);
+  // TODO: Parser might throw an error.
+  Shortcode _parseInlineShortcode(String input) {
+    log.debug('INLINE: $input');
+    final shortcode = inlineShortcode.parse(input);
+    return shortcode.value as Shortcode;
+    // return _parseArgs(input);
   }
 
-  Map<String, dynamic> _parseBodyShortcode(String body, {String shortcode}) {
-    final values = <String, dynamic>{};
-    values['body'] = body;
-    values.addAll(_parseArgs(shortcode));
-    return values;
+  Shortcode _parseBodyShortcode(String input) {
+    log.debug('BLOCK: $input');
+    final _shortcode = blockShortcode.parse(input);
+    return _shortcode.value;
   }
 
   Map<String, dynamic> _parseArgs(String input) {
     final values = <String, dynamic>{};
+    print('INPUT: $input');
 
     // Raw arguments will look like [{{ ,shorcode, arg="hello", }}]. This hack
     // will remove initial {{ and shortcode name together with trailing }}.

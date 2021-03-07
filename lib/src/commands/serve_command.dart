@@ -25,6 +25,8 @@ class ServeCommand extends Command<int> {
       ..addOption('address', abbr: 'a', defaultsTo: '127.0.0.1')
       ..addOption('port', abbr: 'p', defaultsTo: '4040')
       ..addOption('websocket-port', defaultsTo: '4041');
+
+    log.verbose = config.serve.verbose;
   }
 
   @override
