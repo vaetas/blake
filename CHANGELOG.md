@@ -1,3 +1,10 @@
+## 0.4.0
+
+* feat: generate sitemap
+* feat: get modify date from git
+* refactor: shortcode parser
+* fix: allow naming index files with underscore
+
 ## 0.3.0
 
 * feat: date & update metadata
