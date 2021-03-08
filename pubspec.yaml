@@ -1,5 +1,5 @@
 name: blake
-version: 0.3.0
+version: 0.4.0
 description: Experimental static site generator for Dart with Markdown support, mustache templates and live-reload.
 homepage: https://github.com/vaetas/blake
 
@@ -30,7 +30,7 @@ dependencies:
 dev_dependencies:
   analysis_options:
     git: https://github.com/vaetas/analysis_options.git
-  test: ^1.16.5
+  test: ^1.16.6
 
 scripts:
   compile:
