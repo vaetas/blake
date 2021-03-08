@@ -35,10 +35,11 @@ class ShortcodeTemplate {
 /// Example of a shortcode without body.
 ///
 /// ```dart
-/// {{ block x=123 }}
+/// {{ inline x=123 }}
 /// ```
 ///
 /// Example of a shortcode with body. Body will be set as a `body` argument.
+///
 /// ```dart
 /// {{< block x=123 >}}
 ///   This is a block body
@@ -110,7 +111,7 @@ class ShortcodeParser {
 
   /// Parses inline shortcode.
   ///
-  /// ```
+  /// ```dart
   /// {{ block x=123 }}
   /// ```
   Shortcode parseInline(String input) {
@@ -119,10 +120,11 @@ class ShortcodeParser {
 
   /// Parses body shortcode.
   ///
-  /// ```
+  /// ```dart
   /// {{< block x=123 >}}
   ///   This is a block body
   /// {{< /block >}}
+  /// ```
   Shortcode parseBlock(String input) {
     return grammar.blockShortcode.parse(input).value;
   }
