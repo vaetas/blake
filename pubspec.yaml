@@ -30,7 +30,7 @@ dependencies:
 dev_dependencies:
   analysis_options:
     git: https://github.com/vaetas/analysis_options.git
-  test: ^1.16.6
+  test: ^1.16.5
 
 scripts:
   compile:
@@ -40,4 +40,4 @@ scripts:
     mac:
       - mkdir -p build
       - dart2native bin/blake.dart -o build/blake
-      - tar -czf build/blake-mac.tar.gz build/blake
+      - cd build && tar -czf blake-mac.tar.gz blake
