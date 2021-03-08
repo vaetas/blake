@@ -1,3 +1,7 @@
+## 0.4.1
+
+* fix: revert test dependency version
+
 ## 0.4.0
 
 * feat: generate sitemap
