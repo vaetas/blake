@@ -137,6 +137,8 @@ class ShortcodeRenderer {
 
   final List<ShortcodeTemplate> shortcodeTemplates;
 
+  final parser = ShortcodeParser();
+
   String render(String input) {
     var _result = input;
 
@@ -204,50 +206,14 @@ class ShortcodeRenderer {
   // TODO: Parser might throw an error.
   Shortcode _parseInlineShortcode(String input) {
     log.debug('INLINE: $input');
-    final shortcode = inlineShortcode.parse(input);
-    return shortcode.value as Shortcode;
+    final shortcode = parser.parseInline(input);
+    return shortcode;
     // return _parseArgs(input);
   }
 
   Shortcode _parseBodyShortcode(String input) {
     log.debug('BLOCK: $input');
-    final _shortcode = blockShortcode.parse(input);
-    return _shortcode.value;
-  }
-
-  Map<String, dynamic> _parseArgs(String input) {
-    final values = <String, dynamic>{};
-    print('INPUT: $input');
-
-    // Raw arguments will look like [{{ ,shorcode, arg="hello", }}]. This hack
-    // will remove initial {{ and shortcode name together with trailing }}.
-    final args = input.split(' ').sublist(2)..removeLast();
-
-    for (final arg in args) {
-      final parts = arg.split('=');
-      final key = parts[0];
-      final dynamic value = _parseArgValue(parts[1]);
-
-      values[key] = value;
-    }
-
-    return values;
-  }
-
-  dynamic _parseArgValue(String value) {
-    switch (value) {
-      case 'true':
-        return true;
-      case 'false':
-        return false;
-      default:
-        String _value;
-
-        if (value.startsWith('"') && value.endsWith('"')) {
-          _value = value.substring(1, value.length - 1);
-        }
-
-        return _value;
-    }
+    final _shortcode = parser.parseBlock(input);
+    return _shortcode;
   }
 }

@@ -47,7 +47,7 @@ class ShortcodeTemplate {
 class Shortcode {
   Shortcode.inline({this.name, this.arguments});
 
-  Shortcode.block({this.name, this.arguments, String body}) {
+  Shortcode.block({this.name, this.arguments, @required String body}) {
     arguments.add(Argument(name: 'body', value: body));
   }
 
@@ -66,7 +66,7 @@ class Shortcode {
       other is Shortcode &&
           runtimeType == other.runtimeType &&
           name == other.name &&
-          listEquals(arguments, other.arguments);
+          mapEquals<String, dynamic>(getValues(), other.getValues());
 
   @override
   int get hashCode => name.hashCode ^ arguments.hashCode;
@@ -79,15 +79,15 @@ class Shortcode {
 
 /// Single shortcode argument.
 ///
-/// `body` name is reserved for block-styled shortcodes.
+/// [value] can be either String, bool, int, or double.
 class Argument {
   Argument({
     this.name,
     this.value,
-  }) : assert(name != 'body');
+  });
 
   String name;
-  String value;
+  dynamic value;
 
   @override
   bool operator ==(Object other) =>
@@ -95,6 +95,7 @@ class Argument {
       other is Argument &&
           runtimeType == other.runtimeType &&
           name == other.name &&
+          value.runtimeType == other.value.runtimeType &&
           value == other.value;
 
   @override
@@ -104,47 +105,97 @@ class Argument {
   String toString() => 'Argument{name: $name, value: $value}';
 }
 
-final shortcodeName = letter().star().flatten();
-final argumentName = letter().plus().flatten();
+class ShortcodeParser {
+  final grammar = ShortcodeGrammar();
 
-// TODO: Uvozovky escapable
-final argumentValue = ((char('"') & noneOf('"').plus().flatten() & char('"'))
-        .map<dynamic>((value) => value[1]) |
-    word().plus().flatten());
-// ignore: top_level_function_literal_block
-final argument = (argumentName & char('=') & argumentValue).map((value) {
-  return Argument(
-    name: value[0] as String,
-    value: value[2] as String,
-  );
-});
+  /// Parses inline shortcode.
+  ///
+  /// ```
+  /// {{ block x=123 }}
+  /// ```
+  Shortcode parseInline(String input) {
+    return grammar.inlineShortcode.parse(input).value;
+  }
 
-// ignore: top_level_function_literal_block
-final grammar = (shortcodeName & argument.trim().star()).map((value) {
-  return Shortcode.inline(
-    name: value[0] as String,
-    arguments: value[1] as List<Argument>,
-  );
-});
+  /// Parses body shortcode.
+  ///
+  /// ```
+  /// {{< block x=123 >}}
+  ///   This is a block body
+  /// {{< /block >}}
+  Shortcode parseBlock(String input) {
+    return grammar.blockShortcode.parse(input).value;
+  }
+}
 
-final inlineShortcode = (string('{{') & grammar.trim() & string('}}'))
-    .map<dynamic>((value) => value[1] as Shortcode);
+class ShortcodeGrammar {
+  Parser<String> shortcodeName = letter().star().flatten().trim();
+  Parser<String> argumentName = letter().plus().flatten().trim();
 
-final blockStart = (string('{{<').trim() & grammar.trim() & string('>}}'));
-final blockEnd =
-    string('{{<') & char('/').trim() & shortcodeName & string('>}}').trim();
+  Parser<dynamic> get argumentValue =>
+      doubleToken | intToken | boolToken | stringToken;
 
-final blockShortcode = (blockStart &
-        blockEnd.neg().star().flatten().map<String>((value) => value.trim()) &
-        blockEnd)
-    .map((value) {
-  final shortcode = value[1] as Shortcode;
-  final body = value[3] as String;
-  return Shortcode.block(
-    name: shortcode.name,
-    arguments: [
-      ...shortcode.arguments,
-    ],
-    body: body,
-  );
-});
+  Parser<Argument> get argument =>
+      (argumentName & char('=') & argumentValue).trim().map((value) {
+        return Argument(
+          name: value[0] as String,
+          value: value[2],
+        );
+      });
+
+  Parser<Shortcode> get shortcode =>
+      (shortcodeName & argument.star()).map<Shortcode>((value) {
+        return Shortcode.inline(
+          name: value[0] as String,
+          arguments: value[1] as List<Argument>,
+        );
+      });
+
+  Parser<Shortcode> get inlineShortcode =>
+      (string('{{') & shortcode.trim() & string('}}'))
+          .map((value) => value[1] as Shortcode);
+
+  Parser<List<dynamic>> get blockStart =>
+      (string('{{<').trim() & shortcode.trim() & string('>}}'));
+
+  Parser<List<dynamic>> get blockEnd =>
+      string('{{<') & char('/').trim() & shortcodeName & string('>}}').trim();
+
+  Parser<Shortcode> get blockShortcode => (blockStart &
+              blockEnd
+                  .neg()
+                  .star()
+                  .flatten()
+                  .map<String>((value) => value.trim()) &
+              blockEnd)
+          .map((value) {
+        final shortcode = value[1] as Shortcode;
+        final body = value[3] as String;
+        return Shortcode.block(
+          name: shortcode.name,
+          arguments: [
+            ...shortcode.arguments,
+          ],
+          body: body,
+        );
+      });
+
+  Parser<String> stringToken = (char('"') &
+          (string(r'\"') | char('"').neg()).star().flatten() &
+          char('"'))
+      .flatten()
+      .trim()
+      .map((value) => value.substring(1, value.length - 1));
+
+  Parser<bool> boolToken = (string('true') | string('false'))
+      .trim()
+      .map<bool>((dynamic value) => value == 'true');
+
+  Parser<int> intToken = digit().plus().flatten().trim().map(int.parse);
+  Parser<double> doubleToken = digit()
+      .plus()
+      .seq(char('.').seq(digit().plus()))
+      .flatten()
+      .trim()
+      .map(double.parse);
+}
