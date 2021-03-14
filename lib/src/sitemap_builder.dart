@@ -60,7 +60,7 @@ class SitemapBuilder {
   Future<void> _createFile(String content) async {
     final file = await fs
         .file(Path.join(config.build.publicDir, 'sitemap.xml'))
-        .create();
+        .create(recursive: true);
 
     await file.writeAsString(content);
   }
