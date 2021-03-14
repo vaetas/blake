@@ -96,21 +96,32 @@ class BuildCommand extends Command<int> {
     Directory contentDir,
   ) async {
     try {
-      final shortcodesDir = Path.join(config.build.templatesDir, 'shortcodes');
-      final shortcodeFiles = await fs.directory(shortcodesDir).list().toList();
-
-      final shortcodeTemplates =
-          await shortcodeFiles.whereType<File>().asyncMap<ShortcodeTemplate>(
-        (e) async {
-          return ShortcodeTemplate(
-            name: Path.basenameWithoutExtension(e.path),
-            template: await e.readAsString(),
-          );
-        },
+      final shortcodesDirPath = Path.join(
+        config.build.templatesDir,
+        'shortcodes',
       );
+      final shortcodesDir = fs.directory(shortcodesDirPath);
+
+      // TODO: Create shortcodes dir during initialization.
+      List<ShortcodeTemplate> shortcodes;
+      if (await shortcodesDir.exists()) {
+        final shortcodeFiles = await shortcodesDir.list().toList();
+
+        shortcodes =
+            await shortcodeFiles.whereType<File>().asyncMap<ShortcodeTemplate>(
+          (e) async {
+            return ShortcodeTemplate(
+              name: Path.basenameWithoutExtension(e.path),
+              template: await e.readAsString(),
+            );
+          },
+        );
+      } else {
+        shortcodes = [];
+      }
 
       final parser = ContentParser(
-        shortcodeTemplates: shortcodeTemplates,
+        shortcodeTemplates: shortcodes,
         config: config,
       );
       final content = await parser.parse(contentDir);
