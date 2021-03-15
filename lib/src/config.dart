@@ -26,13 +26,13 @@ class Config {
     );
   }
 
-  late final String title;
-  late final String author;
-  late final String baseUrl;
-  late final BuildConfig build;
-  late final ServeConfig serve;
-  late final TemplatesConfig templates;
-  late final YamlMap extra;
+  final String title;
+  final String author;
+  final String baseUrl;
+  final BuildConfig build;
+  final ServeConfig serve;
+  final TemplatesConfig templates;
+  final YamlMap extra;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
