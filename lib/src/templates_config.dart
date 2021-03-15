@@ -1,16 +1,19 @@
-import 'package:blake/src/utils.dart';
 import 'package:yaml/yaml.dart';
 
 class TemplatesConfig {
-  TemplatesConfig({String page, String section})
-      : page = page ?? 'index.mustache',
-        section = section ?? 'section.mustache';
+  TemplatesConfig({
+    this.page = 'index.mustache',
+    this.section = 'section.mustache',
+  });
 
-  factory TemplatesConfig.fromYaml(YamlMap map) {
-    assert(map != null);
+  factory TemplatesConfig.fromYaml(YamlMap? map) {
+    if (map == null) {
+      return TemplatesConfig();
+    }
+
     return TemplatesConfig(
-      page: map.get('page'),
-      section: map.get('section'),
+      page: map['page'] as String? ?? 'index.mustache',
+      section: map['section'] as String? ?? 'section.mustache',
     );
   }
 

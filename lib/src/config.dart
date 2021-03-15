@@ -1,29 +1,38 @@
 import 'package:blake/src/build/build_config.dart';
 import 'package:blake/src/serve/serve_config.dart';
 import 'package:blake/src/templates_config.dart';
-import 'package:blake/src/utils.dart';
 import 'package:yaml/yaml.dart';
 
 class Config {
-  Config.fromYaml(YamlMap map) {
-    final _emptyMap = YamlMap();
+  Config({
+    this.title = '',
+    this.author = '',
+    this.baseUrl = '',
+    required this.build,
+    required this.serve,
+    required this.templates,
+    YamlMap? extra,
+  }) : extra = extra ?? YamlMap();
 
-    title = map.get<String>(_kTitle, '');
-    author = map.get<String>(_kAuthor, '');
-    baseUrl = map.get<String>(_kBaseUrl, '');
-    build = BuildConfig.fromYaml(map.get(_kBuild, _emptyMap));
-    serve = ServeConfig.fromYaml(map.get(_kServe, _emptyMap));
-    templates = TemplatesConfig.fromYaml(map.get(_kTemplates, _emptyMap));
-    extra = map.get(_kExtra, _emptyMap);
+  factory Config.fromYaml(YamlMap map) {
+    return Config(
+      build: BuildConfig.fromYaml(map[_kBuild] as YamlMap?),
+      serve: ServeConfig.fromYaml(map[_kServe] as YamlMap?),
+      templates: TemplatesConfig.fromYaml(map[_kTemplates] as YamlMap?),
+      title: map[_kTitle] as String? ?? '',
+      author: map[_kAuthor] as String? ?? '',
+      baseUrl: map[_kBaseUrl] as String? ?? '',
+      extra: map[_kExtra] as YamlMap? ?? YamlMap(),
+    );
   }
 
-  String title;
-  String author;
-  String baseUrl;
-  BuildConfig build;
-  ServeConfig serve;
-  TemplatesConfig templates;
-  YamlMap extra;
+  late final String title;
+  late final String author;
+  late final String baseUrl;
+  late final BuildConfig build;
+  late final ServeConfig serve;
+  late final TemplatesConfig templates;
+  late final YamlMap extra;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

@@ -1,4 +1,3 @@
-import 'package:blake/blake.dart';
 import 'package:blake/src/shortcode.dart';
 import 'package:test/test.dart';
 

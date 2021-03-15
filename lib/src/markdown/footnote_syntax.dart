@@ -5,7 +5,7 @@ class FootnoteReferenceSyntax extends TextSyntax {
 
   @override
   bool onMatch(InlineParser parser, Match match) {
-    final index = _parseFootnoteIndex(match.group(0));
+    final index = _parseFootnoteIndex(match.group(0)!);
     parser.addNode(Element.text('sup', index));
     return true;
   }
@@ -34,12 +34,12 @@ class FootnoteSyntax extends LongBlockHtmlSyntax {
     final lines =
         childLines.map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
 
-    final index = _referencePattern.firstMatch(lines.first).group(0);
+    final index = _referencePattern.firstMatch(lines.first)!.group(0);
 
     return Element(
       'p',
       [
-        Element.text('span', index),
+        Element.text('span', index!),
       ],
     );
   }

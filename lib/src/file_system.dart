@@ -9,11 +9,6 @@ export 'package:file/file.dart';
 
 const fs = LocalFileSystem();
 
-/// List all files and directories inside folder with given [path].
-Future<List<FileSystemEntity>> listDirectory(String path) {
-  return fs.directory(path).list().toList();
-}
-
 extension DirectoryExtension on Directory {
   /// If [Directory] already exists delete all its contents and create it again.
   Future<Directory> reset({bool recursive = true}) async {
@@ -26,10 +21,10 @@ extension DirectoryExtension on Directory {
 
 extension FileSystemEntityExtension on FileSystemEntity {
   /// Handle every possible FS entity.
-  R when<R>({
-    R Function(File file) file,
-    R Function(Directory directory) directory,
-    R Function(Link link) link,
+  R? when<R>({
+    R Function(File file)? file,
+    R Function(Directory directory)? directory,
+    R Function(Link link)? link,
   }) {
     if (fs.isFileSync(path)) {
       return file?.call(this as File);

@@ -14,17 +14,15 @@ import 'package:blake/src/shortcode.dart';
 import 'package:blake/src/utils.dart';
 import 'package:file/file.dart';
 import 'package:markdown/markdown.dart';
-import 'package:meta/meta.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
 final _delimiter = RegExp(r'(---)(\n|\r)?');
 
 class ContentParser {
   const ContentParser({
-    @required this.shortcodeTemplates,
-    @required this.config,
-  })  : assert(shortcodeTemplates != null),
-        assert(config != null);
+    required this.shortcodeTemplates,
+    required this.config,
+  });
 
   final List<ShortcodeTemplate> shortcodeTemplates;
   final Config config;
@@ -46,7 +44,7 @@ class ContentParser {
 
         if (!metadata.containsKey('date')) {
           final date = await GitUtil.getModified(file);
-          metadata['date'] = date.toIso8601String();
+          metadata['date'] = date!.toIso8601String();
         }
 
         return Page(
@@ -75,12 +73,13 @@ class ContentParser {
           '',
         );
 
+        final indexes = content
+            .where((element) => element is Page && element.isIndex)
+            .whereType<Page>();
+
         return Section(
           path: path,
-          index: content.firstWhere(
-            (element) => element is Page && element.isIndex,
-            orElse: () => null,
-          ) as Page,
+          index: indexes.isEmpty ? null : indexes.first,
           children: content
               .where((element) => !(element is Page && element.isIndex))
               .toList(),
@@ -89,12 +88,12 @@ class ContentParser {
       link: (link) {
         throw UnimplementedError('Link file is not yet supported.');
       },
-    );
+    )!;
   }
 
   Future<MarkdownFile> _parseFile(String markdown) async {
     if (_delimiter.allMatches(markdown).length < 2 ||
-        _delimiter.firstMatch(markdown).start != 0) {
+        _delimiter.firstMatch(markdown)!.start != 0) {
       log.warning('Front matter is invalid or missing.');
     }
 
@@ -102,7 +101,7 @@ class ContentParser {
     final rawMetadata = markdown.substring(matches[0].start, matches[1].end);
     final metadata = rawMetadata.substring(3, rawMetadata.length - 4).trim();
 
-    final m = yaml.loadYaml(metadata) as yaml.YamlMap;
+    final m = yaml.loadYaml(metadata) as yaml.YamlMap?;
 
     final content =
         ShortcodeRenderer(shortcodeTemplates: shortcodeTemplates).render(
@@ -132,8 +131,8 @@ class ContentParser {
 /// To render an `input` call [ShortcodeRenderer.render] method.
 class ShortcodeRenderer {
   ShortcodeRenderer({
-    @required this.shortcodeTemplates,
-  }) : assert(shortcodeTemplates != null);
+    required this.shortcodeTemplates,
+  });
 
   final List<ShortcodeTemplate> shortcodeTemplates;
 

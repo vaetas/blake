@@ -7,9 +7,9 @@ class GitUtil {
 
   static final _shell = Shell(verbose: false);
 
-  static bool _isGitAvailable;
+  static bool _isGitAvailable = false;
 
-  static Future<DateTime> getModified(File file) async {
+  static Future<DateTime?> getModified(File file) async {
     await _ensureGitAvailable();
 
     // For already tracked files git returns date.
@@ -22,17 +22,17 @@ class GitUtil {
   }
 
   /// Get date when [file] was first tracked in git history.
-  static Future<DateTime> getCreated(File file) async {
+  static Future<DateTime?> getCreated(File file) async {
     await _ensureGitAvailable();
 
     final result = await _shell.run(
-      'git log --diff-filter=A --follow --format=%aI -1 -- file.txt',
+      'git log --diff-filter=A --follow --format=%aI -1 -- ${file.path}',
     );
 
     return _parseOutput(result.outText);
   }
 
-  static DateTime _parseOutput(String output) {
+  static DateTime? _parseOutput(String output) {
     if (output.trim().isEmpty) {
       return null;
     } else {
@@ -65,7 +65,7 @@ class GitUtil {
   static Future<bool> isGitDir() async {
     try {
       final result = await _shell.run('git status');
-      return result.errText != null;
+      return result.errText.isEmpty;
     } catch (e) {
       return false;
     }

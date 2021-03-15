@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'package:ansicolor/ansicolor.dart';
-import 'package:meta/meta.dart';
 
 class Logger {
   Logger({this.enableColors = true, this.verbose = false});
@@ -15,15 +14,15 @@ class Logger {
 
   void warning(dynamic message) => _log(LogLevel.warning, message: message);
 
-  void error(dynamic message, {Object error, String help}) {
+  void error(dynamic message, {Object? error, String? help}) {
     _log(LogLevel.error, message: message, error: error, help: help);
   }
 
   void _log(
     LogLevel level, {
-    @required dynamic message,
-    Object error,
-    String help,
+    required dynamic message,
+    Object? error,
+    String? help,
   }) {
     if (!verbose && level == LogLevel.debug) return;
 
@@ -61,11 +60,11 @@ class LogLevel {
 
   static const error = LogLevel._('ERROR');
 
-  T when<T>({
-    _WhenCallback<T> fine,
-    _WhenCallback<T> info,
-    _WhenCallback<T> warning,
-    _WhenCallback<T> error,
+  T? when<T>({
+    _WhenCallback<T>? fine,
+    _WhenCallback<T>? info,
+    _WhenCallback<T>? warning,
+    _WhenCallback<T>? error,
   }) {
     switch (name) {
       case 'DEBUG':

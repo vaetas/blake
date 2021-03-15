@@ -1,16 +1,14 @@
-import 'package:blake/blake.dart';
 import 'package:blake/src/config.dart';
 import 'package:blake/src/content/page.dart';
+import 'package:blake/src/file_system.dart';
 import 'package:blake/src/utils.dart';
-import 'package:meta/meta.dart';
 import 'package:xml/xml.dart';
 
 class SitemapBuilder {
   const SitemapBuilder({
-    @required this.pages,
-    @required this.config,
-  })  : assert(pages != null),
-        assert(config != null);
+    required this.pages,
+    required this.config,
+  });
 
   final List<Page> pages;
   final Config config;

@@ -146,7 +146,7 @@ class BuildCommand extends Command<int> {
   Future<void> _buildSection(Section section, Config config) async {
     if (section.index != null) {
       await _buildPage(
-        section.index,
+        section.index!,
         config,
         extraData: <dynamic, dynamic>{
           'children': section.children
@@ -177,7 +177,7 @@ class BuildCommand extends Command<int> {
     log.debug('Build: $page');
 
     // Abort on non-public pages (i.e. data only page).
-    final public = page.metadata['public'] as bool ?? true;
+    final public = page.metadata['public'] as bool? ?? true;
     if (!public) {
       log.debug('Page ${page.path} is not public');
       return;
@@ -238,7 +238,7 @@ class BuildCommand extends Command<int> {
   /// page front-matter it is used. Otherwise default template will used.
   Future<Template> _getTemplate(Page page, Config config) async {
     // Template set in front matter has precedence.
-    var templateName = page.metadata['template'] as String;
+    var templateName = page.metadata['template'] as String?;
     templateName ??=
         page.isIndex ? config.templates.section : config.templates.page;
 

@@ -19,5 +19,5 @@ build:
 serve:
   verbose: true
   address: '127.0.0.1'
-  port: 4040
-  websocket_port: 4041
+  port: 4042
+  websocket_port: 4043

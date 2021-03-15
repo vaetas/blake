@@ -13,7 +13,7 @@ import 'package:blake/src/log.dart';
 export 'src/build/build_config.dart';
 export 'src/content/content.dart';
 export 'src/file_system.dart';
-export 'src/serve/local_server.dart';
+// export 'src/serve/local_server.dart';
 export 'src/serve/serve_config.dart';
 export 'src/shortcode.dart' show Shortcode, ShortcodeTemplate, ShortcodeParser;
 
@@ -22,7 +22,7 @@ export 'src/shortcode.dart' show Shortcode, ShortcodeTemplate, ShortcodeParser;
 class Blake {
   final runner = CommandRunner<int>('blake', 'Blake Static Site Generator');
 
-  Future<int> call(List<String> args) async {
+  Future<int?> call(List<String> args) async {
     runner.addCommand(InitCommand());
     ansiColorDisabled = false;
 

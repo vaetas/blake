@@ -1,5 +1,4 @@
 import 'package:blake/src/util/equals.dart';
-import 'package:meta/meta.dart';
 import 'package:mustache_template/mustache_template.dart';
 import 'package:petitparser/petitparser.dart';
 
@@ -8,10 +7,9 @@ import 'package:petitparser/petitparser.dart';
 /// which is this file's content.
 class ShortcodeTemplate {
   const ShortcodeTemplate({
-    @required this.name,
-    @required this.template,
-  })  : assert(name != null),
-        assert(template != null);
+    required this.name,
+    required this.template,
+  });
 
   final String name;
   final String template;
@@ -46,9 +44,16 @@ class ShortcodeTemplate {
 /// {{< /block >}}
 /// ```
 class Shortcode {
-  Shortcode.inline({this.name, this.arguments});
+  Shortcode.inline({
+    required this.name,
+    required this.arguments,
+  });
 
-  Shortcode.block({this.name, this.arguments, @required String body}) {
+  Shortcode.block({
+    required this.name,
+    required this.arguments,
+    required String body,
+  }) {
     arguments.add(Argument(name: 'body', value: body));
   }
 
@@ -83,7 +88,7 @@ class Shortcode {
 /// [value] can be either String, bool, int, or double.
 class Argument {
   Argument({
-    this.name,
+    required this.name,
     this.value,
   });
 

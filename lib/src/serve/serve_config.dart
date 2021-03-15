@@ -1,35 +1,32 @@
 import 'package:blake/src/errors.dart';
-import 'package:blake/src/utils.dart';
 import 'package:yaml/yaml.dart';
 
 /// Configuration specific to `build serve` command.
 class ServeConfig {
   ServeConfig({
-    String address,
-    int port,
-    int websocketPort,
-    bool verbose,
-  }) {
-    this.port = port ?? 4040;
-    this.websocketPort = websocketPort ?? 4041;
-    baseUrl = parseAddress(address ?? '127.0.0.1', this.port);
-    this.verbose = verbose ?? false;
-  }
+    String address = '127.0.0.1',
+    this.port = 4040,
+    this.websocketPort = 4041,
+    this.verbose = false,
+  }) : baseUrl = parseAddress(address, port);
 
-  factory ServeConfig.fromYaml(YamlMap map) {
-    assert(map != null);
+  factory ServeConfig.fromYaml(YamlMap? map) {
+    if (map == null) {
+      return ServeConfig();
+    }
+
     return ServeConfig(
-      address: map.get('address'),
-      port: map.get(_kPort),
-      websocketPort: map.get(_kWebsocketPort),
-      verbose: map.get(_kVerbose),
+      address: map['address'] as String? ?? '127.0.0.1',
+      port: map[_kPort] as int? ?? 4040,
+      websocketPort: map[_kWebsocketPort] as int? ?? 4041,
+      verbose: map[_kVerbose] as bool? ?? false,
     );
   }
 
-  Uri baseUrl;
-  int port;
-  int websocketPort;
-  bool verbose;
+  late final Uri baseUrl;
+  late final int port;
+  late final int websocketPort;
+  late final bool verbose;
 
   @override
   String toString() => 'ServeConfig${toMap()}';
@@ -55,7 +52,7 @@ const _kVerbose = 'verbose';
 Uri parseAddress(String address, int port) {
   if (_addressPattern.hasMatch(address)) {
     final match = _hostPattern.firstMatch(address);
-    final host = address.substring(match.start, match.end);
+    final host = address.substring(match!.start, match.end);
     return Uri(scheme: 'http', host: host, port: port);
   } else {
     throw ConfigError('Invalid address format: $address');

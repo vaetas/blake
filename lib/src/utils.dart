@@ -8,7 +8,12 @@ class Path {
   Path._();
 
   /// Join path elements with '/' separator.
-  static String join(String part1, [String part2, String part3, String part4]) {
+  static String join(
+    String part1, [
+    String? part2,
+    String? part3,
+    String? part4,
+  ]) {
     return normalize(p.join(part1, part2, part3, part4));
   }
 
@@ -52,13 +57,13 @@ extension ArgResultsExtension on ArgResults {
 }
 
 extension YamlMapExtension on YamlMap {
-  T get<T>(String key, [T defaultValue]) {
+  T? get<T>(String key, [T? defaultValue]) {
     return this[key] as T ?? defaultValue;
   }
 }
 
 extension MapExtension on Map<String, dynamic> {
-  T get<T>(String key, [T defaultValue]) {
+  T? get<T>(String key, [T? defaultValue]) {
     return this[key] as T ?? defaultValue;
   }
 }

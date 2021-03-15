@@ -1,13 +1,11 @@
 import 'package:glob/glob.dart';
-import 'package:meta/meta.dart';
 import 'package:watcher/watcher.dart';
 
 /// Watch [directory] for changes in whole subtree except `public` directory.
 Stream<WatchEvent> watch(
   String directory, {
-  @required Glob files,
+  required Glob files,
 }) {
-  assert(files != null);
   return DirectoryWatcher(
     directory,
     pollingDelay: const Duration(milliseconds: 250),

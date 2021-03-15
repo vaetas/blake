@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
-import 'package:blake/blake.dart';
 import 'package:blake/src/config.dart';
+import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/utils.dart';
 import 'package:mustache_template/mustache_template.dart';
@@ -47,7 +47,7 @@ class NewCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    if (argResults.rest.length != 2) {
+    if (argResults!.rest.length != 2) {
       log.error(
         'Invalid usage of `new` command. '
         'Correct usage is `blake new <type> <name>`',
@@ -55,7 +55,7 @@ class NewCommand extends Command<int> {
       return 1;
     }
 
-    final args = _CommandArgs.fromResults(argResults);
+    final args = _CommandArgs.fromResults(argResults!);
 
     if (args.force) {
       log.debug(
@@ -101,7 +101,7 @@ class NewCommand extends Command<int> {
     // TODO: Transform to pretty title.
     final title = Path.basename(args.name);
 
-    final template = Template(types[args.type]);
+    final template = Template(types[args.type]!);
     final data = <String, dynamic>{
       'title': title,
       'date': DateTime.now().toIso8601String(),

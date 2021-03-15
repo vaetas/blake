@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:io' show HttpServer, WebSocket, WebSocketTransformer;
+import 'dart:io';
 
-import 'package:blake/blake.dart';
+import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
-import 'package:http_server/http_server.dart';
+import 'package:blake/src/utils.dart';
 
 /// Local web server used for `blake serve` command.
 ///
@@ -15,7 +15,7 @@ class LocalServer {
     this.address = '127.0.0.1',
     this.port = 4040,
     this.websocketPort = 4041,
-    this.onReload,
+    required this.onReload,
   });
 
   /// Directory where should the [LocalServer] be started.
@@ -30,17 +30,10 @@ class LocalServer {
 
   final Stream<void> onReload;
 
-  HttpServer server;
+  late HttpServer httpServer;
 
   Future<void> start() async {
-    final directory = VirtualDirectory(path);
-
-    directory
-      ..allowDirectoryListing = true
-      ..directoryHandler = (dir, request) {
-        final indexUri = Uri.file(dir.path).resolve('index.html');
-        directory.serveFile(fs.file(indexUri.toFilePath()), request);
-      };
+    final directoryServer = DirectoryServer(path: path);
 
     try {
       // ignore: unawaited_futures
@@ -50,13 +43,14 @@ class LocalServer {
       return;
     }
 
-    server = await HttpServer.bind(address, port);
+    httpServer = await HttpServer.bind(address, port);
     log.info('Server started on http://$address:$port');
-    await server.forEach(directory.serveRequest);
+
+    await httpServer.forEach(directoryServer.serve);
   }
 
   Future<void> _startWebsocket() async {
-    StreamSubscription<void> _sub;
+    StreamSubscription<void>? _sub;
     final websocket = await HttpServer.bind(address, websocketPort);
     websocket.transform(WebSocketTransformer()).listen(
       (WebSocket socket) async {
@@ -66,5 +60,36 @@ class LocalServer {
         });
       },
     );
+  }
+}
+
+class DirectoryServer {
+  DirectoryServer({required this.path});
+
+  /// Base path. All files are looked-up within this path subtree.
+  final String path;
+
+  Future<void> serve(HttpRequest request) async {
+    String? path;
+
+    final uri = request.requestedUri.path.substring(1);
+    if (uri.isEmpty || uri.endsWith('/')) {
+      path = Path.join(this.path, uri, 'index.html');
+    } else {
+      path = Path.join(this.path, uri);
+    }
+
+    final file = fs.file(path);
+    final response = request.response;
+
+    if (await file.exists()) {
+      response.headers.set('Content-Type', 'text/html; charset=UTF-8');
+      await response.addStream(file.openRead());
+      await response.close();
+    } else {
+      // TODO: Return 404 when files doesn't exists.
+      response.statusCode = HttpStatus.notFound;
+      await response.close();
+    }
   }
 }

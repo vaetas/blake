@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:args/command_runner.dart';
-import 'package:blake/blake.dart';
+import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/yaml.dart';
 
@@ -17,7 +17,7 @@ class InitCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    final name = argResults.rest.isEmpty ? '.' : argResults.rest.first;
+    final name = argResults!.rest.isEmpty ? '.' : argResults!.rest.first;
 
     if (name.isEmpty) {
       log.info('Initializing project in current directory...');

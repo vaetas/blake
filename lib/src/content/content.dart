@@ -10,7 +10,10 @@ abstract class Content {
 
   String get path;
 
-  R when<R>({R Function(Section section) section, R Function(Page page) page});
+  R? when<R>({
+    R Function(Section section)? section,
+    R Function(Page page)? page,
+  });
 
   Map<String, dynamic> toMap(Config config) {
     return <String, dynamic>{

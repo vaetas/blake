@@ -1,4 +1,4 @@
-bool listEquals<T>(List<T> a, List<T> b) {
+bool listEquals<T>(List<T>? a, List<T>? b) {
   if (a == null) {
     return b == null;
   }
@@ -16,7 +16,7 @@ bool listEquals<T>(List<T> a, List<T> b) {
   return true;
 }
 
-bool mapEquals<T, U>(Map<T, U> a, Map<T, U> b) {
+bool mapEquals<T, U>(Map<T, U>? a, Map<T, U>? b) {
   if (a == null) {
     return b == null;
   }

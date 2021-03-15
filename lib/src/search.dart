@@ -1,7 +1,6 @@
 import 'package:blake/src/config.dart';
 import 'package:blake/src/content/content.dart';
 import 'package:blake/src/content/page.dart';
-import 'package:meta/meta.dart';
 
 /// Build JSON search index for static search of your content.
 ///
@@ -9,10 +8,9 @@ import 'package:meta/meta.dart';
 /// future might be possible to search though the page content.
 class SearchIndexBuilder {
   const SearchIndexBuilder({
-    @required this.config,
-    @required this.pages,
-  })  : assert(config != null),
-        assert(pages != null);
+    required this.config,
+    required this.pages,
+  });
 
   final Config config;
   final List<Page> pages;

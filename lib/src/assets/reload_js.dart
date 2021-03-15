@@ -1,5 +1,5 @@
-import 'package:blake/blake.dart';
 import 'package:blake/src/config.dart';
+import 'package:blake/src/file_system.dart';
 import 'package:mustache_template/mustache_template.dart';
 
 Future<void> setupReloadScript(Config config) async {

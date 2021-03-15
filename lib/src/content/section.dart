@@ -6,14 +6,14 @@ import 'package:blake/src/content/page.dart';
 class Section extends Content {
   Section({
     this.index,
-    this.path,
+    required this.path,
     this.children = const [],
   });
 
   @override
   final String path;
 
-  final Page index;
+  final Page? index;
 
   /// [Page] or [Section] content.
   final List<Content> children;
@@ -27,7 +27,10 @@ class Section extends Content {
   }
 
   @override
-  R when<R>({R Function(Section section) section, R Function(Page page) page}) {
+  R? when<R>({
+    R Function(Section section)? section,
+    R Function(Page page)? page,
+  }) {
     return section?.call(this);
   }
 
@@ -41,7 +44,7 @@ class Section extends Content {
     final list = <Page>[];
 
     if (index != null) {
-      list.add(index);
+      list.add(index!);
     }
 
     for (final child in children) {

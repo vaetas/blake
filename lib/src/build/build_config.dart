@@ -1,37 +1,32 @@
-import 'package:blake/src/utils.dart';
 import 'package:yaml/yaml.dart';
 
 /// Configuration for building static site.
 class BuildConfig {
   const BuildConfig({
-    bool verbose = false,
-    String publicDir,
-    String contentDir,
-    String templatesDir,
-    String staticDir,
-    String dataDir,
-    String typesDir,
-    bool generateSearchIndex,
-  })  : verbose = verbose ?? false,
-        publicDir = publicDir ?? 'public',
-        contentDir = contentDir ?? 'content',
-        templatesDir = templatesDir ?? 'templates',
-        staticDir = staticDir ?? 'static',
-        dataDir = dataDir ?? 'data',
-        typesDir = typesDir ?? 'types',
-        generateSearchIndex = generateSearchIndex ?? false;
+    this.verbose = false,
+    this.publicDir = 'public',
+    this.contentDir = 'content',
+    this.templatesDir = 'templates',
+    this.staticDir = 'static',
+    this.dataDir = 'data',
+    this.typesDir = 'types',
+    this.generateSearchIndex = false,
+  });
 
-  factory BuildConfig.fromYaml(YamlMap map) {
-    assert(map != null);
+  // TODO: Is it necessary to specify default values inside both constructors?
+  factory BuildConfig.fromYaml(YamlMap? map) {
+    if (map == null) {
+      return const BuildConfig();
+    }
     return BuildConfig(
-      verbose: map.get<bool>(_kVerbose),
-      publicDir: map.get<String>(_kPublicDir),
-      contentDir: map.get<String>(_kContentDir),
-      templatesDir: map.get<String>(_kTemplatesDir),
-      staticDir: map.get<String>(_kStaticDir),
-      dataDir: map.get<String>(_kDataDir),
-      typesDir: map.get<String>(_kTypesDir),
-      generateSearchIndex: map.get<bool>(_kGenerateSearchIndex),
+      verbose: map[_kVerbose] as bool? ?? false,
+      publicDir: map[_kPublicDir] as String? ?? 'public',
+      contentDir: map[_kContentDir] as String? ?? 'templates',
+      templatesDir: map[_kTemplatesDir] as String? ?? 'templates',
+      staticDir: map[_kStaticDir] as String? ?? 'static',
+      dataDir: map[_kDataDir] as String? ?? 'data',
+      typesDir: map[_kTypesDir] as String? ?? 'types',
+      generateSearchIndex: map[_kGenerateSearchIndex] as bool? ?? false,
     );
   }
 

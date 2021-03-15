@@ -1,34 +1,33 @@
-import 'package:blake/blake.dart';
 import 'package:blake/src/config.dart';
 import 'package:blake/src/content/content.dart';
 import 'package:blake/src/content/section.dart';
+import 'package:blake/src/file_system.dart';
 import 'package:blake/src/git_util.dart';
 import 'package:blake/src/utils.dart';
 import 'package:glob/glob.dart';
-import 'package:meta/meta.dart';
 
 final _kIndexGlob = Glob('{index,_index}');
 
 /// [Page] is leaf node which cannot have other subpages.
 class Page extends Content {
   Page({
-    @required this.path,
+    required this.path,
     this.content,
-    this.metadata,
+    this.metadata = const <String, dynamic>{},
   });
 
   @override
-  String get title => metadata?.get<String>('title', Path.basename(path));
+  String get title => metadata['title'] as String? ?? Path.basename(path);
 
-  bool get public => metadata?.get<bool>('public') ?? true;
+  bool get public => metadata['public'] as bool? ?? true;
 
-  DateTime get date {
-    final _date = metadata?.get<String>('date');
+  DateTime? get date {
+    final _date = metadata['date'] as String?;
     return _date != null ? DateTime.parse(_date) : null;
   }
 
-  Future<DateTime> getUpdated(Config config) async {
-    final _updated = metadata?.get<String>('updated');
+  Future<DateTime?> getUpdated(Config config) async {
+    final _updated = metadata['updated'] as String?;
     if (_updated != null) {
       return DateTime.parse(_updated);
     } else {
@@ -43,7 +42,7 @@ class Page extends Content {
   @override
   final String path;
 
-  final String content;
+  final String? content;
 
   final Map<String, dynamic> metadata;
 
@@ -107,7 +106,10 @@ class Page extends Content {
   }
 
   @override
-  R when<R>({R Function(Section section) section, R Function(Page page) page}) {
+  R? when<R>({
+    R Function(Section section)? section,
+    R Function(Page page)? page,
+  }) {
     return page?.call(this);
   }
 
