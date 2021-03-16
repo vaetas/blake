@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:args/command_runner.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
+import 'package:blake/src/utils.dart';
 import 'package:blake/src/yaml.dart';
 
 class InitCommand extends Command<int> {
@@ -17,35 +18,42 @@ class InitCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    final name = argResults!.rest.isEmpty ? '.' : argResults!.rest.first;
+    final projectDir = argResults!.rest.isEmpty ? '.' : argResults!.rest.first;
+    final generateInCurrentDir = projectDir == '.';
 
-    if (name.isEmpty) {
-      log.info('Initializing project in current directory...');
+    if (!generateInCurrentDir) {
+      log.info('Initializing project in $projectDir directory');
+      await fs.directory(projectDir).create();
     } else {
-      log.info('Initializing project in $name directory');
+      log.info('Initializing project in current directory...');
     }
 
     try {
-      await _initConfig(name);
+      await _initConfig(projectDir);
 
-      await fs.directory('$name/content').create();
-      await fs.directory('$name/templates').create();
-      await fs.directory('$name/static').create();
-      await fs.directory('$name/data').create();
-      await fs.directory('$name/types').create();
+      await fs.directory('$projectDir/content').create();
+      await fs.directory('$projectDir/templates').create();
+      await fs.directory('$projectDir/static').create();
+      await fs.directory('$projectDir/data').create();
+      await fs.directory('$projectDir/types').create();
     } catch (e) {
       log.error(e);
       return 1;
     }
 
-    log.info('Site initialized successfully');
+    final serverStartHelp = generateInCurrentDir
+        ? 'Start server by `blake serve`'
+        : 'Start server by `cd $name && blake serve`';
+    log.info(
+      'Site initialized successfully\n       $serverStartHelp',
+    );
+
     return 0;
   }
 
   Future<void> _initConfig(String root) async {
-    final configFile = await fs
-        .file('${root.isEmpty ? '$root/' : ''}config.yaml')
-        .create(recursive: true);
+    final configFile =
+        await fs.file(Path.join(root, 'config.yaml')).create(recursive: true);
     final config = await configFile.readAsString();
 
     if (config.trim().isNotEmpty) {

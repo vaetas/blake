@@ -29,7 +29,7 @@ class Blake {
     if (!await isProjectDirectory()) {
       return runner.run(args);
     } else {
-      await _ensureGit();
+      // await _ensureGit();
 
       final config = await getConfig();
       return config.when(
