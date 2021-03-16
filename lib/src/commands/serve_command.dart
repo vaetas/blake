@@ -40,13 +40,22 @@ class ServeCommand extends Command<int> {
 
   final Config config;
 
+  late BuildCommand buildCommand;
+
   @override
   FutureOr<int> run() async => _serve();
 
+  Future<int> _rebuild() async {
+    return buildCommand.build(
+      config,
+      includeReloadScript: true,
+    );
+  }
+
   Future<int> _serve() async {
-    final buildCommand = BuildCommand(config);
+    buildCommand = BuildCommand(config);
     // Build once before starting server to ensure there is something to show.
-    await buildCommand.build(config);
+    await _rebuild();
 
     try {
       await setupReloadScript(config);
@@ -72,7 +81,7 @@ class ServeCommand extends Command<int> {
       // ignore: avoid_print
       print('');
       log.info('Event: $event');
-      await buildCommand.build(config);
+      await _rebuild();
       _onReload.add(null);
     });
 

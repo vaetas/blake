@@ -4,6 +4,7 @@ import 'dart:io' show exit;
 
 import 'package:args/command_runner.dart';
 import 'package:blake/src/build/content_parser.dart';
+import 'package:blake/src/commands/serve_command.dart';
 import 'package:blake/src/config.dart';
 import 'package:blake/src/content/content.dart';
 import 'package:blake/src/content/page.dart';
@@ -17,6 +18,7 @@ import 'package:blake/src/shortcode.dart';
 import 'package:blake/src/sitemap_builder.dart';
 import 'package:blake/src/util/either.dart';
 import 'package:blake/src/utils.dart';
+import 'package:html/parser.dart' as html_parser;
 import 'package:mustache_template/mustache_template.dart';
 
 class BuildCommand extends Command<int> {
@@ -40,15 +42,25 @@ class BuildCommand extends Command<int> {
 
   final _stopwatch = Stopwatch();
 
+  bool includeReloadScript = false;
+
+  /// Reload script is included when build is triggered using [ServeCommand].
+  late final script = html_parser.parseFragment(
+    '<script src="${config.baseUrl}/reload.js"></script>',
+  );
+
   @override
   FutureOr<int> run() async {
     return build(config);
   }
 
-  Future<int> build(Config config) async {
+  Future<int> build(
+    Config config, {
+    bool includeReloadScript = false,
+  }) async {
     log.info('Building');
     _stopwatch.start();
-
+    this.includeReloadScript = includeReloadScript;
     final contentDir = (await getContentDirectory(config)).when<Directory>(
       _exit,
       (value) => value,
@@ -60,33 +72,18 @@ class BuildCommand extends Command<int> {
     );
     await _generateContent(content);
     await _copyStaticFiles();
+    final pages = content.getPages();
 
     final sitemapBuilder = SitemapBuilder(
       config: config,
-      pages: content.getPages(),
+      pages: pages,
     );
     await sitemapBuilder.build();
 
     if (config.build.generateSearchIndex) {
-      final index = SearchIndexBuilder(
-        config: config,
-        pages: content.getPages(),
-      ).build();
-
-      final indexFilePath = Path.join(
-        config.build.publicDir,
-        'search_index.json',
-      );
-
-      final indexFile = await fs.file(indexFilePath).create();
-      await indexFile.writeAsString(json.encode(index));
-      log.debug('Search index generated');
-
-      final size = await indexFile.length();
-      if (size >= 1000000) {
-        log.warning('Search index file is over 1MB');
-      }
+      await _generateSearchIndex(pages);
     }
+
     _stopwatch.stop();
     log.info('Build done in ${_stopwatch.elapsedMilliseconds}ms');
     return 0;
@@ -196,7 +193,17 @@ class BuildCommand extends Command<int> {
       ..addAll(page.metadata)
       ..addAll(extraData);
 
-    final output = template.renderString(metadata);
+    var output = template.renderString(metadata);
+    if (includeReloadScript) {
+      final parsedHtml = html_parser.parse(output);
+
+      if (parsedHtml.body != null) {
+        parsedHtml.body!.nodes.add(script);
+        output = parsedHtml.outerHtml;
+      } else {
+        log.warning('Could not include reload script into ${page.path}');
+      }
+    }
     final path = page.getBuildPath(config);
     final file = await fs.file(path).create(recursive: true);
     await file.writeAsString(output);
@@ -250,6 +257,27 @@ class BuildCommand extends Command<int> {
     }
 
     return Template(await file.readAsString(), name: templateName);
+  }
+
+  Future<void> _generateSearchIndex(List<Page> pages) async {
+    final index = SearchIndexBuilder(
+      config: config,
+      pages: pages,
+    ).build();
+
+    final indexFilePath = Path.join(
+      config.build.publicDir,
+      'search_index.json',
+    );
+
+    final indexFile = await fs.file(indexFilePath).create();
+    await indexFile.writeAsString(json.encode(index));
+    log.debug('Search index generated');
+
+    final size = await indexFile.length();
+    if (size >= 1000000) {
+      log.warning('Search index file is over 1MB');
+    }
   }
 
   /// When error occurs, show log and exit program.
