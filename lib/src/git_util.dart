@@ -10,8 +10,9 @@ class GitUtil {
   static bool _isGitAvailable = false;
 
   static Future<DateTime?> getModified(File file) async {
-    await _ensureGitAvailable();
-
+    if (!await isGitInstalled()) {
+      return null;
+    }
     // For already tracked files git returns date.
     // When file does not exists or is not yet tracked this returns empty string
     final result = await _shell.run(
@@ -23,7 +24,9 @@ class GitUtil {
 
   /// Get date when [file] was first tracked in git history.
   static Future<DateTime?> getCreated(File file) async {
-    await _ensureGitAvailable();
+    if (!await isGitInstalled()) {
+      return null;
+    }
 
     final result = await _shell.run(
       'git log --diff-filter=A --follow --format=%aI -1 -- ${file.path}',
