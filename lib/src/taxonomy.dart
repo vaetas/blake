@@ -16,7 +16,7 @@ class Tag {
   Map<String, dynamic> toMap(Config config) {
     return <String, dynamic>{
       'name': name,
-      'pages': pages.map((e) => e.toMap(config)).toList()
+      'pages': pages.map((e) => e.toMap()).toList()
     };
   }
 }

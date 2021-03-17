@@ -79,20 +79,7 @@ class BuildCommand extends Command<int> {
     data = await parseDataTree(config);
     data['tags'] = tags;
 
-    for (final page in pages) {
-      if (page.aliases.isNotEmpty) {
-        for (final alias in page.aliases) {
-          final _alias = alias as String;
-          final path = _alias.startsWith('/') ? _alias.substring(1) : _alias;
-          final redirectPage = RedirectPage(
-            path: path,
-            redirectUrl: page.getPublicUrl(config, isServe: isServe),
-          );
-          await _buildPage(redirectPage);
-        }
-      }
-    }
-
+    await _buildAliases(pages);
     await _generateContent(content);
     await _copyStaticFiles();
 
@@ -173,7 +160,7 @@ class BuildCommand extends Command<int> {
         extraData: <dynamic, dynamic>{
           'children': section.children
               .whereType<Page>()
-              .map((e) => e.toMap(config))
+              .map((content) => content.toMap())
               .toList(),
         },
       );
@@ -322,6 +309,22 @@ class BuildCommand extends Command<int> {
 
     log.debug('Tags: $result');
     return result;
+  }
+
+  Future<void> _buildAliases(List<Page> pages) async {
+    for (final page in pages) {
+      if (page.aliases.isNotEmpty) {
+        for (final alias in page.aliases) {
+          final _alias = alias as String;
+          final path = _alias.startsWith('/') ? _alias.substring(1) : _alias;
+          final redirectPage = RedirectPage(
+            path: path,
+            redirectUrl: page.getPublicUrl(config, isServe: isServe),
+          );
+          await _buildPage(redirectPage);
+        }
+      }
+    }
   }
 
   /// When error occurs, show log and exit program.

@@ -1,4 +1,3 @@
-import 'package:blake/src/config.dart';
 import 'package:blake/src/content/content.dart';
 import 'package:blake/src/content/page.dart';
 
@@ -19,7 +18,7 @@ class Section extends Content {
   final List<Content> children;
 
   @override
-  Map<String, dynamic> toMap(Config config) {
+  Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'title': title,
       'path': path,

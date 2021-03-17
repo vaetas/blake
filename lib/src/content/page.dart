@@ -98,13 +98,10 @@ class Page extends Content {
   bool get isIndex => _kIndexGlob.matches(Path.basenameWithoutExtension(path));
 
   @override
-  Map<String, dynamic> toMap(Config config) {
-    // TODO: Remove dependency from [config]?
+  Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'title': title,
-      'path': getBuildPath(config)
-          .replaceFirst(config.build.publicDir, '')
-          .replaceFirst('index.html', ''),
+      'path': path.replaceFirst('.md', '/'),
       'content': content,
       'metadata': metadata,
     };

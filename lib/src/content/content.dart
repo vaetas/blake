@@ -1,4 +1,3 @@
-import 'package:blake/src/config.dart';
 import 'package:blake/src/content/page.dart';
 import 'package:blake/src/content/section.dart';
 import 'package:blake/src/utils.dart';
@@ -15,7 +14,7 @@ abstract class Content {
     R Function(Page page)? page,
   });
 
-  Map<String, dynamic> toMap(Config config) {
+  Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'title': title,
       'path': path,

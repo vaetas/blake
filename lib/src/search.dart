@@ -33,7 +33,7 @@ List<Map<String, dynamic>> createSearchIndex(
 
   content.when(
     page: (page) {
-      final metadata = page.toMap(config);
+      final metadata = page.toMap();
       list.add(
         <String, dynamic>{
           'title': metadata['name'],
