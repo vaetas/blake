@@ -4,11 +4,10 @@ import 'package:yaml/yaml.dart';
 /// Configuration specific to `build serve` command.
 class ServeConfig {
   ServeConfig({
-    String address = '127.0.0.1',
     this.port = 4040,
     this.websocketPort = 4041,
     this.verbose = false,
-  }) : baseUrl = parseAddress(address, port);
+  }) : baseUrl = Uri(host: '127.0.0.1', scheme: 'http', port: port);
 
   factory ServeConfig.fromYaml(YamlMap? map) {
     if (map == null) {
@@ -16,7 +15,6 @@ class ServeConfig {
     }
 
     return ServeConfig(
-      address: map['address'] as String? ?? '127.0.0.1',
       port: map[_kPort] as int? ?? 4040,
       websocketPort: map[_kWebsocketPort] as int? ?? 4041,
       verbose: map[_kVerbose] as bool? ?? false,
@@ -33,7 +31,6 @@ class ServeConfig {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'base_url': baseUrl.toString(),
       _kPort: port,
       _kWebsocketPort: websocketPort,
       _kVerbose: verbose,

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io' show exit;
 
 import 'package:args/command_runner.dart';
+import 'package:blake/src/assets/redirect_page.dart';
 import 'package:blake/src/build/content_parser.dart';
 import 'package:blake/src/commands/serve_command.dart';
 import 'package:blake/src/config.dart';
@@ -43,7 +44,7 @@ class BuildCommand extends Command<int> {
 
   final _stopwatch = Stopwatch();
 
-  bool includeReloadScript = false;
+  bool isServe = false;
 
   late Map<String, dynamic> data;
 
@@ -59,11 +60,11 @@ class BuildCommand extends Command<int> {
 
   Future<int> build(
     Config config, {
-    bool includeReloadScript = false,
+    bool isServe = false,
   }) async {
     log.info('Building');
     _stopwatch.start();
-    this.includeReloadScript = includeReloadScript;
+    this.isServe = isServe;
     final contentDir = (await getContentDirectory(config)).when<Directory>(
       _exit,
       (value) => value,
@@ -77,6 +78,20 @@ class BuildCommand extends Command<int> {
     final tags = _buildTaxonomy(pages);
     data = await parseDataTree(config);
     data['tags'] = tags;
+
+    for (final page in pages) {
+      if (page.aliases.isNotEmpty) {
+        for (final alias in page.aliases) {
+          final _alias = alias as String;
+          final path = _alias.startsWith('/') ? _alias.substring(1) : _alias;
+          final redirectPage = RedirectPage(
+            path: path,
+            redirectUrl: page.getPublicUrl(config, isServe: isServe),
+          );
+          await _buildPage(redirectPage);
+        }
+      }
+    }
 
     await _generateContent(content);
     await _copyStaticFiles();
@@ -202,7 +217,7 @@ class BuildCommand extends Command<int> {
       ..addAll(extraData);
 
     var output = template.renderString(metadata);
-    if (includeReloadScript) {
+    if (isServe) {
       final parsedHtml = html_parser.parse(output);
 
       if (parsedHtml.body != null) {

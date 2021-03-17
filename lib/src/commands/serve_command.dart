@@ -48,7 +48,7 @@ class ServeCommand extends Command<int> {
   Future<int> _rebuild() async {
     return buildCommand.build(
       config,
-      includeReloadScript: true,
+      isServe: true,
     );
   }
 

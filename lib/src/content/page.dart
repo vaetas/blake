@@ -23,6 +23,9 @@ class Page extends Content {
 
   late List<dynamic> tags = metadata['tags'] as List<dynamic>? ?? <dynamic>[];
 
+  late List<dynamic> aliases =
+      metadata['aliases'] as List<dynamic>? ?? <dynamic>[];
+
   DateTime? get date {
     final _date = metadata['date'] as String?;
     return _date != null ? DateTime.parse(_date) : null;
@@ -83,11 +86,11 @@ class Page extends Content {
     }
   }
 
-  String getPublicUrl(Config config) {
+  String getPublicUrl(Config config, {bool isServe = false}) {
     return getBuildPath(config)
         .replaceFirst(
           config.build.publicDir,
-          config.baseUrl,
+          isServe ? 'http://127.0.0.1:${config.serve.port}' : config.baseUrl,
         )
         .replaceFirst('index.html', '');
   }

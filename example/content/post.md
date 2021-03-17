@@ -2,6 +2,9 @@
 title: Post
 template: page.mustache
 tags: ['lorem', 'ipsum']
+aliases: [
+    "/aliased/post/"
+]
 ---
 
 # Hello Word
