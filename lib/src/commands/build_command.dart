@@ -143,19 +143,18 @@ class BuildCommand extends Command<int> {
   Future<void> _generateContent(Content content) async {
     try {
       await content.when(
-        section: (section) => _buildSection(section, config),
-        page: (page) => _buildPage(page, config),
+        section: _buildSection,
+        page: _buildPage,
       );
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<void> _buildSection(Section section, Config config) async {
+  Future<void> _buildSection(Section section) async {
     if (section.index != null) {
       await _buildPage(
         section.index!,
-        config,
         extraData: <dynamic, dynamic>{
           'children': section.children
               .whereType<Page>()
@@ -168,8 +167,8 @@ class BuildCommand extends Command<int> {
     try {
       for (final child in section.children) {
         await child.when(
-          section: (section) => _buildSection(section, config),
-          page: (page) => _buildPage(page, config),
+          section: _buildSection,
+          page: _buildPage,
         );
       }
     } catch (e) {
@@ -178,8 +177,7 @@ class BuildCommand extends Command<int> {
   }
 
   Future<void> _buildPage(
-    Page page,
-    Config config, {
+    Page page, {
     Map<dynamic, dynamic> extraData = const <dynamic, dynamic>{},
   }) async {
     log.debug('Build: $page');
