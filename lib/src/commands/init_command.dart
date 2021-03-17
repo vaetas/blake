@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:args/command_runner.dart';
+import 'package:blake/src/config.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/utils.dart';
@@ -63,13 +64,8 @@ class InitCommand extends Command<int> {
 
     log.info('Populating with default values...');
 
-    final defaultConfig = <String, dynamic>{
-      'title': 'Static Site',
-      'author': 'William Blake',
-    };
-
+    final defaultConfig = Config.initial().toMap();
     final yaml = jsonToYaml(defaultConfig);
-    log.debug(yaml);
 
     try {
       await configFile.writeAsString(yaml);

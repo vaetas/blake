@@ -26,6 +26,19 @@ class Config {
     );
   }
 
+  /// Populated config used during `blake init`.
+  factory Config.initial() {
+    return Config(
+      author: 'William Blake',
+      title: 'Static Site',
+      baseUrl: '127.0.0.1',
+      extra: YamlMap(),
+      build: const BuildConfig(),
+      serve: ServeConfig(),
+      templates: const TemplatesConfig(),
+    );
+  }
+
   final String title;
   final String author;
   final String baseUrl;
@@ -41,7 +54,7 @@ class Config {
       _kBaseUrl: baseUrl,
       _kBuild: build.toMap(),
       _kServe: serve.toMap(),
-      _kTemplates: templates,
+      _kTemplates: templates.toMap(),
       _kExtra: extra,
     };
   }

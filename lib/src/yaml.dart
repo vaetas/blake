@@ -13,12 +13,13 @@ String jsonToYaml(dynamic json) {
 }
 
 void _writeMap(
-  Map<dynamic, dynamic> map, {
+  Map<String, dynamic> map, {
   int indentation = 0,
   required StringBuffer buffer,
 }) {
-  map.forEach((dynamic key, dynamic value) {
-    if (value is Map<dynamic, dynamic>) {
+  map.forEach((String key, dynamic value) {
+    if (value is Map<String, dynamic>) {
+      buffer.write('$key:\n');
       _writeMap(value, indentation: indentation + 2, buffer: buffer);
     } else if (value is List<dynamic>) {
       _writeList(value, indentation: indentation + 2, buffer: buffer);
@@ -33,12 +34,12 @@ void _writeList(
   int indentation = 0,
   required StringBuffer buffer,
 }) {
-  for (final e in list) {
-    if (e is Map<dynamic, dynamic>) {
+  for (final element in list) {
+    if (element is Map<String, dynamic>) {
       buffer.write('-'.indent(indentation));
-      _writeMap(e, buffer: buffer, indentation: 1);
+      _writeMap(element, buffer: buffer, indentation: 1);
     } else {
-      buffer.write('.- $e\n'.indent(indentation));
+      buffer.write('.- $element\n'.indent(indentation));
     }
   }
 }

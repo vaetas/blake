@@ -1,14 +1,14 @@
 import 'package:yaml/yaml.dart';
 
 class TemplatesConfig {
-  TemplatesConfig({
+  const TemplatesConfig({
     this.page = 'index.mustache',
     this.section = 'section.mustache',
   });
 
   factory TemplatesConfig.fromYaml(YamlMap? map) {
     if (map == null) {
-      return TemplatesConfig();
+      return const TemplatesConfig();
     }
 
     return TemplatesConfig(
