@@ -21,6 +21,8 @@ class Page extends Content {
 
   bool get public => metadata['public'] as bool? ?? true;
 
+  late List<dynamic> tags = metadata['tags'] as List<dynamic>? ?? <dynamic>[];
+
   DateTime? get date {
     final _date = metadata['date'] as String?;
     return _date != null ? DateTime.parse(_date) : null;

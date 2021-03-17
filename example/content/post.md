@@ -1,6 +1,7 @@
 ---
 title: Post
 template: page.mustache
+tags: ['lorem', 'ipsum']
 ---
 
 # Hello Word

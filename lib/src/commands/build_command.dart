@@ -16,6 +16,7 @@ import 'package:blake/src/log.dart';
 import 'package:blake/src/search.dart';
 import 'package:blake/src/shortcode.dart';
 import 'package:blake/src/sitemap_builder.dart';
+import 'package:blake/src/taxonomy.dart';
 import 'package:blake/src/util/either.dart';
 import 'package:blake/src/utils.dart';
 import 'package:html/parser.dart' as html_parser;
@@ -72,12 +73,13 @@ class BuildCommand extends Command<int> {
       (error) => _exit<Content>(error),
       (value) => value,
     );
-
+    final pages = content.getPages();
+    final tags = _buildTaxonomy(pages);
     data = await parseDataTree(config);
+    data['tags'] = tags;
 
     await _generateContent(content);
     await _copyStaticFiles();
-    final pages = content.getPages();
 
     final sitemapBuilder = SitemapBuilder(
       config: config,
@@ -286,6 +288,27 @@ class BuildCommand extends Command<int> {
     if (size >= 1000000) {
       log.warning('Search index file is over 1MB');
     }
+  }
+
+  List<Map<String, dynamic>> _buildTaxonomy(List<Page> pages) {
+    final tags = <String, List<Page>>{};
+    for (final page in pages) {
+      for (final tag in page.tags) {
+        tags[tag as String] ??= [];
+        tags[tag]!.add(page);
+      }
+    }
+
+    final result = List.generate(tags.length, (index) {
+      final key = tags.keys.elementAt(index);
+      return Tag(
+        name: key,
+        pages: tags[key]!,
+      ).toMap(config);
+    });
+
+    log.debug('Tags: $result');
+    return result;
   }
 
   /// When error occurs, show log and exit program.
