@@ -44,6 +44,8 @@ class BuildCommand extends Command<int> {
 
   bool includeReloadScript = false;
 
+  late Map<String, dynamic> data;
+
   /// Reload script is included when build is triggered using [ServeCommand].
   late final script = html_parser.parseFragment(
     '<script src="${config.baseUrl}/reload.js"></script>',
@@ -70,6 +72,9 @@ class BuildCommand extends Command<int> {
       (error) => _exit<Content>(error),
       (value) => value,
     );
+
+    data = await parseDataTree(config);
+
     await _generateContent(content);
     await _copyStaticFiles();
     final pages = content.getPages();
@@ -85,7 +90,11 @@ class BuildCommand extends Command<int> {
     }
 
     _stopwatch.stop();
-    log.info('Build done in ${_stopwatch.elapsedMilliseconds}ms');
+    log.info(
+      'Build done in ${_stopwatch.elapsedMilliseconds}ms '
+      '(${pages.length} pages)',
+    );
+    _stopwatch.reset();
     return 0;
   }
 
@@ -181,7 +190,6 @@ class BuildCommand extends Command<int> {
     }
 
     final template = await _getTemplate(page, config);
-    final data = await parseDataTree(config);
 
     final metadata = <dynamic, dynamic>{
       'title': page.title,
