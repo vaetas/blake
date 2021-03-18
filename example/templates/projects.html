@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{title}} - Section</title>
+</head>
+<body>
+<h1>{{title}}</h1>
+<div>{{content}}</div>
+<ul>
+{% for child in children %}
+    <li>{{ child.title }}: {{ child.content }}</li>
+{% endfor %}
+</ul>
+</body>
+</html>

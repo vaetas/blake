@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+</head>
+<body>
+<h1>{{ title }}</h1>
+{{ content }}
+<div>Reading list:</div>
+<ul>
+{% for book in data.books.fiction %}
+    <li>{{ book['title'] }} -- {{ book['author'] }} ({{ book['rating'] }}/5)</li>
+{% endfor %}
+</ul>
+</body>
+</html>
