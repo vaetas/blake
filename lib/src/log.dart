@@ -37,6 +37,9 @@ class Logger {
 
     // TODO: Show help message on new line?
     print('$pen $message ${help != null ? '\n$help' : ''}');
+    if (error != null) {
+      print(error);
+    }
   }
 
   final _greyPen = AnsiPen()..xterm(243, bg: false);

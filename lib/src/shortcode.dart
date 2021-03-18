@@ -1,5 +1,6 @@
 import 'package:blake/src/util/equals.dart';
-import 'package:mustache_template/mustache_template.dart';
+import 'package:blake/src/utils.dart';
+import 'package:jinja/jinja.dart';
 import 'package:petitparser/petitparser.dart';
 
 /// [ShortcodeTemplate] is a single file inside `templates/shortcodes` folder.
@@ -17,8 +18,12 @@ class ShortcodeTemplate {
   /// Render shortcode [template] using [values].
   ///
   /// As of now this uses Mustache templating. This might change in the future.
-  String render(Map<String, dynamic> values) {
-    return Template(template).renderString(values);
+  String render({
+    required Environment environment,
+    required Map<String, dynamic> values,
+  }) {
+    final templatePath = Path.join('shortcodes', '$name.html');
+    return environment.getTemplate(templatePath).renderMap(values);
   }
 
   @override

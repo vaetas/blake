@@ -1,6 +1,6 @@
 import 'package:blake/src/config.dart';
 import 'package:blake/src/file_system.dart';
-import 'package:mustache_template/mustache_template.dart';
+import 'package:jinja/jinja.dart';
 
 Future<void> setupReloadScript(Config config) async {
   final publicDir = await getPublicDirectory(config);
@@ -11,15 +11,15 @@ Future<void> setupReloadScript(Config config) async {
 }
 
 String _getReloadScript(Config config) {
-  return Template(_reloadScript).renderString(
+  return Template(_reloadScript).renderMap(
     <String, dynamic>{
-      'websocket_port': config.serve.websocketPort,
+      'port': config.serve.websocketPort,
     },
   );
 }
 
 const _reloadScript = r'''
-const address = 'ws://localhost:{{ websocket_port }}';
+const address = 'ws://localhost:{{ port }}';
 
 function connect() {
   try {

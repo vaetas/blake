@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{title}} - Section</title>
+</head>
+<body>
+<h1>{{title}}</h1>
+{% for child in children %}
+    <a href="{{child.path}}">{{child.title}}</a>
+{% endfor %}
+</body>
+</html>

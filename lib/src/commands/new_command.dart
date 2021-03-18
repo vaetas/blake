@@ -6,7 +6,6 @@ import 'package:blake/src/config.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/utils.dart';
-import 'package:mustache_template/mustache_template.dart';
 
 /// Create new content based on predefined types.
 ///
@@ -101,12 +100,12 @@ class NewCommand extends Command<int> {
     // TODO: Transform to pretty title.
     final title = Path.basename(args.name);
 
-    final template = Template(types[args.type]!);
+    final template = config.environment.getTemplate(types[args.type]!);
     final data = <String, dynamic>{
       'title': title,
       'date': DateTime.now().toIso8601String(),
     };
-    final output = template.renderString(data);
+    final output = template.renderMap(data);
     await file.writeAsString('---\n$output\n---\n');
 
     log.info('File ${file.path} created.');

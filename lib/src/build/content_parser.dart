@@ -13,6 +13,7 @@ import 'package:blake/src/markdown/markdown_file.dart';
 import 'package:blake/src/shortcode.dart';
 import 'package:blake/src/utils.dart';
 import 'package:file/file.dart';
+import 'package:jinja/jinja.dart';
 import 'package:markdown/markdown.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
@@ -103,8 +104,10 @@ class ContentParser {
 
     final m = yaml.loadYaml(metadata) as yaml.YamlMap?;
 
-    final content =
-        ShortcodeRenderer(shortcodeTemplates: shortcodeTemplates).render(
+    final content = ShortcodeRenderer(
+      shortcodeTemplates: shortcodeTemplates,
+      environment: config.environment,
+    ).render(
       markdown.substring(matches[1].end).trim(),
     );
 
@@ -131,9 +134,11 @@ class ContentParser {
 /// To render an `input` call [ShortcodeRenderer.render] method.
 class ShortcodeRenderer {
   ShortcodeRenderer({
+    required this.environment,
     required this.shortcodeTemplates,
   });
 
+  final Environment environment;
   final List<ShortcodeTemplate> shortcodeTemplates;
 
   final parser = ShortcodeParser();
@@ -154,7 +159,10 @@ class ShortcodeRenderer {
           input.substring(match.start, match.end),
         );
 
-        final output = shortcode.render(variables.getValues());
+        final output = shortcode.render(
+          environment: environment,
+          values: variables.getValues(),
+        );
 
         _result = _result.replaceFirst(
           input.substring(match.start, match.end),
@@ -191,7 +199,10 @@ class ShortcodeRenderer {
         final variables = _parseBodyShortcode(
           input.substring(startMatch.start, endMatch.end),
         );
-        final output = shortcode.render(variables.getValues());
+        final output = shortcode.render(
+          environment: environment,
+          values: variables.getValues(),
+        );
 
         _result = _result.replaceFirst(
           input.substring(startMatch.start, endMatch.end),

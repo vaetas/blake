@@ -21,7 +21,7 @@ import 'package:blake/src/taxonomy.dart';
 import 'package:blake/src/util/either.dart';
 import 'package:blake/src/utils.dart';
 import 'package:html/parser.dart' as html_parser;
-import 'package:mustache_template/mustache_template.dart';
+import 'package:jinja/jinja.dart';
 
 class BuildCommand extends Command<int> {
   BuildCommand(this.config) {
@@ -157,7 +157,7 @@ class BuildCommand extends Command<int> {
     if (section.index != null) {
       await _buildPage(
         section.index!,
-        extraData: <dynamic, dynamic>{
+        extraData: <String, Object?>{
           'children': section.children
               .whereType<Page>()
               .map((content) => content.toMap())
@@ -180,7 +180,7 @@ class BuildCommand extends Command<int> {
 
   Future<void> _buildPage(
     Page page, {
-    Map<dynamic, dynamic> extraData = const <dynamic, dynamic>{},
+    Map<String, Object?> extraData = const <String, Object>{},
   }) async {
     log.debug('Build: $page');
 
@@ -193,22 +193,23 @@ class BuildCommand extends Command<int> {
 
     final template = await _getTemplate(page, config);
 
-    final metadata = <dynamic, dynamic>{
+    final metadata = <String, Object?>{
       'title': page.title,
       'content': page.content,
       'site': config.toMap(),
-      'template': template.name,
+      'template': template!.path,
       'data': data,
     }
       ..addAll(page.metadata)
       ..addAll(extraData);
 
-    var output = template.renderString(metadata);
+    var output = template.renderMap(metadata);
+
     if (isServe) {
       final parsedHtml = html_parser.parse(output);
-
+      // FIXME: Reload script is not inserted into output HTML.
       if (parsedHtml.body != null) {
-        parsedHtml.body!.nodes.add(script);
+        parsedHtml.head!.nodes.add(script);
         output = parsedHtml.outerHtml;
       } else {
         log.warning('Could not include reload script into ${page.path}');
@@ -253,7 +254,10 @@ class BuildCommand extends Command<int> {
 
   /// Get template to render given [page]. If there is a `template` field in
   /// page front-matter it is used. Otherwise default template will used.
-  Future<Template> _getTemplate(Page page, Config config) async {
+  Future<Template?> _getTemplate(
+    Page page,
+    Config config,
+  ) async {
     // Template set in front matter has precedence.
     var templateName = page.metadata['template'] as String?;
     templateName ??=
@@ -266,7 +270,12 @@ class BuildCommand extends Command<int> {
       throw BuildError('Template $templateName does not exists');
     }
 
-    return Template(await file.readAsString(), name: templateName);
+    try {
+      return config.environment.getTemplate(templateName);
+    } on ArgumentError catch (e) {
+      _exit<void>(BuildError(e.toString()));
+      return null;
+    }
   }
 
   Future<void> _generateSearchIndex(List<Page> pages) async {

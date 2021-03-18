@@ -1,6 +1,6 @@
 ---
 title: Post
-template: page.mustache
+template: page.html
 tags: ['lorem', 'ipsum']
 aliases: [
     "/aliased/post/"

@@ -30,7 +30,7 @@ packages:
       name: ansicolor
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0-nullsafety.0"
+    version: "2.0.1"
   args:
     dependency: "direct main"
     description:
@@ -150,6 +150,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  jinja:
+    dependency: "direct main"
+    description:
+      name: jinja
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   js:
     dependency: transitive
     description:
@@ -192,13 +199,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  mustache_template:
-    dependency: "direct main"
-    description:
-      name: mustache_template
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   node_preamble:
     dependency: transitive
     description:

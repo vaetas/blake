@@ -1,6 +1,7 @@
 import 'package:blake/src/build/build_config.dart';
 import 'package:blake/src/serve/serve_config.dart';
 import 'package:blake/src/templates_config.dart';
+import 'package:jinja/jinja.dart';
 import 'package:yaml/yaml.dart';
 
 class Config {
@@ -46,6 +47,10 @@ class Config {
   final ServeConfig serve;
   final TemplatesConfig templates;
   final YamlMap extra;
+
+  late var environment = Environment(
+    loader: FileSystemLoader(path: build.templatesDir),
+  );
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
