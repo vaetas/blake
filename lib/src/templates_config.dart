@@ -2,8 +2,8 @@ import 'package:yaml/yaml.dart';
 
 class TemplatesConfig {
   const TemplatesConfig({
-    this.page = 'index.mustache',
-    this.section = 'section.mustache',
+    this.page = 'index.html',
+    this.section = 'section.html',
   });
 
   factory TemplatesConfig.fromYaml(YamlMap? map) {
@@ -12,8 +12,8 @@ class TemplatesConfig {
     }
 
     return TemplatesConfig(
-      page: map['page'] as String? ?? 'index.mustache',
-      section: map['section'] as String? ?? 'section.mustache',
+      page: map['page'] as String? ?? 'index.html',
+      section: map['section'] as String? ?? 'section.html',
     );
   }
 

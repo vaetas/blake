@@ -12,7 +12,7 @@ Features as of now:
 
 * Markdown support.
 * YAML configuration and front-matter.
-* Mustache templates.
+* Jinja templates.
 * Live-reload.
 * Single native binary.
 * YAML/JSON data content and non-public Data pages.

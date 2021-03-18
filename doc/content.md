@@ -36,7 +36,7 @@ Below is an example frontmatter for Markdown file.
 
 ```yaml
 title: Post
-template: page.mustache
+template: page.html
 tags: ['lorem', 'ipsum']
 aliases: [
     "/aliased/post/"

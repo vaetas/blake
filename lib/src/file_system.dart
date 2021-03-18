@@ -65,7 +65,7 @@ Future<Either<BuildError, Directory>> getContentDirectory(Config config) async {
   }
 }
 
-/// Templates folder contains Mustache templates for rendering Markdown files
+/// Templates folder contains Jinja templates for rendering Markdown files
 /// inside content folder.
 ///
 /// Config: `build.templates_dir`

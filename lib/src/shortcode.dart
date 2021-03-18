@@ -15,9 +15,7 @@ class ShortcodeTemplate {
   final String name;
   final String template;
 
-  /// Render shortcode [template] using [values].
-  ///
-  /// As of now this uses Mustache templating. This might change in the future.
+  /// Render shortcode [template] using [values] with Jinja.
   String render({
     required Environment environment,
     required Map<String, dynamic> values,
