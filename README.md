@@ -59,23 +59,27 @@ And as usual, `blake` or `blake help` will show usage help.
 
 ## Build
 
-To create native binary use the following command. You need to have installed full Dart SDK at your computer (Dart packaged with Flutter is not enough).
+You can build Blake into a single native binary. As of now, this binary can only be run on the same platform it was built on. Once compiled, you can run Blake without needing to install Dart SDK.
+
+To compile this project, you need to install [grinder package](https://pub.dev/packages/grinder).
 
 ```
-# Windows
-dart2native bin/blake.dart -o bin/blake.exe
-
-# Linux or macOS
-dart2native bin/blake.dart -o bin/blake
+pub global activate grinder
 ```
 
-You can also run this project without compiling to the binary.
+Then you can run the `grind compile` script to produce a native binary together with an archive. This command will output a binary and an archive into the `build` directory.
+
+```
+grind compile
+```
+
+You can also run this project without compiling it to the binary.
 
 ```
 dart bin/blake.dart
 ```
 
-You can activate Blake globally from a local path which might be useful during development.
+Or you can activate Blake globally from a local path which is useful during development.
 
 ```
 pub global activate --source path .

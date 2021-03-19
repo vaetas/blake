@@ -30,14 +30,5 @@ dependencies:
 dev_dependencies:
   analysis_options:
     git: https://github.com/vaetas/analysis_options.git
+  grinder: ^0.9.0
   test: ^1.16.8
-
-scripts:
-  compile:
-    win:
-      - mkdir build
-      - dart2native bin/blake.dart -o build/blake.exe
-    mac:
-      - mkdir -p build
-      - dart2native bin/blake.dart -o build/blake
-      - cd build && tar -czf blake-mac.tar.gz blake
