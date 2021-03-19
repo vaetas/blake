@@ -20,6 +20,7 @@ import 'package:blake/src/sitemap_builder.dart';
 import 'package:blake/src/taxonomy.dart';
 import 'package:blake/src/util/either.dart';
 import 'package:blake/src/utils.dart';
+import 'package:html/dom.dart' as html_dom;
 import 'package:html/parser.dart' as html_parser;
 import 'package:jinja/jinja.dart';
 
@@ -49,9 +50,16 @@ class BuildCommand extends Command<int> {
   late Map<String, Object?> data;
 
   /// Reload script is included when build is triggered using [ServeCommand].
-  late final script = html_parser.parseFragment(
-    '<script src="${config.baseUrl}/reload.js"></script>',
-  );
+  ///
+  /// This needs to generate new instance on each access. HTML library probably
+  /// works with references and mutates the node after usage. Therefore, when
+  /// settings this field as `late final`, it will be inserted into DOM only
+  /// once and subsequent uses fail.
+  html_dom.DocumentFragment get script {
+    return html_parser.parseFragment(
+      '<script src="http://127.0.0.1:${config.serve.port}/reload.js"></script>',
+    );
+  }
 
   @override
   FutureOr<int> run() async {
@@ -205,9 +213,8 @@ class BuildCommand extends Command<int> {
 
     if (isServe) {
       final parsedHtml = html_parser.parse(output);
-      // FIXME: Reload script is not inserted into output HTML.
       if (parsedHtml.body != null) {
-        parsedHtml.head!.nodes.add(script);
+        parsedHtml.body!.nodes.add(script);
         output = parsedHtml.outerHtml;
       } else {
         log.warning('Could not include reload script into ${page.path}');
