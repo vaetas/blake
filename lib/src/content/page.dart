@@ -4,9 +4,6 @@ import 'package:blake/src/content/section.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/git_util.dart';
 import 'package:blake/src/utils.dart';
-import 'package:glob/glob.dart';
-
-final _kIndexGlob = Glob('{index,_index}');
 
 /// [Page] is leaf node which cannot have other subpages.
 class Page extends Content {
@@ -17,11 +14,14 @@ class Page extends Content {
   });
 
   @override
-  String get title => metadata['title'] as String? ?? Path.basename(path);
+  late final String title = metadata['title'] as String? ?? Path.basename(path);
 
-  bool get public => metadata['public'] as bool? ?? true;
+  /// Public pages are build into public folder. When [public] is false,
+  /// the page is not build. It is still accessible in templates in both cases.
+  late final bool public = metadata['public'] as bool? ?? true;
 
-  late List<dynamic> tags = metadata['tags'] as List<dynamic>? ?? <dynamic>[];
+  late final List<dynamic> tags =
+      metadata['tags'] as List<dynamic>? ?? <dynamic>[];
 
   late List<dynamic> aliases =
       metadata['aliases'] as List<dynamic>? ?? <dynamic>[];
@@ -50,6 +50,11 @@ class Page extends Content {
   final String? content;
 
   final Map<String, dynamic> metadata;
+
+  bool get isIndex {
+    final name = Path.basenameWithoutExtension(path);
+    return name == 'index' || name == '_index';
+  }
 
   /// Get final build path for this [Page].
   ///
@@ -95,11 +100,10 @@ class Page extends Content {
         .replaceFirst('index.html', '');
   }
 
-  bool get isIndex => _kIndexGlob.matches(Path.basenameWithoutExtension(path));
-
   @override
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+  Map<String, Object?> toMap() {
+    // TODO: [metadata] should be merged into the same map.
+    return {
       'title': title,
       'path': path.replaceFirst('.md', '/'),
       'content': content,

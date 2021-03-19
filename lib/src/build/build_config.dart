@@ -54,8 +54,8 @@ class BuildConfig {
   /// Create public JSON search index when true.
   final bool generateSearchIndex;
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+  Map<String, Object?> toMap() {
+    return {
       _kVerbose: verbose,
       _kPublicDir: publicDir,
       _kContentDir: contentDir,

@@ -5,10 +5,15 @@ import 'package:blake/src/content/page.dart';
 class RedirectPage extends Page {
   RedirectPage({
     required String path,
-    required this.redirectUrl,
+    required this.destinationUrl,
   }) : super(path: path);
 
-  final String redirectUrl;
+  final String destinationUrl;
+
+  @override
+  Map<String, Object> toMap() {
+    return {};
+  }
 
   @override
   String? get content {
@@ -16,7 +21,7 @@ class RedirectPage extends Page {
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="refresh" content="0; url=$redirectUrl" />
+  <meta http-equiv="refresh" content="0; url=$destinationUrl" />
 </head>
 </html>
 ''';

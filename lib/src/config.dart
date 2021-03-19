@@ -52,8 +52,8 @@ class Config {
     loader: FileSystemLoader(path: build.templatesDir),
   );
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+  Map<String, Object?> toMap() {
+    return {
       _kTitle: title,
       _kAuthor: author,
       _kBaseUrl: baseUrl,

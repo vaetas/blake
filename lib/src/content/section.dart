@@ -18,8 +18,8 @@ class Section extends Content {
   final List<Content> children;
 
   @override
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
+  Map<String, Object?> toMap() {
+    return {
       'title': title,
       'path': path,
     };

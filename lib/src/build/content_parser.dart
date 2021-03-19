@@ -215,14 +215,12 @@ class ShortcodeRenderer {
 
   // TODO: Parser might throw an error.
   Shortcode _parseInlineShortcode(String input) {
-    log.debug('INLINE: $input');
     final shortcode = parser.parseInline(input);
     return shortcode;
     // return _parseArgs(input);
   }
 
   Shortcode _parseBodyShortcode(String input) {
-    log.debug('BLOCK: $input');
     final _shortcode = parser.parseBlock(input);
     return _shortcode;
   }

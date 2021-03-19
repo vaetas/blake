@@ -9,17 +9,12 @@ abstract class Content {
 
   String get path;
 
+  List<Page> getPages();
+
   R? when<R>({
     R Function(Section section)? section,
     R Function(Page page)? page,
   });
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'title': title,
-      'path': path,
-    };
-  }
-
-  List<Page> getPages();
+  Map<String, Object?> toMap();
 }

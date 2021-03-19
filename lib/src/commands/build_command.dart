@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'dart:io' show exit;
 
 import 'package:args/command_runner.dart';
-import 'package:blake/src/assets/redirect_page.dart';
 import 'package:blake/src/build/content_parser.dart';
 import 'package:blake/src/commands/serve_command.dart';
 import 'package:blake/src/config.dart';
 import 'package:blake/src/content/content.dart';
 import 'package:blake/src/content/page.dart';
+import 'package:blake/src/content/redirect_page.dart';
 import 'package:blake/src/content/section.dart';
 import 'package:blake/src/data.dart';
 import 'package:blake/src/errors.dart';
@@ -46,7 +46,7 @@ class BuildCommand extends Command<int> {
 
   bool isServe = false;
 
-  late Map<String, dynamic> data;
+  late Map<String, Object?> data;
 
   /// Reload script is included when build is triggered using [ServeCommand].
   late final script = html_parser.parseFragment(
@@ -83,11 +83,10 @@ class BuildCommand extends Command<int> {
     await _generateContent(content);
     await _copyStaticFiles();
 
-    final sitemapBuilder = SitemapBuilder(
+    await SitemapBuilder(
       config: config,
       pages: pages,
-    );
-    await sitemapBuilder.build();
+    ).build();
 
     if (config.build.generateSearchIndex) {
       await _generateSearchIndex(pages);
@@ -182,11 +181,10 @@ class BuildCommand extends Command<int> {
     Page page, {
     Map<String, Object?> extraData = const <String, Object>{},
   }) async {
-    log.debug('Build: $page');
+    // log.debug('Build: $page');
 
     // Abort on non-public pages (i.e. data only page).
-    final public = page.metadata['public'] as bool? ?? true;
-    if (!public) {
+    if (!page.public) {
       log.debug('Page ${page.path} is not public');
       return;
     }
@@ -281,7 +279,7 @@ class BuildCommand extends Command<int> {
   Future<void> _generateSearchIndex(List<Page> pages) async {
     final index = SearchIndexBuilder(
       config: config,
-      pages: pages,
+      pages: pages.where((element) => element.public).toList(),
     ).build();
 
     final indexFilePath = Path.join(
@@ -316,7 +314,7 @@ class BuildCommand extends Command<int> {
       ).toMap(config);
     });
 
-    log.debug('Tags: $result');
+    log.debug('Tags: ${result.map((e) => '${e['name']}').toList()}');
     return result;
   }
 
@@ -328,7 +326,7 @@ class BuildCommand extends Command<int> {
           final path = _alias.startsWith('/') ? _alias.substring(1) : _alias;
           final redirectPage = RedirectPage(
             path: path,
-            redirectUrl: page.getPublicUrl(config, isServe: isServe),
+            destinationUrl: page.getPublicUrl(config, isServe: isServe),
           );
           await _buildPage(redirectPage);
         }

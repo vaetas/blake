@@ -16,11 +16,11 @@ import 'package:yaml/yaml.dart';
 /// be the same).
 ///
 /// See `example` directory for reference.
-Future<Map<String, dynamic>> parseDataTree(
+Future<Map<String, Object?>> parseDataTree(
   Config config, {
   String? path,
 }) async {
-  final data = <String, dynamic>{};
+  final data = <String, Object?>{};
   path ??= config.build.dataDir;
   final nodes = await fs.directory(path).list().toList();
 
