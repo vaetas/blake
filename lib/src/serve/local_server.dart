@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/utils.dart';
+import 'package:mime/mime.dart';
 
 /// Local web server used for `blake serve` command.
 ///
@@ -63,8 +64,11 @@ class LocalServer {
   }
 }
 
+/// Serves local directory with given [path] as a web server.
 class DirectoryServer {
-  DirectoryServer({required this.path});
+  DirectoryServer({
+    required this.path,
+  });
 
   /// Base path. All files are looked-up within this path subtree.
   final String path;
@@ -82,14 +86,21 @@ class DirectoryServer {
     final file = fs.file(path);
     final response = request.response;
 
-    if (await file.exists()) {
-      response.headers.set('Content-Type', 'text/html; charset=UTF-8');
-      await response.addStream(file.openRead());
-      await response.close();
-    } else {
-      // TODO: Return 404 when files doesn't exists.
+    if (!await file.exists()) {
+      // TODO: Return 404 page when files doesn't exists.
       response.statusCode = HttpStatus.notFound;
       await response.close();
+      return;
     }
+
+    final extension = Path.extension(path);
+    final mime = _getMimeType(extension);
+    response.headers.set('Content-Type', '$mime; charset=UTF-8');
+    await response.addStream(file.openRead());
+    await response.close();
+  }
+
+  String _getMimeType(String path) {
+    return lookupMimeType(path) ?? 'text/plain';
   }
 }
