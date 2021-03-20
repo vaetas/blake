@@ -4,6 +4,7 @@ import 'package:args/command_runner.dart';
 import 'package:blake/src/assets/reload_js.dart';
 import 'package:blake/src/commands/build_command.dart';
 import 'package:blake/src/config.dart';
+import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/serve/local_server.dart';
 import 'package:blake/src/serve/watch.dart';
@@ -81,6 +82,15 @@ class ServeCommand extends Command<int> {
       // ignore: avoid_print
       print('');
       log.info('Event: $event');
+      if (event.path.startsWith(config.build.templatesDir)) {
+        final templatePath =
+            event.path.replaceFirst('${config.build.templatesDir}/', '');
+        final content = await fs.file(event.path).readAsString();
+        config.environment.fromString(
+          content,
+          path: templatePath,
+        );
+      }
       await _rebuild();
       _onReload.add(null);
     });

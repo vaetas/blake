@@ -1,4 +1,5 @@
 import 'package:blake/src/build/build_config.dart';
+import 'package:blake/src/commands/serve_command.dart';
 import 'package:blake/src/serve/serve_config.dart';
 import 'package:blake/src/templates_config.dart';
 import 'package:jinja/jinja.dart';
@@ -48,8 +49,15 @@ class Config {
   final TemplatesConfig templates;
   final YamlMap extra;
 
+  // TODO: is [autoReload] good idea performance wise?
+  /// [FileSystemLoader.autoReload] is not required because we handle reloading
+  /// templates ourselves inside [ServeCommand]. Only this way we can ensure
+  /// the template is updated before triggering rebuild.
   late var environment = Environment(
-    loader: FileSystemLoader(path: build.templatesDir),
+    loader: FileSystemLoader(
+      path: build.templatesDir,
+      autoReload: false,
+    ),
   );
 
   Map<String, Object?> toMap() {
