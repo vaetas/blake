@@ -44,8 +44,12 @@ class ContentParser {
         final metadata = Map<String, dynamic>.from(parsed.metadata);
 
         if (!metadata.containsKey('date')) {
-          final date = await GitUtil.getModified(file);
-          metadata['date'] = date!.toIso8601String();
+          if (await GitUtil.isGitInstalled()) {
+            final date = await GitUtil.getModified(file);
+            if (date != null) {
+              metadata['date'] = date.toIso8601String();
+            }
+          }
         }
 
         return Page(
