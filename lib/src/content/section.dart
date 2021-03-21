@@ -19,10 +19,8 @@ class Section extends Content {
 
   @override
   Map<String, Object?> toMap() {
-    final pages = children
-        .whereType<Page>()
-        .map((content) => content.toMap())
-        .toList();
+    final pages =
+        children.whereType<Page>().map((content) => content.toMap()).toList();
 
     final sections = children
         .whereType<Section>()
