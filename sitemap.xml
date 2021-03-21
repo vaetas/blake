@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://127.0.0.1/</loc>
+    <loc>https://vaetas.github.io/blake//</loc>
   </url>
   <url>
-    <loc>http://127.0.0.1/docs/search/</loc>
+    <loc>https://vaetas.github.io/blake//docs/search/</loc>
     <lastmod>2021-03-21T00:00:00.000</lastmod>
   </url>
   <url>
-    <loc>http://127.0.0.1/docs/templates/</loc>
+    <loc>https://vaetas.github.io/blake//docs/templates/</loc>
     <lastmod>2021-03-21T00:00:00.000</lastmod>
   </url>
   <url>
-    <loc>http://127.0.0.1/docs/taxonomy/</loc>
+    <loc>https://vaetas.github.io/blake//docs/taxonomy/</loc>
     <lastmod>2021-03-21T00:00:00.000</lastmod>
   </url>
   <url>
-    <loc>http://127.0.0.1/docs/content/</loc>
+    <loc>https://vaetas.github.io/blake//docs/content/</loc>
     <lastmod>2021-03-21T00:00:00.000</lastmod>
   </url>
   <url>
-    <loc>http://127.0.0.1/docs/install/</loc>
+    <loc>https://vaetas.github.io/blake//docs/install/</loc>
     <lastmod>2021-03-21T00:00:00.000</lastmod>
   </url>
   <url>
-    <loc>http://127.0.0.1/docs/deploy/</loc>
+    <loc>https://vaetas.github.io/blake//docs/deploy/</loc>
     <lastmod>2021-03-21T00:00:00.000</lastmod>
   </url>
   <url>
-    <loc>http://127.0.0.1/docs/shortcodes/</loc>
+    <loc>https://vaetas.github.io/blake//docs/shortcodes/</loc>
     <lastmod>2021-03-21T00:00:00.000</lastmod>
   </url>
 </urlset>
