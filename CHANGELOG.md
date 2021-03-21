@@ -1,3 +1,7 @@
+## 0.5.1
+
+* style: format file
+
 ## 0.5.0
 
 * feat: use Jinja instead of Mustache
