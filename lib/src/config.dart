@@ -49,7 +49,6 @@ class Config {
   final TemplatesConfig templates;
   final YamlMap extra;
 
-  // TODO: is [autoReload] good idea performance wise?
   /// [FileSystemLoader.autoReload] is not required because we handle reloading
   /// templates ourselves inside [ServeCommand]. Only this way we can ensure
   /// the template is updated before triggering rebuild.
