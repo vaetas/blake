@@ -1,10 +1,14 @@
-# Shortcodes
+---
+title: Shortcodes
+date: 2021-03-21
+template: page.html
+---
 
 Shortcodes can be used inside your Markdown files. They are replaced template values before parsing Markdown.
 
 ## Usage
 
-Put shortcodes inside `templates/shortcodes` directory. The name of the shortcode should contain only lowercase letters, dash, or underscore. The expected file extension for shortcodes is `.html`. 
+Put shortcodes inside `templates/shortcodes` directory. The name of the shortcode should contain only lowercase letters, dash, or underscore. The expected file extension for shortcodes is `.html`.
 
 > Example shortcode names: `code.html`, `youtube.html` or `my-shortcode.html`.
 

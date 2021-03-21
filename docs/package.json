@@ -1,0 +1,21 @@
+{
+  "name": "blake-docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postcss:build": "postcss css/tailwind.css --output static/main.css",
+    "postcss:watch": "postcss css/tailwind.css --output static/main.css --watch",
+    "build": "postcss css/tailwind.css --output static/main.css --env production"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/jit": "^0.1.5",
+    "@tailwindcss/typography": "^0.4.0",
+    "autoprefixer": "^10.2.5",
+    "postcss": "^8.2.8",
+    "postcss-cli": "^8.3.1",
+    "tailwindcss": "^2.0.4"
+  }
+}

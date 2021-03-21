@@ -1,0 +1,20 @@
+{% extends "layouts/base.html" %}
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block body %}
+<h1 class="font-bold pb-4">{{ title }}</h1>
+{{ content }}
+{% set docs = sections[0]['pages'] %}
+<h2>Documentation</h2>
+<ul>
+    <li><a href="https://vaetas.github.io/blake/docs/install/">Install</a></li>
+    <li><a href="https://vaetas.github.io/blake/docs/content/">Content</a></li>
+    <li><a href="https://vaetas.github.io/blake/docs/templates/">Templates</a></li>
+    <li><a href="https://vaetas.github.io/blake/docs/shortcodes/">Shortcodes</a></li>
+    <li><a href="https://vaetas.github.io/blake/docs/taxonomy/">Taxonomy</a></li>
+    <li><a href="https://vaetas.github.io/blake/docs/deploy/">Deploy</a></li>
+    <li><a href="https://vaetas.github.io/blake/docs/search/">Search</a></li>
+</ul>
+{% endblock %}

@@ -1,6 +1,12 @@
-# Search
+---
+title: Search
+date: 2021-03-21
+template: page.html
+---
 
-Blake allows generating a JSON page index for static site search. There is currently no client-side implementation.
+Blake allows generating a JSON page index for static site search. 
+There is currently no client-side implementation, and you must do it 
+yourself.
 
 ## Enable
 

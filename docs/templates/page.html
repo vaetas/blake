@@ -1,0 +1,12 @@
+{% extends "layouts/base.html" %}
+{% block title %}
+{{ title }} — {{ site.title }}
+{% endblock %}
+
+{% block body %}
+<h1 class="font-bold">{{ title }}</h1>
+<div class="text-gray-400 rounded-md block pb-2">
+    <time datetime="{{ date }}" itemprop="datePublished">{{ date }}</time>
+</div>
+{{ content }}
+{% endblock %}

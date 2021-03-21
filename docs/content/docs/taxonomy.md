@@ -1,8 +1,12 @@
-# Taxonomy
+---
+title: Taxonomy
+date: 2021-03-21
+template: page.html
+---
 
 ## Tags
 
-Page tags can be specified using `tags` inside your frontmatter. They are optional and you can leave them entirely.
+Page tags can be specified using `tags` inside your frontmatter. They are optional, and you can leave them entirely.
 
 ```
 ---

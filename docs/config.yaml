@@ -1,0 +1,24 @@
+title: Blake Static
+author: Vojtech Pavlovsky
+base_url: https://vaetas.github.io/blake/
+
+build:
+  verbose: false
+  public_dir: public
+  content_dir: content
+  templates_dir: templates
+  static_dir: static
+  data_dir: data
+  types_dir: types
+  generate_search_index: true
+
+serve:
+  port: 4040
+  websocket_port: 4041
+  verbose: false
+
+templates:
+  page: index.html
+  section: index.html
+
+extra: {}
