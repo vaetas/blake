@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/main.css" rel="stylesheet">
+    <title>
+Content — Blake Static
+</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+</head>
+<body>
+<div class="p-6 pb-12 mx-auto wrapper">
+    <a href="/" class="font-bold text-lg">🚀 Blake Static</a>
+</div>
+<div class="wrapper mx-auto p-4 prose pb-40">
+
+<h1 class="font-bold">Content</h1>
+<div class="text-gray-400 rounded-md block pb-2">
+    <time datetime="2021-03-21" itemprop="datePublished">2021-03-21</time>
+</div>
+<h2 id="page">Page</h2>
+<p>Page is a single Markdown document with a YAML frontmatter metadata.</p>
+<pre><code>---
+title: Post Title
+tags: ['flutter', 'dart']
+---
+
+Lorem ipsum dolor sit amet.
+</code></pre>
+<p>You can omit YAML fields, but frontmatter delimiter still needs to be used. Below is a minimal example without any YAML metadata.</p>
+<pre><code>---
+---
+
+Lorem ipsum dolor sit amet.
+</code></pre>
+<p>Some frontmatter keywords are reserved and you should only use them for defined purposes.</p>
+<ul>
+<li><code>title</code> (String) -- page title.</li>
+<li><code>public</code> (bool) -- when false the page in not build but is still accessible as a data.</li>
+<li><code>tags</code> (List)</li>
+<li><code>aliases</code> (List) -- page that redirect to current page.</li>
+<li><code>template</code> (String) -- select which template to use.</li>
+<li><code>date</code> (String) -- file creation date in ISO format.</li>
+<li><code>updated</code> (String) -- file updated date. By default, when this is not set, git is used to find out last modification date (if possible).</li>
+</ul>
+<p>Below is an example frontmatter for Markdown file.</p>
+<pre><code class="language-yaml">title: Post
+template: page.html
+tags: ['lorem', 'ipsum']
+aliases: [
+    "/aliased/post/"
+]
+</code></pre>
+<h3 id="data-pages">Data pages</h3>
+<p>Imagine a scenario where you want to have a <em>Projects</em> page with 
+a list of all your projects. Every project contains name, description, 
+and repository.</p>
+<p>First option is to create single Markdown file and put each project 
+into a shortcode.</p>
+<p>Section option is to create a directory called <code>projects</code> with <code>_index.md</code> 
+file. Then, for every project create another Markdown file within 
+this directory and declare <code>public: false</code> in its frontmatter.</p>
+<p>Now you can create special template for Projects page and access all subpages. 
+You can loop through them and display them one by one. These subpages will not 
+be rendered as a seperated pages but you can still access them from <code>_index.md</code> 
+file.</p>
+<pre><code class="language-text">├── content
+│  ├── projects
+│  │  ├── _index.md
+│  │  ├── blake.md
+│  │  └── gh_pages.md
+</code></pre>
+<p>Your directory will have structure as in the example above. However, your published 
+page will only have <code>/projects/</code> path rendered. If you try to visit <code>/projects/blake/</code> 
+you will see a 404 error.</p>
+
+
+</div>
+</body>
+</html>

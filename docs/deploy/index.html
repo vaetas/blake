@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/main.css" rel="stylesheet">
+    <title>
+Deploy — Blake Static
+</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+</head>
+<body>
+<div class="p-6 pb-12 mx-auto wrapper">
+    <a href="/" class="font-bold text-lg">🚀 Blake Static</a>
+</div>
+<div class="wrapper mx-auto p-4 prose pb-40">
+
+<h1 class="font-bold">Deploy</h1>
+<div class="text-gray-400 rounded-md block pb-2">
+    <time datetime="2021-03-21" itemprop="datePublished">2021-03-21</time>
+</div>
+<p>When you run <code>blake build</code> the content is generated into <code>public</code> 
+directory. Markdown files are rendered into HTML using templates and 
+files from <code>static</code> directory are copied into <code>public</code> without any change.</p>
+<p>You can deploy the content of <code>public</code> directory to your website.</p>
+<h2 id="github-pages">Github Pages</h2>
+<p>Install <a href="https://pub.dev/packages/gh_pages">gh_pages</a> package and run following 
+command.</p>
+<pre><code class="language-text">gh_pages public
+</code></pre>
+<p>This creates branch <code>gh-pages</code> if it does not exist and copies files from <code>public</code> 
+dir into this branch. Finally, it pushes the changes to your remote repository.</p>
+<p>You will also need to <a href="https://docs.github.com/en/github/working-with-github-pages/creating-a-github-pages-site">configure Github Pages</a> 
+in your repository for this to work.</p>
+<h2 id="netlify">Netlify</h2>
+<p>Netlify will require custom build script that is not yet implemented. It is planned, 
+although it is not a priority.</p>
+
+
+</div>
+</body>
+</html>

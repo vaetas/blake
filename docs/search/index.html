@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/main.css" rel="stylesheet">
+    <title>
+Search — Blake Static
+</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+</head>
+<body>
+<div class="p-6 pb-12 mx-auto wrapper">
+    <a href="/" class="font-bold text-lg">🚀 Blake Static</a>
+</div>
+<div class="wrapper mx-auto p-4 prose pb-40">
+
+<h1 class="font-bold">Search</h1>
+<div class="text-gray-400 rounded-md block pb-2">
+    <time datetime="2021-03-21" itemprop="datePublished">2021-03-21</time>
+</div>
+<p>Blake allows generating a JSON page index for static site search. 
+There is currently no client-side implementation and you must do it 
+yourself.</p>
+<h2 id="enable">Enable</h2>
+<p>Search index generation is disabled by default. You can enable it inside your <code>config.yaml</code> file.</p>
+<pre><code class="language-yaml">build:
+  generate_search_index: true
+</code></pre>
+<h2 id="usage">Usage</h2>
+<p>When you enable index generation, the build command will also create a <code>search_index.json</code> file inside the <code>public</code> directory.</p>
+<p>For example, when you start a local Blake server you can access the index on <code>http://127.0.0.1:4040/search_index.json</code>.</p>
+<h2 id="format">Format</h2>
+<p>For now, the JSON format is very plain (this will change in the future). You can only access <code>title</code> and <code>url</code> attributes for a page. Therefore, you can only search through page titles and <em>not</em> the content.</p>
+<pre><code class="language-json">[
+  {
+    "title":"Home",
+    "url":"http://127.0.0.1:4040/"
+  },
+  {
+    "title":"Post",
+    "url":"http://127.0.0.1:4040/post/"
+  },
+  {
+    "title":"Projects",
+    "url":"http://127.0.0.1:4040/projects/"
+  },
+]
+</code></pre>
+
+
+</div>
+</body>
+</html>

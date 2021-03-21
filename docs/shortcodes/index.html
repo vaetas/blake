@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/main.css" rel="stylesheet">
+    <title>
+Shortcodes — Blake Static
+</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+</head>
+<body>
+<div class="p-6 pb-12 mx-auto wrapper">
+    <a href="/" class="font-bold text-lg">🚀 Blake Static</a>
+</div>
+<div class="wrapper mx-auto p-4 prose pb-40">
+
+<h1 class="font-bold">Shortcodes</h1>
+<div class="text-gray-400 rounded-md block pb-2">
+    <time datetime="2021-03-21" itemprop="datePublished">2021-03-21</time>
+</div>
+<p>Shortcodes can be used inside your Markdown files. They are replaced template values before parsing Markdown.</p>
+<h2 id="usage">Usage</h2>
+<p>Put shortcodes inside <code>templates/shortcodes</code> directory. The name of the shortcode should contain only lowercase letters, dash, or underscore. The expected file extension for shortcodes is <code>.html</code>.</p>
+<blockquote>
+<p>Example shortcode names: <code>code.html</code>, <code>youtube.html</code> or <code>my-shortcode.html</code>.</p>
+</blockquote>
+<p>Shortcodes folder does not allows subfolders. Only files inside the <code>template/shortcodes</code> are used and any subdirectories are omitted.</p>
+<p>See an example of a shortcode called <code>block.html</code>:</p>
+<pre><code class="language-html">&lt;div class="block"&gt;
+  &lt;div class="block-title"&gt;
+    {{ name }}
+    {{ surname }}
+  &lt;/div&gt;
+
+  {{ body }}
+&lt;/div&gt;
+</code></pre>
+<p>You could use this shortcode in your Markdown file with the following syntax:</p>
+<pre><code class="language-markdown">**Hello world**
+This is some text.
+
+{{ block name="John" surname="Doe" }}
+</code></pre>
+<p>You can also have body-styled shortcodes. They must use <code>{{&lt; shortcode &gt;}}</code> syntax and have a <code>{{&lt; /shortcode &gt;}}</code> end tag.</p>
+<p>The <code>body</code> template variable is by default set to the body of the shortcode. If you also use a custom argument called <code>body</code>, your argument will have a precedence.</p>
+<pre><code class="language-markdown">**Hello world**
+This is some text.
+
+{{&lt; block name="John" surname="Doe" &gt;}}
+This is a body of the shortcode.
+{{&lt; /block &gt;}}
+</code></pre>
+
+
+</div>
+</body>
+</html>
