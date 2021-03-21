@@ -1,3 +1,14 @@
+## 0.5.0
+
+* feat: use Jinja instead of Mustache
+* feat: null safety
+* feat: auto inject reload script into HTML files
+* feat: allow tags
+* feat: aliases
+* feat: use grinder for tooling
+* perf: parse data only once per build
+* And other bugfixes & improvements.
+
 ## 0.4.1
 
 * fix: revert test dependency version
