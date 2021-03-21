@@ -187,12 +187,17 @@ class BuildCommand extends Command<int> {
           .map((content) => content.toMap())
           .toList();
 
+      // TODO: Refactor
+      final site = Map<String, Object?>.from(config.toMap());
+      final baseUrl = config.getBaseUrl(isServe: isServe);
+      site['baseUrl'] = baseUrl;
+
       await _buildPage(
         section.index!,
         extraData: <String, Object?>{
           'children': pages,
           'pages': pages,
-          'site': config.toMap(),
+          'site': site,
           'sections': sections,
         },
       );
@@ -224,10 +229,15 @@ class BuildCommand extends Command<int> {
 
     final template = await _getTemplate(page, config);
 
+    // TODO: Refactor
+    final site = Map<String, Object?>.from(config.toMap());
+    final baseUrl = config.getBaseUrl(isServe: isServe);
+    site['baseUrl'] = baseUrl;
+
     final metadata = <String, Object?>{
       'title': page.title,
       'content': page.content,
-      'site': config.toMap(),
+      'site': site,
       'template': template!.path,
       'data': data,
     }

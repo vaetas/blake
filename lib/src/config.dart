@@ -30,13 +30,14 @@ class Config {
 
   /// Populated config used during `blake init`.
   factory Config.initial() {
+    final serveConfig = ServeConfig();
     return Config(
       author: 'William Blake',
       title: 'Static Site',
-      baseUrl: '127.0.0.1',
+      baseUrl: 'http://127.0.0.1:${serveConfig.port}',
       extra: YamlMap(),
       build: const BuildConfig(),
-      serve: ServeConfig(),
+      serve: serveConfig,
       templates: const TemplatesConfig(),
     );
   }
@@ -58,6 +59,10 @@ class Config {
       autoReload: false,
     ),
   );
+
+  String getBaseUrl({bool isServe = false}) {
+    return isServe ? 'http://127.0.0.1:${serve.port}/' : baseUrl;
+  }
 
   Map<String, Object?> toMap() {
     return {
