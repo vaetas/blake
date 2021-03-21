@@ -1,5 +1,9 @@
+import 'package:blake/src/util/either.dart';
+
 abstract class Maybe<A> {
   const Maybe();
+
+  A get value;
 
   R when<R>(R Function() isNothing, R Function(A value) isValue);
 
@@ -11,6 +15,7 @@ abstract class Maybe<A> {
 class Just<A> extends Maybe<A> {
   const Just(this.value);
 
+  @override
   final A value;
 
   @override
@@ -24,6 +29,11 @@ class Just<A> extends Maybe<A> {
 
 class Nothing<A> extends Maybe<A> {
   const Nothing();
+
+  @override
+  A get value {
+    throw ForbiddenAccessError('Cannot access [value] for Nothing instance.');
+  }
 
   @override
   R when<R>(R Function() isNothing, R Function(A value) isValue) {

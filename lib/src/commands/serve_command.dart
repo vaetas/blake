@@ -46,10 +46,14 @@ class ServeCommand extends Command<int> {
   @override
   FutureOr<int> run() async => _serve();
 
-  Future<int> _rebuild() async {
-    return buildCommand.build(
+  Future<void> _rebuild() async {
+    final result = await buildCommand.build(
       config,
       isServe: true,
+    );
+    return result.when(
+      () => 0,
+      log.error,
     );
   }
 

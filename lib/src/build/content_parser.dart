@@ -99,7 +99,9 @@ class ContentParser {
   Future<MarkdownFile> _parseFile(String markdown) async {
     if (_delimiter.allMatches(markdown).length < 2 ||
         _delimiter.firstMatch(markdown)!.start != 0) {
-      log.warning('Front matter is invalid or missing.');
+      throw const MissingFrontmatterError(
+        'Front matter is invalid or missing.',
+      );
     }
 
     final matches = _delimiter.allMatches(markdown).toList();
@@ -131,6 +133,16 @@ class ContentParser {
       metadata: m ?? yaml.YamlMap.wrap(<dynamic, dynamic>{}),
     );
   }
+}
+
+class MissingFrontmatterError extends BuildError {
+  const MissingFrontmatterError(
+    String message, [
+    String? help,
+  ]) : super(message, help);
+
+  @override
+  String get name => 'MissingFrontmatterError';
 }
 
 /// Replace every shortcode inside text file with its value.

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io' show exit;
 
 import 'package:args/command_runner.dart';
 import 'package:blake/src/build/content_parser.dart';
@@ -19,6 +18,7 @@ import 'package:blake/src/shortcode.dart';
 import 'package:blake/src/sitemap_builder.dart';
 import 'package:blake/src/taxonomy.dart';
 import 'package:blake/src/util/either.dart';
+import 'package:blake/src/util/maybe.dart';
 import 'package:blake/src/utils.dart';
 import 'package:html/dom.dart' as html_dom;
 import 'package:html/parser.dart' as html_parser;
@@ -63,32 +63,47 @@ class BuildCommand extends Command<int> {
 
   @override
   FutureOr<int> run() async {
-    return build(config);
+    final result = await build(config);
+    return result.when(
+      () => 0,
+      (value) {
+        log.error(value);
+        return 1;
+      },
+    );
   }
 
-  Future<int> build(
+  Future<Maybe<BuildError>> build(
     Config config, {
     bool isServe = false,
   }) async {
     log.info('Building');
     _stopwatch.start();
     this.isServe = isServe;
-    final contentDir = (await getContentDirectory(config)).when<Directory>(
-      _exit,
-      (value) => value,
-    );
 
-    final content = (await _parseContent(contentDir)).when(
-      (error) => _exit<Content>(error),
-      (value) => value,
-    );
-    final pages = content.getPages();
+    final contentDir = await getContentDirectory(config);
+    if (contentDir.isError) {
+      return Just(contentDir.error);
+    }
+
+    final content = await _parseContent(contentDir.value);
+    if (content.isError) {
+      return Just(content.error);
+    }
+
+    final pages = content.value.getPages();
     final tags = _buildTaxonomy(pages);
     data = await parseDataTree(config);
     data['tags'] = tags;
 
     await _buildAliases(pages);
-    await _generateContent(content);
+
+    try {
+      await _generateContent(content.value);
+    } on BuildError catch (e) {
+      return Just(e);
+    }
+
     await _copyStaticFiles();
 
     await SitemapBuilder(
@@ -106,7 +121,7 @@ class BuildCommand extends Command<int> {
       '(${pages.length} pages)',
     );
     _stopwatch.reset();
-    return 0;
+    return const Nothing();
   }
 
   Future<Either<BuildError, Content>> _parseContent(
@@ -162,13 +177,23 @@ class BuildCommand extends Command<int> {
 
   Future<void> _buildSection(Section section) async {
     if (section.index != null) {
+      final pages = section.children
+          .whereType<Page>()
+          .map((content) => content.toMap())
+          .toList();
+
+      final sections = section.children
+          .whereType<Section>()
+          .map((content) => content.toMap())
+          .toList();
+
       await _buildPage(
         section.index!,
         extraData: <String, Object?>{
-          'children': section.children
-              .whereType<Page>()
-              .map((content) => content.toMap())
-              .toList(),
+          'children': pages,
+          'pages': pages,
+          'site': config.toMap(),
+          'sections': sections,
         },
       );
     }
@@ -272,13 +297,15 @@ class BuildCommand extends Command<int> {
     final file = fs.file(path);
 
     if (!await file.exists()) {
-      throw BuildError('Template $templateName does not exists');
+      throw BuildError(
+        "Template '$templateName' used in '${page.path}' does not exist.",
+      );
     }
 
     try {
       return config.environment.getTemplate(templateName);
     } on ArgumentError catch (e) {
-      _exit<void>(BuildError(e.toString()));
+      _abortBuild(BuildError(e.toString()));
       return null;
     }
   }
@@ -342,8 +369,12 @@ class BuildCommand extends Command<int> {
   }
 
   /// When error occurs, show log and exit program.
-  R _exit<R>(Exception reason) {
-    log.error(reason);
-    exit(1);
+  // R _exit<R>(Exception reason) {
+  //   log.error(reason);
+  //   // exit(1);
+  // }
+
+  void _abortBuild(BlakeError error) {
+    log.error(error, help: error.help);
   }
 }
