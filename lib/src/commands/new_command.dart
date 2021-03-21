@@ -6,6 +6,7 @@ import 'package:blake/src/config.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/utils.dart';
+import 'package:jinja/jinja.dart';
 
 /// Create new content based on predefined types.
 ///
@@ -98,9 +99,8 @@ class NewCommand extends Command<int> {
     }
 
     // TODO: Transform to pretty title.
-    final title = Path.basename(args.name);
-
-    final template = config.environment.getTemplate(types[args.type]!);
+    final title = Path.basenameWithoutExtension(args.name);
+    final template = Template(types[args.type]!);
     final data = <String, dynamic>{
       'title': title,
       'date': DateTime.now().toIso8601String(),
