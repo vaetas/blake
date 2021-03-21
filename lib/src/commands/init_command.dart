@@ -44,7 +44,7 @@ class InitCommand extends Command<int> {
 
     final serverStartHelp = generateInCurrentDir
         ? 'Start server by `blake serve`'
-        : 'Start server by `cd $name && blake serve`';
+        : 'Start server by `cd $projectDir && blake serve`';
     log.info(
       'Site initialized successfully\n       $serverStartHelp',
     );
