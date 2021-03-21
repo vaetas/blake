@@ -1,4 +1,3 @@
-import 'package:blake/src/errors.dart';
 import 'package:file/file.dart';
 import 'package:process_run/shell.dart';
 
@@ -7,12 +6,17 @@ class GitUtil {
 
   static final _shell = Shell(verbose: false);
 
-  static bool _isGitAvailable = false;
+  static bool _isGitDirectory = false;
+  static bool _isGitInstalled = false;
 
   static Future<DateTime?> getModified(File file) async {
     if (!await isGitInstalled()) {
       return null;
     }
+    if (!await isGitDir()) {
+      return null;
+    }
+
     // For already tracked files git returns date.
     // When file does not exists or is not yet tracked this returns empty string
     final result = await _shell.run(
@@ -25,6 +29,9 @@ class GitUtil {
   /// Get date when [file] was first tracked in git history.
   static Future<DateTime?> getCreated(File file) async {
     if (!await isGitInstalled()) {
+      return null;
+    }
+    if (!await isGitDir()) {
       return null;
     }
 
@@ -43,34 +50,34 @@ class GitUtil {
     }
   }
 
+  /// Checks if GIT is installed on current system and the command is available.
   static Future<bool> isGitInstalled() async {
     try {
-      await _ensureGitAvailable();
-      return _isGitAvailable;
+      final result = await which('git');
+      if (result == null) {
+        _isGitInstalled = false;
+      } else {
+        _isGitInstalled = true;
+      }
     } catch (e) {
-      return false;
+      _isGitInstalled = false;
     }
+
+    return _isGitInstalled;
   }
 
-  static Future<void> _ensureGitAvailable() async {
-    if (_isGitAvailable == true) return;
-
-    final result = await which('git');
-
-    if (result == null) {
-      _isGitAvailable = false;
-      throw const BuildError('Git must be available to use git methods');
-    } else {
-      _isGitAvailable = true;
-    }
-  }
-
+  /// Checks if current dir is git repository.
+  ///
+  /// The result value is cached after first invocation. However, when the users
+  /// starts local server and then runs `git init` this will not update its
+  /// result. We might change this in the future.
   static Future<bool> isGitDir() async {
     try {
       final result = await _shell.run('git status');
-      return result.errText.isEmpty;
+      _isGitDirectory = result.errText.isEmpty;
     } catch (e) {
-      return false;
+      _isGitDirectory = false;
     }
+    return _isGitDirectory;
   }
 }
