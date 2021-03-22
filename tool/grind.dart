@@ -1,11 +1,13 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:blake/src/utils.dart';
 import 'package:grinder/grinder.dart';
 
 part 'compile.dart';
+part 'docs.dart';
 
 void main(List<String> args) => grind(args);
 
