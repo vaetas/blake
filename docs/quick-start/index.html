@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://vaetas.github.io/blake/main.css" rel="stylesheet">
+    <title>
+Quick start guide — Blake Static
+</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+</head>
+<body>
+<div class="p-6 pb-12 mx-auto wrapper">
+    <a href="https://vaetas.github.io/blake/" class="font-bold text-lg">🚀 Blake Static</a>
+</div>
+<div class="wrapper mx-auto p-4 prose pb-40">
+
+<h1 class="font-bold">Quick start guide</h1>
+<div class="text-gray-400 rounded-md block pb-2">
+    <time datetime="" itemprop="datePublished"></time>
+</div>
+<p>Install Blake using <code>pub</code>.</p>
+<pre><code class="language-text">pub global activate blake
+</code></pre>
+<p>Initialize new project. This generates <code>config.yaml</code> file and 
+used directories for content and templates.</p>
+<pre><code class="language-text"># Create new project in current directory
+blake init
+
+# Create new project in `website` directory
+blake init website
+</code></pre>
+<p>Start local development server with auto-reload.</p>
+<pre><code class="language-text">blake serve
+</code></pre>
+<p>You should see a URL address in your terminal if the server started 
+successfully. Open it in your browser. By default, this address is <a href="http://127.0.0.1:4040/">http://127.0.0.1:4040/</a>.</p>
+<p>Because the initialized project does not have content or templates, 
+you must create them first.</p>
+<p>Inside <code>templates</code> directory create <code>page.html</code> template. Use <a href="https://vaetas.github.io/blake/docs/templates/">templates docs</a> 
+as a reference.</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;title&gt;{{ title }}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    {{ content }}
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Now inside <code>content</code> create <code>_index.md</code> page.</p>
+<pre><code class="language-markdown">---
+title: Homepage
+template: page.html
+---
+
+Hello world.
+</code></pre>
+<p>The YAML config inside <code>---</code> is called the frontmatter. You can access these values inside 
+your templates by its keys. The Markdown body (<em>Hello world.</em>) can be accessed using <code>content</code> key 
+in the templates.</p>
+<p>Now you need to reload your browser tab to properly initialize live-reload script. This 
+script is only injected into generated HTML pages and because we have only created the first 
+page now, live-reload will not work without manual reload. Subsequent edits will trigger 
+reloads correctly in your browser.</p>
+
+
+</div>
+</body>
+</html>
