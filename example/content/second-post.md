@@ -2,6 +2,8 @@
 title: Second post
 ---
 
+{{ site.baseUrl }}
+
 {{< code file="main.dart" >}}
 ```dart
 void main() {
@@ -18,3 +20,8 @@ Hello.
 |---|---|---|---|---|
 | 1 | 2 | 3 | 4 | 5 |
 | 1 | 2 | 3 | 4 | 5 |
+
+{% raw %}
+Tag {% raw %} can escape jinja tags {{ like this }} or {% this %}. See source code 
+of this page.
+{% endraw %}

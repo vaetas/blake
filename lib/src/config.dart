@@ -68,7 +68,7 @@ class Config {
     return {
       _kTitle: title,
       _kAuthor: author,
-      _kBaseUrl: baseUrl,
+      'baseUrl': baseUrl,
       _kBuild: build.toMap(),
       _kServe: serve.toMap(),
       _kTemplates: templates.toMap(),

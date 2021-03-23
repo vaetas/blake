@@ -177,6 +177,7 @@ class BuildCommand extends Command<int> {
 
   Future<void> _buildSection(Section section) async {
     if (section.index != null) {
+      final children = section.children.map((e) => e.toMap()).toList();
       final pages = section.children
           .whereType<Page>()
           .map((content) => content.toMap())
@@ -187,17 +188,11 @@ class BuildCommand extends Command<int> {
           .map((content) => content.toMap())
           .toList();
 
-      // TODO: Refactor
-      final site = Map<String, Object?>.from(config.toMap());
-      final baseUrl = config.getBaseUrl(isServe: isServe);
-      site['baseUrl'] = baseUrl;
-
       await _buildPage(
         section.index!,
         extraData: <String, Object?>{
-          'children': pages,
+          'children': children,
           'pages': pages,
-          'site': site,
           'sections': sections,
         },
       );
@@ -228,21 +223,18 @@ class BuildCommand extends Command<int> {
     }
 
     final template = await _getTemplate(page, config);
-
-    // TODO: Refactor
-    final site = Map<String, Object?>.from(config.toMap());
     final baseUrl = config.getBaseUrl(isServe: isServe);
-    site['baseUrl'] = baseUrl;
-
     final metadata = <String, Object?>{
       'title': page.title,
-      'content': page.content,
-      'site': site,
+      'site': config.toMap()..set('baseUrl', baseUrl),
       'template': template!.path,
       'data': data,
     }
       ..addAll(page.metadata)
       ..addAll(extraData);
+
+    final content = Template(page.content ?? '').renderMap(metadata);
+    metadata['content'] = content;
 
     var output = template.renderMap(metadata);
 
@@ -386,5 +378,11 @@ class BuildCommand extends Command<int> {
 
   void _abortBuild(BlakeError error) {
     log.error(error, help: error.help);
+  }
+}
+
+extension MapExtension<K, V> on Map<K, V> {
+  void set(K key, V value) {
+    this[key] = value;
   }
 }
