@@ -233,8 +233,18 @@ class BuildCommand extends Command<int> {
       ..addAll(page.metadata)
       ..addAll(extraData);
 
-    final content = Template(page.content ?? '').renderMap(metadata);
-    metadata['content'] = content;
+    final useJinjaContent = page.metadata['jinja'] as bool?;
+
+    if (useJinjaContent != null && useJinjaContent) {
+      try {
+        final content = Template(page.content ?? '').renderMap(metadata);
+        metadata['content'] = content;
+      } catch (e) {
+        _abortBuild(BuildError(e.toString(), 'Fix file ${page.path}'));
+      }
+    } else {
+      metadata['content'] = page.content;
+    }
 
     var output = template.renderMap(metadata);
 
