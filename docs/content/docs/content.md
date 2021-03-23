@@ -17,7 +17,7 @@ tags: ['flutter', 'dart']
 Lorem ipsum dolor sit amet.
 ```
 
-You can omit YAML fields, but frontmatter delimiter still needs to be used. Below is a minimal example without any YAML metadata.
+You can omit YAML fields, but frontmatter delimiter is still required. Below is a minimal example without any YAML metadata.
 
 ```
 ---
@@ -26,15 +26,18 @@ You can omit YAML fields, but frontmatter delimiter still needs to be used. Belo
 Lorem ipsum dolor sit amet.
 ```
 
-Some frontmatter keywords are reserved and you should only use them for defined purposes.
+Some frontmatter keywords are reserved, and you should only use them for defined purposes.
 
-* `title` (String) -- page title.
-* `public` (bool) -- when false the page in not build but is still accessible as a data.
-* `tags` (List)
-* `aliases` (List) -- page that redirect to current page.
-* `template` (String) -- select which template to use.
-* `date` (String) -- file creation date in ISO format.
-* `updated` (String) -- file updated date. By default, when this is not set, git is used to find out last modification date (if possible).
+| Key      | Type           | Default | Description                             |
+|----------|----------------|---------|-----------------------------------------|
+| title    | String         |         | Title of the page                       |
+| template | String         |         | Name of the template (e.g. `page.html`) |
+| public   | bool           | true    | Generate HTML from this page            |
+| tags     | List\<String\> |         | Page tags                               |
+| aliases  | List\<String\> |         | Redirects to this page                  |
+| date     | String         |         | Create date                             |
+| updated  | String         |         | Update date                             |
+| jinja    | bool           | false   | Allow jinja templates in Markdown       |
 
 Below is an example frontmatter for Markdown file.
 
@@ -76,3 +79,7 @@ file.
 Your directory will have structure as in the example above. However, your published 
 page will only have `/projects/` path rendered. If you try to visit `/projects/blake/` 
 you will see a 404 error.
+
+## Markdown
+
+Blake uses [markdown](https://pub.dev/packages/markdown) package for rendering.

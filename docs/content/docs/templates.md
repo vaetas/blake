@@ -24,6 +24,7 @@ should be located in `templates/shortcodes/` directory.
 
 Below is an example of a simple template for pages.
 
+{% raw %}
 ```html
 <!doctype html>
 <html lang="en">
@@ -35,3 +36,4 @@ Below is an example of a simple template for pages.
 </body>
 </html>
 ```
+{% endraw %}

@@ -1,6 +1,7 @@
 ---
 title: Quick start guide
 template: page.html
+date: 2021-03-22
 ---
 
 Install Blake using `pub`.
@@ -35,6 +36,7 @@ you must create them first.
 Inside `templates` directory create `page.html` template. Use [templates docs](https://vaetas.github.io/blake/docs/templates/) 
 as a reference.
 
+{% raw %}
 ```html
 <!doctype html>
 <html lang="en">
@@ -46,6 +48,7 @@ as a reference.
 </body>
 </html>
 ```
+{% endraw %}
 
 Now inside `content` create `_index.md` page.
 
