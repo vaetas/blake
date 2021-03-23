@@ -36,7 +36,7 @@ class ShortcodeTemplate {
 /// Example of a shortcode without body.
 ///
 /// ```dart
-/// {{ inline x=123 }}
+/// {{< inline x=123 />}}
 /// ```
 ///
 /// Example of a shortcode with body. Body will be set as a `body` argument.
@@ -54,17 +54,15 @@ class Shortcode {
 
   Shortcode.block({
     required this.name,
-    required this.arguments,
+    required List<Argument> arguments,
     required String body,
-  }) {
-    arguments.add(Argument(name: 'body', value: body));
-  }
+  }) : arguments = [...arguments, Argument(name: 'body', value: body)];
 
   final String name;
   final List<Argument> arguments;
 
-  Map<String, dynamic> getValues() {
-    return <String, dynamic>{
+  Map<String, Object?> getValues() {
+    return {
       for (final arg in arguments) arg.name: arg.value,
     };
   }
@@ -96,7 +94,7 @@ class Argument {
   });
 
   String name;
-  dynamic value;
+  Object? value;
 
   @override
   bool operator ==(Object other) =>
@@ -120,7 +118,7 @@ class ShortcodeParser {
   /// Parses inline shortcode.
   ///
   /// ```dart
-  /// {{ block x=123 }}
+  /// {{< name x=123 />}}
   /// ```
   Shortcode parseInline(String input) {
     return grammar.inlineShortcode.parse(input).value;
@@ -129,9 +127,9 @@ class ShortcodeParser {
   /// Parses body shortcode.
   ///
   /// ```dart
-  /// {{< block x=123 >}}
+  /// {{< name x=123 >}}
   ///   This is a block body
-  /// {{< /block >}}
+  /// {{< /name >}}
   /// ```
   Shortcode parseBlock(String input) {
     return grammar.blockShortcode.parse(input).value;
@@ -162,7 +160,7 @@ class ShortcodeGrammar {
       });
 
   Parser<Shortcode> get inlineShortcode =>
-      (string('{{') & shortcode.trim() & string('}}'))
+      (string('{{<') & shortcode.trim() & string('/>}}'))
           .map((value) => value[1] as Shortcode);
 
   Parser<List<dynamic>> get blockStart =>

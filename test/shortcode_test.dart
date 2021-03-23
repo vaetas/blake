@@ -71,7 +71,9 @@ void main() {
   group('Parse inline shortcode', () {
     test('1', () {
       expect(
-        grammar.inlineShortcode.parse('{{ inline x=1 y="hello world" }}').value,
+        grammar.inlineShortcode
+            .parse('{{< inline x=1 y="hello world" />}}')
+            .value,
         equals(exampleInlineShortcode),
       );
     });

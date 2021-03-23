@@ -33,7 +33,7 @@ You could use this shortcode in your Markdown file with the following syntax:
 **Hello world**
 This is some text.
 
-{{ block name="John" surname="Doe" }}
+{{< block name="John" surname="Doe" />}}
 ```
 
 You can also have body-styled shortcodes. They must use `{{< shortcode >}}` syntax and have a `{{< /shortcode >}}` end tag.

@@ -167,7 +167,7 @@ class ShortcodeRenderer {
        Inline shortcodes
       */
 
-      final pattern = RegExp('\\{{2} ${shortcode.name} ((?!\\/).)* \\}{2}');
+      final pattern = RegExp('\\{{2}< ${shortcode.name} ((?!\\/).)* />\\}{2}');
       final inlineMatches = pattern.allMatches(input);
 
       for (final match in inlineMatches) {

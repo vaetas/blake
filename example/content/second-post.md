@@ -10,7 +10,7 @@ void main() {
 ```
 {{< /code >}}
 
-{{ info text="Hello-world!" }}
+{{< info text="Hello-world!" />}}
 
 Hello.
 
