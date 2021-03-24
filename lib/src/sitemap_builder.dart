@@ -34,7 +34,8 @@ class SitemapBuilder {
   Future<Iterable<XmlNode>> _buildNodes() async {
     return pages.asyncMap((e) async {
       final _updated = await e.getUpdated(config);
-
+      final url = e.getPublicUrl(config);
+      print(url);
       return XmlElement(
         XmlName('url'),
         [],
@@ -42,7 +43,7 @@ class SitemapBuilder {
           XmlElement(
             XmlName('loc'),
             [],
-            [XmlText(e.getPublicUrl(config))],
+            [XmlText(url)],
           ),
           if (_updated != null)
             XmlElement(

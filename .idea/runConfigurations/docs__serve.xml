@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="docs: serve" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+    <option name="arguments" value="serve" />
+    <option name="filePath" value="$PROJECT_DIR$/bin/blake.dart" />
+    <option name="workingDirectory" value="$PROJECT_DIR$/docs" />
+    <method v="2" />
+  </configuration>
+</component>

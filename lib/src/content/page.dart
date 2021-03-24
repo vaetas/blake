@@ -92,10 +92,14 @@ class Page extends Content {
   }
 
   String getPublicUrl(Config config, {bool isServe = false}) {
+    final baseUrl = config.baseUrl.endsWith('/')
+        ? config.baseUrl.substring(0, config.baseUrl.length - 1)
+        : config.baseUrl;
+
     return getBuildPath(config)
         .replaceFirst(
           config.build.publicDir,
-          isServe ? 'http://127.0.0.1:${config.serve.port}' : config.baseUrl,
+          isServe ? 'http://127.0.0.1:${config.serve.port}' : baseUrl,
         )
         .replaceFirst('index.html', '');
   }
