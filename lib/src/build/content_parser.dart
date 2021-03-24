@@ -8,13 +8,11 @@ import 'package:blake/src/errors.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/git_util.dart';
 import 'package:blake/src/log.dart';
-import 'package:blake/src/markdown/footnote_syntax.dart';
 import 'package:blake/src/markdown/markdown_file.dart';
 import 'package:blake/src/shortcode.dart';
 import 'package:blake/src/utils.dart';
 import 'package:file/file.dart';
 import 'package:jinja/jinja.dart';
-import 'package:markdown/markdown.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
 final _delimiter = RegExp(r'(---)(\n|\r)?');
@@ -110,27 +108,11 @@ class ContentParser {
 
     final m = yaml.loadYaml(metadata) as yaml.YamlMap?;
 
-    final content = ShortcodeRenderer(
-      shortcodeTemplates: shortcodeTemplates,
-      environment: config.environment,
-    ).render(
-      markdown.substring(matches[1].end).trim(),
-    );
-
-    final parsed = markdownToHtml(
-      content,
-      extensionSet: ExtensionSet.gitHubWeb,
-      blockSyntaxes: [
-        FootnoteSyntax(),
-      ],
-      inlineSyntaxes: [
-        FootnoteReferenceSyntax(),
-      ],
-    );
+    final content = markdown.substring(matches[1].end).trim();
 
     return MarkdownFile(
-      content: parsed,
-      metadata: m ?? yaml.YamlMap.wrap(<dynamic, dynamic>{}),
+      content: content,
+      metadata: m ?? yaml.YamlMap.wrap(<String, Object?>{}),
     );
   }
 }

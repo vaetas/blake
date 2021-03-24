@@ -15,6 +15,7 @@ class RedirectPage extends Page {
     return {};
   }
 
+  // FIXME: This should not be inside Markdown content.
   @override
   String? get content {
     return '''

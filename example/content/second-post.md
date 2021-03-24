@@ -1,18 +1,23 @@
 ---
 title: Second post
+jinja: true
+test: {a: 123}
 ---
 
 {{ site.baseUrl }}
 
-{{< code file="main.dart" >}}
+Value from frontmatter: {{ test['a'] }}
+
+{< code file="main.dart" >}
 ```dart
 void main() {
     print('Hello world');
 }
 ```
-{{< /code >}}
+{< /code >}
 
-{{< info text="Hello-world!" />}}
+{< info text="Hello-world!" />}
+
 
 Hello.
 

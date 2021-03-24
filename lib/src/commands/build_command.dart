@@ -13,6 +13,7 @@ import 'package:blake/src/data.dart';
 import 'package:blake/src/errors.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
+import 'package:blake/src/markdown/footnote_syntax.dart';
 import 'package:blake/src/search.dart';
 import 'package:blake/src/shortcode.dart';
 import 'package:blake/src/sitemap_builder.dart';
@@ -23,6 +24,7 @@ import 'package:blake/src/utils.dart';
 import 'package:html/dom.dart' as html_dom;
 import 'package:html/parser.dart' as html_parser;
 import 'package:jinja/jinja.dart';
+import 'package:markdown/markdown.dart';
 
 class BuildCommand extends Command<int> {
   BuildCommand(this.config) {
@@ -60,6 +62,8 @@ class BuildCommand extends Command<int> {
       '<script src="http://127.0.0.1:${config.serve.port}/reload.js"></script>',
     );
   }
+
+  late List<ShortcodeTemplate> shortcodeTemplates;
 
   @override
   FutureOr<int> run() async {
@@ -135,11 +139,10 @@ class BuildCommand extends Command<int> {
       final shortcodesDir = fs.directory(shortcodesDirPath);
 
       // TODO: Create shortcodes dir during initialization.
-      List<ShortcodeTemplate> shortcodes;
       if (await shortcodesDir.exists()) {
         final shortcodeFiles = await shortcodesDir.list().toList();
 
-        shortcodes =
+        shortcodeTemplates =
             await shortcodeFiles.whereType<File>().asyncMap<ShortcodeTemplate>(
           (e) async {
             return ShortcodeTemplate(
@@ -149,11 +152,11 @@ class BuildCommand extends Command<int> {
           },
         );
       } else {
-        shortcodes = [];
+        shortcodeTemplates = [];
       }
 
       final parser = ContentParser(
-        shortcodeTemplates: shortcodes,
+        shortcodeTemplates: shortcodeTemplates,
         config: config,
       );
       final content = await parser.parse(contentDir);
@@ -210,6 +213,7 @@ class BuildCommand extends Command<int> {
     }
   }
 
+  /// Processes content in following order: Jinja -> shortcodes -> markdown.
   Future<void> _buildPage(
     Page page, {
     Map<String, Object?> extraData = const <String, Object>{},
@@ -233,12 +237,15 @@ class BuildCommand extends Command<int> {
       ..addAll(page.metadata)
       ..addAll(extraData);
 
-    final useJinjaContent = page.metadata['jinja'] as bool?;
+    final useJinjaContent = page.metadata['jinja'] as bool? ?? false;
 
-    if (useJinjaContent != null && useJinjaContent) {
+    var content = page.content ?? '';
+    // print('Content: $content');
+    if (useJinjaContent) {
       try {
-        final content = Template(page.content ?? '').renderMap(metadata);
-        metadata['content'] = content;
+        content = Template(
+          page.content ?? '',
+        ).renderMap(metadata);
       } catch (e) {
         _abortBuild(BuildError(e.toString(), 'Fix file ${page.path}'));
       }
@@ -246,6 +253,19 @@ class BuildCommand extends Command<int> {
       metadata['content'] = page.content;
     }
 
+    final renderedShortcodeContent = ShortcodeRenderer(
+      shortcodeTemplates: shortcodeTemplates,
+      environment: config.environment,
+    ).render(content);
+
+    final renderedMarkdownContent = markdownToHtml(
+      renderedShortcodeContent,
+      extensionSet: ExtensionSet.gitHubWeb,
+      blockSyntaxes: [FootnoteSyntax()],
+      inlineSyntaxes: [FootnoteReferenceSyntax()],
+    );
+
+    metadata['content'] = renderedMarkdownContent;
     var output = template.renderMap(metadata);
 
     if (isServe) {

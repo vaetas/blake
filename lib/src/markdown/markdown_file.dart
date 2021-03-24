@@ -8,6 +8,6 @@ class MarkdownFile {
 
   final YamlMap metadata;
 
-  /// Raw markdown content.
+  /// Unrendered markdown content.
   final String content;
 }
