@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://vaetas.github.io/blake//</loc>
+    <loc>https://vaetas.github.io/blake/</loc>
     <lastmod>2021-03-21T23:37:53.000Z</lastmod>
   </url>
   <url>
-    <loc>https://vaetas.github.io/blake//docs/search/</loc>
+    <loc>https://vaetas.github.io/blake/docs/search/</loc>
     <lastmod>2021-03-21T23:37:53.000Z</lastmod>
   </url>
   <url>
-    <loc>https://vaetas.github.io/blake//docs/templates/</loc>
+    <loc>https://vaetas.github.io/blake/docs/templates/</loc>
+    <lastmod>2021-03-23T01:24:13.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://vaetas.github.io/blake/docs/taxonomy/</loc>
+    <lastmod>2021-03-23T01:24:13.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://vaetas.github.io/blake/docs/content/</loc>
+    <lastmod>2021-03-23T01:24:13.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://vaetas.github.io/blake/docs/quick-start/</loc>
+    <lastmod>2021-03-23T01:24:13.000Z</lastmod>
+  </url>
+  <url>
+    <loc>https://vaetas.github.io/blake/docs/install/</loc>
     <lastmod>2021-03-21T23:37:53.000Z</lastmod>
   </url>
   <url>
-    <loc>https://vaetas.github.io/blake//docs/taxonomy/</loc>
+    <loc>https://vaetas.github.io/blake/docs/deploy/</loc>
     <lastmod>2021-03-21T23:37:53.000Z</lastmod>
   </url>
   <url>
-    <loc>https://vaetas.github.io/blake//docs/content/</loc>
-    <lastmod>2021-03-21T23:37:53.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://vaetas.github.io/blake//docs/quick-start/</loc>
-  </url>
-  <url>
-    <loc>https://vaetas.github.io/blake//docs/install/</loc>
-    <lastmod>2021-03-21T23:37:53.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://vaetas.github.io/blake//docs/deploy/</loc>
-    <lastmod>2021-03-21T23:37:53.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://vaetas.github.io/blake//docs/shortcodes/</loc>
-    <lastmod>2021-03-21T23:37:53.000Z</lastmod>
+    <loc>https://vaetas.github.io/blake/docs/shortcodes/</loc>
+    <lastmod>2021-03-23T00:19:15.000Z</lastmod>
   </url>
 </urlset>

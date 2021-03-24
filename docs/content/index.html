@@ -28,22 +28,14 @@ tags: ['flutter', 'dart']
 
 Lorem ipsum dolor sit amet.
 </code></pre>
-<p>You can omit YAML fields, but frontmatter delimiter still needs to be used. Below is a minimal example without any YAML metadata.</p>
+<p>You can omit YAML fields, but frontmatter delimiter is still required. Below is a minimal example without any YAML metadata.</p>
 <pre><code>---
 ---
 
 Lorem ipsum dolor sit amet.
 </code></pre>
-<p>Some frontmatter keywords are reserved and you should only use them for defined purposes.</p>
-<ul>
-<li><code>title</code> (String) -- page title.</li>
-<li><code>public</code> (bool) -- when false the page in not build but is still accessible as a data.</li>
-<li><code>tags</code> (List)</li>
-<li><code>aliases</code> (List) -- page that redirect to current page.</li>
-<li><code>template</code> (String) -- select which template to use.</li>
-<li><code>date</code> (String) -- file creation date in ISO format.</li>
-<li><code>updated</code> (String) -- file updated date. By default, when this is not set, git is used to find out last modification date (if possible).</li>
-</ul>
+<p>Some frontmatter keywords are reserved, and you should only use them for defined purposes.</p>
+<table><thead><tr><th>Key</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>title</td><td>String</td><td></td><td>Title of the page</td></tr><tr><td>template</td><td>String</td><td></td><td>Name of the template (e.g. <code>page.html</code>)</td></tr><tr><td>public</td><td>bool</td><td>true</td><td>Generate HTML from this page</td></tr><tr><td>tags</td><td>List&lt;String&gt;</td><td></td><td>Page tags</td></tr><tr><td>aliases</td><td>List&lt;String&gt;</td><td></td><td>Redirects to this page</td></tr><tr><td>date</td><td>String</td><td></td><td>Create date</td></tr><tr><td>updated</td><td>String</td><td></td><td>Update date</td></tr><tr><td>jinja</td><td>bool</td><td>false</td><td>Allow jinja templates in Markdown</td></tr></tbody></table>
 <p>Below is an example frontmatter for Markdown file.</p>
 <pre><code class="language-yaml">title: Post
 template: page.html
@@ -74,6 +66,8 @@ file.</p>
 <p>Your directory will have structure as in the example above. However, your published 
 page will only have <code>/projects/</code> path rendered. If you try to visit <code>/projects/blake/</code> 
 you will see a 404 error.</p>
+<h2 id="markdown">Markdown</h2>
+<p>Blake uses <a href="https://pub.dev/packages/markdown">markdown</a> package for rendering.</p>
 
 
 </div>

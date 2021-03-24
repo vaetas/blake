@@ -17,7 +17,7 @@ Quick start guide — Blake Static
 
 <h1 class="font-bold">Quick start guide</h1>
 <div class="text-gray-400 rounded-md block pb-2">
-    <time datetime="" itemprop="datePublished"></time>
+    <time datetime="2021-03-22" itemprop="datePublished">2021-03-22</time>
 </div>
 <p>Install Blake using <code>pub</code>.</p>
 <pre><code class="language-text">pub global activate blake
@@ -39,6 +39,7 @@ successfully. Open it in your browser. By default, this address is <a href="http
 you must create them first.</p>
 <p>Inside <code>templates</code> directory create <code>page.html</code> template. Use <a href="https://vaetas.github.io/blake/docs/templates/">templates docs</a> 
 as a reference.</p>
+<p>{% raw %}</p>
 <pre><code class="language-html">&lt;!doctype html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
@@ -49,6 +50,7 @@ as a reference.</p>
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
+<p>{% endraw %}</p>
 <p>Now inside <code>content</code> create <code>_index.md</code> page.</p>
 <pre><code class="language-markdown">---
 title: Homepage
