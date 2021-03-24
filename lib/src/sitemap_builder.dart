@@ -35,7 +35,6 @@ class SitemapBuilder {
     return pages.asyncMap((e) async {
       final _updated = await e.getUpdated(config);
       final url = e.getPublicUrl(config);
-      print(url);
       return XmlElement(
         XmlName('url'),
         [],
