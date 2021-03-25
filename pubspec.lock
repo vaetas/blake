@@ -114,7 +114,7 @@ packages:
       name: glob
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   grinder:
     dependency: "direct dev"
     description:
@@ -156,7 +156,7 @@ packages:
       name: jinja
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "0.3.1"
   js:
     dependency: transitive
     description:
