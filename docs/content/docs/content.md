@@ -2,6 +2,7 @@
 title: Content
 date: 2021-03-21
 template: page.html
+jinja: true
 ---
 
 ## Page
@@ -83,3 +84,21 @@ you will see a 404 error.
 ## Markdown
 
 Blake uses [markdown](https://pub.dev/packages/markdown) package for rendering.
+
+## Jinja in Markdown
+
+Pages can optionally use Jinja templating. This behavior is disabled by default. You can enable it
+by settings `jinja` frontmatter param to `true`. If you don't need to access Jinja variables inside the
+file leave this turned off for better performance.
+
+For example, you can use this to access site properties, like base URL, inside your content.
+
+{% raw %}
+```markdown
+## Header
+Click [on this link]({{ site.baseUrl }}) to go home.
+```
+{% endraw %}
+
+Jinja templates are rendered first, then the shortcodes, and Markdown is rendered last. You can
+therefore use Jinja inside your shortcodes easily.

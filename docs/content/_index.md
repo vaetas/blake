@@ -9,7 +9,7 @@ It is provided as a single binary and can be used even without Dart installed.
 
 * Markdown support.
 * YAML configuration and front-matter.
-* Jinja templates.
+* Jinja templates. Also usable in Markdown files.
 * Live-reload during development.
 * Compiled into single native binary.
 * YAML/JSON data content and non-public Data pages.

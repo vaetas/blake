@@ -1,7 +1,8 @@
 import 'package:blake/src/build/build_config.dart';
 import 'package:blake/src/commands/serve_command.dart';
 import 'package:blake/src/serve/serve_config.dart';
-import 'package:blake/src/templates_config.dart';
+import 'package:blake/src/template/environment.dart';
+import 'package:blake/src/template/templates_config.dart';
 import 'package:jinja/jinja.dart';
 import 'package:yaml/yaml.dart';
 
@@ -53,10 +54,9 @@ class Config {
   /// [FileSystemLoader.autoReload] is not required because we handle reloading
   /// templates ourselves inside [ServeCommand]. Only this way we can ensure
   /// the template is updated before triggering rebuild.
-  late var environment = Environment(
+  late final environment = CustomEnvironment(
     loader: FileSystemLoader(
       path: build.templatesDir,
-      autoReload: false,
     ),
   );
 

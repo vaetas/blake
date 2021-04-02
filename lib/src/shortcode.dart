@@ -1,6 +1,6 @@
+import 'package:blake/src/template/environment.dart';
 import 'package:blake/src/util/equals.dart';
 import 'package:blake/src/utils.dart';
-import 'package:jinja/jinja.dart';
 import 'package:petitparser/petitparser.dart';
 
 /// [ShortcodeTemplate] is a single file inside `templates/shortcodes` folder.
@@ -17,7 +17,7 @@ class ShortcodeTemplate {
 
   /// Render shortcode [template] using [values] with Jinja.
   String render({
-    required Environment environment,
+    required CustomEnvironment environment,
     required Map<String, dynamic> values,
   }) {
     final templatePath = Path.join('shortcodes', '$name.html');

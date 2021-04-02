@@ -2,6 +2,7 @@
 title: Shortcodes
 date: 2021-03-21
 template: page.html
+jinja: true
 ---
 
 Shortcodes can be used inside your Markdown files. They are replaced template values before parsing Markdown.
@@ -16,6 +17,7 @@ Shortcodes folder does not allows subfolders. Only files inside the `template/sh
 
 See an example of a shortcode called `block.html`:
 
+{% raw %}
 ```html
 <div class="block">
   <div class="block-title">
@@ -26,6 +28,9 @@ See an example of a shortcode called `block.html`:
   {{ body }}
 </div>
 ```
+{% endraw %}
+
+See article about [templates]({{ site.baseUrl }}docs/templates/) for more info.
 
 You could use this shortcode in your Markdown file with the following syntax:
 

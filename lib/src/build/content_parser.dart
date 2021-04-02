@@ -10,9 +10,9 @@ import 'package:blake/src/git_util.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/markdown/markdown_file.dart';
 import 'package:blake/src/shortcode.dart';
+import 'package:blake/src/template/environment.dart';
 import 'package:blake/src/utils.dart';
 import 'package:file/file.dart';
-import 'package:jinja/jinja.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
 final _delimiter = RegExp(r'(---)(\n|\r)?');
@@ -136,7 +136,7 @@ class ShortcodeRenderer {
     required this.shortcodeTemplates,
   });
 
-  final Environment environment;
+  final CustomEnvironment environment;
   final List<ShortcodeTemplate> shortcodeTemplates;
 
   final parser = ShortcodeParser();
