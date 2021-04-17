@@ -24,7 +24,7 @@ import 'package:blake/src/utils.dart';
 import 'package:file/file.dart';
 import 'package:html/dom.dart' as html_dom;
 import 'package:html/parser.dart' as html_parser;
-import 'package:jinja/jinja.dart';
+import 'package:jinja/jinja.dart' as jinja;
 import 'package:markdown/markdown.dart';
 
 class BuildCommand extends Command<int> {
@@ -238,17 +238,15 @@ class BuildCommand extends Command<int> {
       ..addAll(page.metadata)
       ..addAll(extraData);
 
-    final useJinjaContent = page.metadata['jinja'] as bool? ?? false;
-
     var content = page.content ?? '';
-    // print('Content: $content');
-    if (useJinjaContent) {
+
+    if (page.jinja) {
       try {
-        content = Template(
-          page.content ?? '',
-        ).renderMap(metadata);
+        content = config.environment
+            .fromString(page.content ?? '')
+            .renderMap(metadata);
       } catch (e) {
-        _abortBuild(BuildError(e.toString(), 'Fix file ${page.path}'));
+        _abortBuild(BuildError(e.toString(), '  Fix file ${page.path}'));
       }
     } else {
       metadata['content'] = page.content;
@@ -317,7 +315,7 @@ class BuildCommand extends Command<int> {
 
   /// Get template to render given [page]. If there is a `template` field in
   /// page front-matter it is used. Otherwise default template will used.
-  Future<Template?> _getTemplate(
+  Future<jinja.Template?> _getTemplate(
     Page page,
     Config config,
   ) async {

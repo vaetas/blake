@@ -2,6 +2,7 @@
 title: Quick start guide
 template: page.html
 date: 2021-03-22
+jinja: true
 ---
 
 Install Blake using `pub`.

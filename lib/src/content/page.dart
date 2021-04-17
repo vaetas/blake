@@ -23,6 +23,8 @@ class Page extends Content {
   late final List<dynamic> tags =
       metadata['tags'] as List<dynamic>? ?? <dynamic>[];
 
+  late final bool jinja = metadata['jinja'] as bool? ?? false;
+
   late List<dynamic> aliases =
       metadata['aliases'] as List<dynamic>? ?? <dynamic>[];
 

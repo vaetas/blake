@@ -3,30 +3,37 @@ import 'package:yaml/yaml.dart';
 /// Configuration for building static site.
 class BuildConfig {
   const BuildConfig({
-    this.verbose = false,
-    this.publicDir = 'public',
-    this.contentDir = 'content',
-    this.templatesDir = 'templates',
-    this.staticDir = 'static',
-    this.dataDir = 'data',
-    this.typesDir = 'types',
-    this.generateSearchIndex = false,
-  });
+    bool? verbose,
+    String? publicDir,
+    String? contentDir,
+    String? templatesDir,
+    String? staticDir,
+    String? dataDir,
+    String? typesDir,
+    bool? generateSearchIndex,
+  })  : verbose = verbose ?? false,
+        publicDir = publicDir ?? 'public',
+        contentDir = contentDir ?? 'content',
+        templatesDir = templatesDir ?? 'templates',
+        staticDir = staticDir ?? 'static',
+        dataDir = dataDir ?? 'data',
+        typesDir = typesDir ?? 'types',
+        generateSearchIndex = generateSearchIndex ?? false;
 
-  // TODO: Is it necessary to specify default values inside both constructors?
   factory BuildConfig.fromYaml(YamlMap? map) {
-    if (map == null) {
+    if (map == null || map.isEmpty) {
       return const BuildConfig();
     }
+
     return BuildConfig(
-      verbose: map[_kVerbose] as bool? ?? false,
-      publicDir: map[_kPublicDir] as String? ?? 'public',
-      contentDir: map[_kContentDir] as String? ?? 'templates',
-      templatesDir: map[_kTemplatesDir] as String? ?? 'templates',
-      staticDir: map[_kStaticDir] as String? ?? 'static',
-      dataDir: map[_kDataDir] as String? ?? 'data',
-      typesDir: map[_kTypesDir] as String? ?? 'types',
-      generateSearchIndex: map[_kGenerateSearchIndex] as bool? ?? false,
+      verbose: map[_kVerbose] as bool?,
+      publicDir: map[_kPublicDir] as String?,
+      contentDir: map[_kContentDir] as String?,
+      templatesDir: map[_kTemplatesDir] as String?,
+      staticDir: map[_kStaticDir] as String?,
+      dataDir: map[_kDataDir] as String?,
+      typesDir: map[_kTypesDir] as String?,
+      generateSearchIndex: map[_kGenerateSearchIndex] as bool?,
     );
   }
 
@@ -63,11 +70,12 @@ class BuildConfig {
       _kStaticDir: staticDir,
       _kDataDir: dataDir,
       _kTypesDir: typesDir,
+      _kGenerateSearchIndex: generateSearchIndex,
     };
   }
 
   @override
-  String toString() => '${toMap()}';
+  String toString() => 'BuildConfig{${toMap()}}';
 }
 
 const _kVerbose = 'verbose';

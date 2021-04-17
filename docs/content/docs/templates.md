@@ -2,6 +2,7 @@
 title: Templates
 date: 2021-03-21
 template: page.html
+jinja: true
 ---
 
 Blake uses [jinja templates](https://jinja.palletsprojects.com/en/2.11.x/) 
@@ -19,7 +20,7 @@ directory (you can customize this location in `config.yaml`).
 ```
 
 Templates directory contains `shortcodes` subdirectory. This directory 
-must be used to place your [shortcodes](https://vaetas.github.io/blake/docs/shortcodes/). Therefore, by default all shortcodes 
+must be used to place your [shortcodes]({{ site.baseUrl }}docs/shortcodes/). Therefore, by default all shortcodes
 should be located in `templates/shortcodes/` directory.
 
 Below is an example of a simple template for pages.

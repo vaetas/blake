@@ -1,4 +1,5 @@
 import 'package:blake/src/shortcode.dart';
+import 'package:blake/src/template/environment.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -97,6 +98,27 @@ void main() {
             body: 'This is a block body',
           ),
         ),
+      );
+    });
+  });
+  group('Jinja skips shortcodes', () {
+    final env = CustomEnvironment();
+    test('inline', () {
+      final template = env.fromString(
+        '{{< code >}}Hello {{ name }}!{{< /user >}} {{ "abc" }}',
+      );
+      expect(
+        template.render(name: 'Jhon'),
+        '{{< code >}}Hello Jhon!{{< /user >}} abc',
+      );
+    });
+    test('body', () {
+      final template = env.fromString(
+        '{{ "abc" }} {{< code \>}} Hello {{ name }}',
+      );
+      expect(
+        template.render(name: 'Jhon'),
+        'abc {{< code >}} Hello Jhon',
       );
     });
   });

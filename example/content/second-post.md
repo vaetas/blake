@@ -8,15 +8,15 @@ test: {a: 123}
 
 Value from frontmatter: {{ test['a'] }}
 
-{< code file="main.dart" >}
+{{< code file="main.dart" >}}
 ```dart
 void main() {
     print('Hello world');
 }
 ```
-{< /code >}
+{{< /code >}}
 
-{< info text="Hello-world!" />}
+{{< info text="Hello-world!" />}}
 
 
 Hello.
