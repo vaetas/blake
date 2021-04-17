@@ -21,6 +21,7 @@ import 'package:blake/src/taxonomy.dart';
 import 'package:blake/src/util/either.dart';
 import 'package:blake/src/util/maybe.dart';
 import 'package:blake/src/utils.dart';
+import 'package:file/file.dart';
 import 'package:html/dom.dart' as html_dom;
 import 'package:html/parser.dart' as html_parser;
 import 'package:jinja/jinja.dart';

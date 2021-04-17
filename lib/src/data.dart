@@ -5,6 +5,7 @@ import 'package:blake/src/errors.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/utils.dart';
+import 'package:file/file.dart';
 import 'package:yaml/yaml.dart';
 
 /// Parse all YAML and JSON files inside `data_dir` and create data Map which

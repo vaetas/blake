@@ -6,6 +6,7 @@ import 'package:blake/src/config.dart';
 import 'package:blake/src/file_system.dart';
 import 'package:blake/src/log.dart';
 import 'package:blake/src/utils.dart';
+import 'package:file/file.dart';
 import 'package:jinja/jinja.dart';
 
 /// Create new content based on predefined types.

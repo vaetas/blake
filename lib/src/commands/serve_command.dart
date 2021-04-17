@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:args/command_runner.dart';
-import 'package:blake/src/assets/reload_js.dart';
+import 'package:blake/src/assets/live_reload.dart';
 import 'package:blake/src/commands/build_command.dart';
 import 'package:blake/src/config.dart';
 import 'package:blake/src/file_system.dart';

@@ -5,8 +5,6 @@ import 'package:file/file.dart';
 import 'package:file/local.dart';
 import 'package:yaml/yaml.dart';
 
-export 'package:file/file.dart';
-
 const fs = LocalFileSystem();
 
 extension DirectoryExtension on Directory {
