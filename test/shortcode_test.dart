@@ -103,22 +103,22 @@ void main() {
   });
   group('Jinja skips shortcodes', () {
     final env = CustomEnvironment();
-    test('inline', () {
-      final template = env.fromString(
-        '{{< code >}}Hello {{ name }}!{{< /user >}} {{ "abc" }}',
-      );
-      expect(
-        template.render(name: 'Jhon'),
-        '{{< code >}}Hello Jhon!{{< /user >}} abc',
-      );
-    });
     test('body', () {
       final template = env.fromString(
-        '{{ "abc" }} {{< code \>}} Hello {{ name }}',
+        '{{< code x=1 y="hello world" >}}Hello {{ name }}!{{< /code >}} {{ "abc" }}',
+      );
+      expect(
+        template.renderMap({'name': 'Jhon'}),
+        '{{< code x=1 y="hello world" >}}Hello Jhon!{{< /code >}} abc',
+      );
+    });
+    test('inline', () {
+      final template = env.fromString(
+        '{{ "abc" }} {{< code />}} Hello {{ name }}',
       );
       expect(
         template.render(name: 'Jhon'),
-        'abc {{< code >}} Hello Jhon',
+        'abc {{< code />}} Hello Jhon',
       );
     });
   });

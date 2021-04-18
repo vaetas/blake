@@ -1,6 +1,6 @@
 import 'package:jinja/jinja.dart';
 
-final _regExp = RegExp(r'({{<\s*\/?.+\s*\/?>}})');
+final _regExp = RegExp(r'''({{<\s*\/?[a-zA-Z0-9_\s=\'\"]+\s*\/?>}})''');
 
 /// Custom Jinja environment to support shortcode syntax.
 ///
