@@ -1,3 +1,7 @@
+## 0.6.1
+
+* fix: shortcode escaping in markdown
+
 ## 0.6.0
 
 * feat: documentation website
