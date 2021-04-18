@@ -6,19 +6,22 @@
 > Did he smile his work to see? \
 > Did he who made the Lamb make thee?
 
-Blake is an experimental static site generator written in the Dart language.
+[Documentation](https://vaetas.github.io/blake/)
+
+Blake is an opinionated static site generator written in Dart lang. 
+It is provided as a single binary and can be used even without Dart installed.
 
 Features as of now:
 
 * Markdown support.
 * YAML configuration and front-matter.
-* Jinja templates.
-* Live-reload.
-* Single native binary.
+* Jinja templates. Also usable in Markdown files.
+* Live-reload during development.
+* Compiled into single native binary.
 * YAML/JSON data content and non-public Data pages.
-* Define content types for quick creation.
-* Basic JSON search index.
-* Sitemap generation.
+* Pre-defined content types for quick creation.
+* Generated JSON search index.
+* `sitemap.xml` generation.
 * Inline & body shortcodes.
 
 Remember that this project is WIP. Everything can change at any time.

@@ -28,7 +28,7 @@ export 'src/serve/watch.dart';
 export 'src/shortcode.dart' show Shortcode, ShortcodeTemplate, ShortcodeParser;
 export 'src/sitemap_builder.dart';
 export 'src/taxonomy.dart';
-export 'src/templates_config.dart';
+export 'src/template/templates_config.dart';
 export 'src/yaml.dart';
 
 /// [Blake] class ties together all commands and exports callable method for
