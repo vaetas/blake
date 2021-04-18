@@ -105,11 +105,11 @@ void main() {
     final env = CustomEnvironment();
     test('body', () {
       final template = env.fromString(
-        '{{< code x=1 y="hello world" >}}Hello {{ name }}!{{< /code >}} {{ "abc" }}',
+        '{{< code x=1 y="hello world" file="test.dart" >}}Hello {{ name }}!{{< /code >}} {{ "abc" }}',
       );
       expect(
         template.renderMap({'name': 'Jhon'}),
-        '{{< code x=1 y="hello world" >}}Hello Jhon!{{< /code >}} abc',
+        '{{< code x=1 y="hello world" file="test.dart" >}}Hello Jhon!{{< /code >}} abc',
       );
     });
     test('inline', () {
