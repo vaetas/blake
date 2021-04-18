@@ -68,6 +68,16 @@ page will only have <code>/projects/</code> path rendered. If you try to visit <
 you will see a 404 error.</p>
 <h2 id="markdown">Markdown</h2>
 <p>Blake uses <a href="https://pub.dev/packages/markdown">markdown</a> package for rendering.</p>
+<h2 id="jinja-in-markdown">Jinja in Markdown</h2>
+<p>Pages can optionally use Jinja templating. This behavior is disabled by default. You can enable it
+by settings <code>jinja</code> frontmatter param to <code>true</code>. If you don't need to access Jinja variables inside the
+file leave this turned off for better performance.</p>
+<p>For example, you can use this to access site properties, like base URL, inside your content.</p>
+<pre><code class="language-markdown">## Header
+Click [on this link]({{ site.baseUrl }}) to go home.
+</code></pre>
+<p>Jinja templates are rendered first, then the shortcodes, and Markdown is rendered last. You can
+therefore use Jinja inside your shortcodes easily.</p>
 
 
 </div>
