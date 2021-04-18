@@ -1,3 +1,8 @@
+## 0.6.0
+
+* feat: documentation website
+* feat: jinja templating inside markdown files (optional)
+
 ## 0.5.1
 
 * style: format file
