@@ -7,7 +7,7 @@ packages:
       name: _fe_analyzer_shared
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "18.0.0"
+    version: "20.0.0"
   analysis_options:
     dependency: "direct dev"
     description:
@@ -23,7 +23,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "1.4.0"
   ansicolor:
     dependency: "direct main"
     description:
@@ -93,7 +93,7 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   csslib:
     dependency: transitive
     description:
@@ -135,7 +135,7 @@ packages:
       name: http_multi_server
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   http_parser:
     dependency: transitive
     description:
@@ -170,7 +170,7 @@ packages:
       name: logging
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   markdown:
     dependency: "direct main"
     description:
@@ -233,7 +233,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.2"
+    version: "4.1.0"
   pool:
     dependency: transitive
     description:
@@ -373,7 +373,7 @@ packages:
       name: vm_service
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.0+1"
+    version: "6.2.0"
   watcher:
     dependency: "direct main"
     description:
@@ -401,7 +401,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.2"
+    version: "5.1.0"
   yaml:
     dependency: "direct main"
     description:
