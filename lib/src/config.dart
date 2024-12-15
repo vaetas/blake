@@ -3,7 +3,7 @@ import 'package:blake/src/commands/serve_command.dart';
 import 'package:blake/src/serve/serve_config.dart';
 import 'package:blake/src/template/environment.dart';
 import 'package:blake/src/template/templates_config.dart';
-import 'package:jinja/jinja.dart';
+import 'package:jinja/loaders.dart';
 import 'package:yaml/yaml.dart';
 
 class Config {
@@ -56,7 +56,7 @@ class Config {
   /// the template is updated before triggering rebuild.
   late final environment = CustomEnvironment(
     loader: FileSystemLoader(
-      path: build.templatesDir,
+      paths: [build.templatesDir],
     ),
   );
 

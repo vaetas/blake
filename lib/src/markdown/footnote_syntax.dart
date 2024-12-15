@@ -11,39 +11,40 @@ class FootnoteReferenceSyntax extends TextSyntax {
   }
 }
 
+// TODO: Removed because `markdown` package is updated from old version 4.0.0
 // TODO: Render footnotes as ordered list.
-class FootnoteSyntax extends LongBlockHtmlSyntax {
-  FootnoteSyntax() : super(_startPattern, _endPattern);
-
-  static const _startPattern = r'\[\^[0-9]+\]:';
-  static const _endPattern = r'(?:    | {0,3}\t)(.*)|(^(?:[ \t]*)$)';
-
-  @override
-  Node parse(BlockParser parser) {
-    final childLines = <String>[];
-
-    while (!parser.isDone) {
-      childLines.add(parser.current);
-      parser.advance();
-
-      if (!parser.matches(RegExp(_endPattern))) {
-        break;
-      }
-    }
-
-    final lines =
-        childLines.map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
-
-    final index = _referencePattern.firstMatch(lines.first)!.group(0);
-
-    return Element(
-      'p',
-      [
-        Element.text('span', index!),
-      ],
-    );
-  }
-}
+// class FootnoteSyntax extends LongBlockHtmlSyntax {
+//   FootnoteSyntax() : super(_startPattern, _endPattern);
+//
+//   static const _startPattern = r'\[\^[0-9]+\]:';
+//   static const _endPattern = r'(?:    | {0,3}\t)(.*)|(^(?:[ \t]*)$)';
+//
+//   @override
+//   Node parse(BlockParser parser) {
+//     final childLines = <String>[];
+//
+//     while (!parser.isDone) {
+//       childLines.add(parser.current);
+//       parser.advance();
+//
+//       if (!parser.matches(RegExp(_endPattern))) {
+//         break;
+//       }
+//     }
+//
+//     final lines =
+//         childLines.map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+//
+//     final index = _referencePattern.firstMatch(lines.first)!.group(0);
+//
+//     return Element(
+//       'p',
+//       [
+//         Element.text('span', index!),
+//       ],
+//     );
+//   }
+// }
 
 /// Footnote reference can only contain number and letter.
 final _referencePattern = RegExp(r'\[\^[0-9a-zA-Z]+\]');

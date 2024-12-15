@@ -21,7 +21,7 @@ class ShortcodeTemplate {
     required Map<String, dynamic> values,
   }) {
     final templatePath = Path.join('shortcodes', '$name.html');
-    return environment.getTemplate(templatePath).renderMap(values);
+    return environment.getTemplate(templatePath).render(values);
   }
 
   @override

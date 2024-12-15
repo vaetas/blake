@@ -12,7 +12,6 @@ export 'src/build/build_config.dart';
 export 'src/build/content_parser.dart';
 export 'src/config.dart';
 export 'src/content/content.dart';
-export 'src/content/content.dart';
 export 'src/content/page.dart';
 export 'src/content/redirect_page.dart';
 export 'src/content/section.dart';

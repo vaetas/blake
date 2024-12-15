@@ -11,9 +11,9 @@ import 'package:jinja/jinja.dart';
 
 /// Create new content based on predefined types.
 ///
-/// Usage: blake new <type> <name>
+/// Usage: blake new [type] [name]
 ///
-/// <type> must be an existing file inside `types_dir` without the extension.
+/// [type] must be an existing file inside `types_dir` without the extension.
 /// For example, say you have following content of `types_dir`:
 ///
 /// types:
@@ -106,7 +106,7 @@ class NewCommand extends Command<int> {
       'title': title,
       'date': DateTime.now().toIso8601String(),
     };
-    final output = template.renderMap(data);
+    final output = template.render(data);
     await file.writeAsString('---\n$output\n---\n');
 
     log.info('File ${file.path} created.');

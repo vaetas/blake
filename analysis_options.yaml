@@ -1,1 +1,1 @@
-include: package:analysis_options/analysis_options.yaml
+include: package:lints/recommended.yaml

@@ -1,35 +1,34 @@
 name: blake
-version: 0.6.2
+version: 0.7.0
 description: Experimental static site generator for Dart with Markdown support, Jinja templates and live-reload.
 repository: https://github.com/vaetas/blake
 documentation: https://vaetas.github.io/blake/
 homepage: https://vaetas.github.io/blake/
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ^3.6.0
 
 executables:
   blake:
 
 dependencies:
-  ansicolor: ^2.0.1
-  args: ^2.0.0
-  file: ^6.1.0
-  glob: ^2.0.1
-  html: ^0.15.0
-  jinja: ^0.3.1
-  markdown: ^4.0.0
-  meta: ^1.3.0
-  mime: ^1.0.0
-  path: ^1.8.0
-  petitparser: ^4.1.0
-  process_run: ^0.12.1
-  watcher: ^1.0.0
-  xml: ^5.1.0
-  yaml: ^3.1.0
+  ansicolor: ^2.0.3
+  args: ^2.6.0
+  file: ^7.0.1
+  glob: ^2.1.2
+  html: ^0.15.5
+  jinja: ^0.6.0
+  markdown: ^7.2.2
+  meta: ^1.16.0
+  mime: ^2.0.0
+  path: ^1.9.0
+  petitparser: ^6.0.2
+  process_run: ^1.2.2+1
+  watcher: ^1.1.0
+  xml: ^6.5.0
+  yaml: ^3.1.2
 
 dev_dependencies:
-  analysis_options:
-    git: https://github.com/vaetas/analysis_options.git
-  grinder: ^0.9.0
-  test: ^1.16.8
+  grinder: ^0.9.5
+  lints: ^5.1.0
+  test: ^1.25.12

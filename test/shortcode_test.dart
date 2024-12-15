@@ -108,7 +108,7 @@ void main() {
         '{{< code x=1 y="hello world" file="test.dart" >}}Hello {{ name }}!{{< /code >}} {{ "abc" }}',
       );
       expect(
-        template.renderMap({'name': 'Jhon'}),
+        template.render({'name': 'Jhon'}),
         '{{< code x=1 y="hello world" file="test.dart" >}}Hello Jhon!{{< /code >}} abc',
       );
     });
@@ -117,7 +117,7 @@ void main() {
         '{{ "abc" }} {{< code />}} Hello {{ name }}',
       );
       expect(
-        template.render(name: 'Jhon'),
+        template.render({'name': 'Jhon'}),
         'abc {{< code />}} Hello Jhon',
       );
     });

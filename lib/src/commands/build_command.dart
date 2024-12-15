@@ -242,9 +242,8 @@ class BuildCommand extends Command<int> {
 
     if (page.jinja) {
       try {
-        content = config.environment
-            .fromString(page.content ?? '')
-            .renderMap(metadata);
+        content =
+            config.environment.fromString(page.content ?? '').render(metadata);
       } catch (e) {
         _abortBuild(BuildError(e.toString(), '  Fix file ${page.path}'));
       }
@@ -260,12 +259,12 @@ class BuildCommand extends Command<int> {
     final renderedMarkdownContent = markdownToHtml(
       renderedShortcodeContent,
       extensionSet: ExtensionSet.gitHubWeb,
-      blockSyntaxes: [FootnoteSyntax()],
+      blockSyntaxes: [],
       inlineSyntaxes: [FootnoteReferenceSyntax()],
     );
 
     metadata['content'] = renderedMarkdownContent;
-    var output = template.renderMap(metadata);
+    var output = template.render(metadata);
 
     if (isServe) {
       final parsedHtml = html_parser.parse(output);

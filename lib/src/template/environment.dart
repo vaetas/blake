@@ -6,11 +6,15 @@ final _regExp = RegExp(r'''({{<\s*\/?[^(}})]+\s*\/?>}})''');
 ///
 /// [CustomEnvironment] wraps every shortcode inside Markdown file with Jinja's
 /// escape tags so they are skipped. Otherwise Jinja throws an error.
-class CustomEnvironment extends Environment {
-  CustomEnvironment({Loader? loader}) : super(loader: loader);
+base class CustomEnvironment extends Environment {
+  CustomEnvironment({super.loader});
 
   @override
-  Template fromString(String source, {String? path}) {
+  Template fromString(
+    String source, {
+    Map<String, Object?>? globals,
+    String? path,
+  }) {
     source = source.replaceAllMapped(
       _regExp,
       (match) => '{% raw %}${match[1]}{% endraw %}',

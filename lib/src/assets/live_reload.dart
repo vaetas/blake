@@ -11,7 +11,7 @@ Future<void> setupReloadScript(Config config) async {
 }
 
 String _getReloadScript(Config config) {
-  return Template(_reloadScript).renderMap(
+  return Template(_reloadScript).render(
     <String, dynamic>{
       'port': config.serve.websocketPort,
     },
